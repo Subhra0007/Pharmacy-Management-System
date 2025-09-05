@@ -12,6 +12,7 @@ import {
   HelpCircle,
   Pill,
   DollarSign,
+ Stethoscope 
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -65,6 +66,10 @@ export default function Sidebar() {
         <Link to="/medicine" className={linkClass("/medicine")}>
           <Pill size={20} />
           <span>Medicine</span>
+        </Link>
+          <Link to="/doctor" className={linkClass("/doctor")}>
+          <Stethoscope size={20} />
+          <span>Doctor</span>
         </Link>
         <Link to="/invoice" className={linkClass("/invoice")}>
           <FileText size={20} />

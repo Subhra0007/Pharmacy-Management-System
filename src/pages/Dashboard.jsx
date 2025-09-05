@@ -2,7 +2,7 @@
 //   BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer,
 //   LineChart, Line
 // } from "recharts";
-import { Package, Users, AlertTriangle, Pill } from "lucide-react";
+import { Package, Users, AlertTriangle, Pill,Plus } from "lucide-react";
 
 import StatCard from "../components/dashboard/StatCard";
 import TopMedicine from "../components/dashboard/TopMedicine";
@@ -42,60 +42,69 @@ const stackedData = [
 
 export default function Dashboard() {
   return (
-    <div className="p-6 space-y-6">
-      <div  className="grid grid-cols-12 gap-6">
-      {/* Stats */}
-      <div className="col-span-12 md:col-span-4 grid grid-cols-2 gap-4">
-        
-        <StatCard 
-          icon={<Package className="text-blue-500" />}
-          title="Total Supplier"
-          value="120"
-          change="+32%"
-          color="blue"
-        />
-        <StatCard
-          icon={<Users className="text-green-500" />}
-          title="Total Customer"
-          value="324"
-          change="-12%"
-          color="green"
-        />
-        <StatCard
-          icon={<AlertTriangle className="text-yellow-500" />}
-          title="Out of Stock"
-          value="102"
-          change="-09%"
-          color="yellow"
-        />
-        <StatCard
-          icon={<Pill className="text-purple-500" />}
-          title="Total Medicine"
-          value="150"
-          change="+43%"
-          color="purple"
-        />
+    <div>
+      {/* Button aligned left */}
+      <div className="flex justify-end p-6">
+        <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          <Plus size={18} />
+          Add New Order
+        </button>
       </div>
 
-      {/* Top Selling Medicine */}
-      <TopMedicine />
+      <div className="p-6 space-y-6">
+        <div className="grid grid-cols-12 gap-6">
+          {/* Stats */}
+          <div className="col-span-12 md:col-span-4 grid grid-cols-2 gap-4">
+            <StatCard 
+              icon={<Package className="text-blue-500" />}
+              title="Total Supplier"
+              value="120"
+              change="+32%"
+              color="blue"
+            />
+            <StatCard
+              icon={<Users className="text-green-500" />}
+              title="Total Customer"
+              value="324"
+              change="-12%"
+              color="green"
+            />
+            <StatCard
+              icon={<AlertTriangle className="text-yellow-500" />}
+              title="Out of Stock"
+              value="102"
+              change="-09%"
+              color="yellow"
+            />
+            <StatCard
+              icon={<Pill className="text-purple-500" />}
+              title="Total Medicine"
+              value="150"
+              change="+43%"
+              color="purple"
+            />
+          </div>
 
-      {/* Graph Report Today */}
-      <StackedReport data={stackedData} />
+          {/* Top Selling Medicine */}
+          <TopMedicine />
+
+          {/* Graph Report Today */}
+          <StackedReport data={stackedData} />
+        </div>
+
+        {/* Graphs */}
+        <div className="grid grid-cols-3 gap-6">
+          <div className="col-span-2">
+            <RevenueExpense data={revenueData} />
+          </div>
+          <div className="col-span-1">
+            <SimpleBarGraph />
+          </div>
+        </div>
+
+        {/* Table */}
+        <PurchaseTable />
       </div>
-      {/* Graphs */}
-    <div className="grid grid-cols-3 gap-6">
-  <div className="col-span-2">
-    <RevenueExpense data={revenueData} />
-  </div>
-  <div className="col-span-1">
-    <SimpleBarGraph  />
-  </div>
-</div>
-
-
-      {/* Table */}
-      <PurchaseTable />
     </div>
   );
 }
