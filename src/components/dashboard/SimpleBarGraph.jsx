@@ -1,26 +1,26 @@
-import {
-  RadialBarChart,
-  RadialBar,
-  ResponsiveContainer
-} from "recharts";
+import { RadialBarChart, RadialBar, ResponsiveContainer } from "recharts";
 
-export default function SimpleBarGraph() {
+export default function SimpleBarGraph({ darkMode }) {
   const chartData = [
-    { name: "Total Purchase", value: 80, fill: "#2563eb" },
-    { name: "Cash Received", value: 65, fill: "#22c55e" },
-    { name: "Bank Receive", value: 55, fill: "#16a34a" },
-    { name: "Total Service", value: 40, fill: "#f97316" },
+    { name: "Total Purchase", value: 80, fill: darkMode ? "#60a5fa" : "#2563eb" },
+    { name: "Cash Received", value: 65, fill: darkMode ? "#86efac" : "#22c55e" },
+    { name: "Bank Receive", value: 55, fill: darkMode ? "#4ade80" : "#16a34a" },
+    { name: "Total Service", value: 40, fill: darkMode ? "#fb923c" : "#f97316" },
   ];
 
   return (
-    <div className="p-4 bg-white shadow rounded-md h-[312px]">
+    <div
+      className={`p-4 shadow rounded-md h-[312px] transition-colors duration-300 ${
+        darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
+      }`}
+    >
       <div className="flex justify-between items-center">
         <h2 className="font-bold">Today's Report</h2>
       </div>
 
-      <p className="text-gray-500 mt-1">Total Earning</p>
+      <p className={darkMode ? "text-gray-400 mt-1" : "text-gray-500 mt-1"}>Total Earning</p>
       <div className="flex items-end gap-2 mb-4">
-        <h3 className="text-2xl font-bold text-gray-900">$536.00</h3>
+        <h3 className="text-2xl font-bold">$536.00</h3>
         <span className="text-green-500 text-sm font-semibold">+43%</span>
       </div>
 
@@ -42,27 +42,33 @@ export default function SimpleBarGraph() {
                 dataKey="value"
                 cornerRadius={5}
                 clockWise
-                background
+                background={{ fill: darkMode ? "#4b5563" : "#e5e7eb" }}
               />
             </RadialBarChart>
           </ResponsiveContainer>
 
           {/* Center Text */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <p className="text-sm text-gray-500">Total Earning</p>
-            <p className="text-xl font-bold text-blue-600">80%</p>
+            <p className={darkMode ? "text-sm text-gray-400" : "text-sm text-gray-500"}>
+              Total Earning
+            </p>
+            <p className={darkMode ? "text-xl font-bold text-blue-400" : "text-xl font-bold text-blue-600"}>
+              80%
+            </p>
           </div>
         </div>
 
         {/* Legend */}
-        <div className="ml-4 space-y-2 ">
+        <div className="ml-4 space-y-2">
           {chartData.map((item, i) => (
-            <div key={i} className="flex items-center gap-2 ">
+            <div key={i} className="flex items-center gap-2">
               <span
                 className="w-3 h-3 rounded-full"
                 style={{ backgroundColor: item.fill }}
               ></span>
-              <span className="text-sm text-gray-700">{item.name}</span>
+              <span className={darkMode ? "text-sm text-gray-300" : "text-sm text-gray-700"}>
+                {item.name}
+              </span>
             </div>
           ))}
         </div>

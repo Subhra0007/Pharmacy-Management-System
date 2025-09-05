@@ -1,6 +1,6 @@
 import { Eye, Edit, Trash2 } from "lucide-react";
 
-export default function PurchaseTable({ darkMode }) {
+export default function ClipboardList({ darkMode }) {
   return (
     <div
       className={`p-4 shadow rounded-md transition-colors duration-300 ${
@@ -9,7 +9,7 @@ export default function PurchaseTable({ darkMode }) {
     >
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="font-bold text-lg">Purchase List</h2>
+        <h2 className="font-bold text-lg">Customer List</h2>
         <button
           className={`text-sm px-3 py-1 rounded transition ${
             darkMode
@@ -36,10 +36,10 @@ export default function PurchaseTable({ darkMode }) {
             </th>
             <th className="p-2">Invoice ID</th>
             <th className="p-2">Date</th>
-            <th className="p-2">Supplier</th>
-            <th className="p-2">Payable Amount</th>
-            <th className="p-2">Paid Amount</th>
-            <th className="p-2">Due</th>
+            <th className="p-2">Customer Name</th>
+            <th className="p-2">Mobile</th>
+            <th className="p-2">Doctor</th>
+            <th className="p-2">Product List</th>
             <th className="p-2">Action</th>
           </tr>
         </thead>
@@ -55,10 +55,12 @@ export default function PurchaseTable({ darkMode }) {
             </td>
             <td className="p-2">#P-00270</td>
             <td className="p-2">Feb 19, 2025</td>
-            <td className="p-2">Square</td>
-            <td className="p-2">2500</td>
-            <td className="p-2">2,500.00</td>
-            <td className="p-2">660.00</td>
+            <td className="p-2">Ab Kar</td>
+            <td className="p-2">1234567899</td>
+            <td className="p-2">Dr. ABC</td>
+            <td className="p-2">
+              <Eye size={16} />
+            </td>
             <td className="p-2 flex gap-2 justify-center">
               <button
                 className={`p-1 rounded transition ${
@@ -101,9 +103,11 @@ export default function PurchaseTable({ darkMode }) {
             <td className="p-2">#P-00268</td>
             <td className="p-2">Feb 20, 2025</td>
             <td className="p-2">Beximco</td>
-            <td className="p-2">660</td>
-            <td className="p-2">5,000.00</td>
-            <td className="p-2">3,647.10</td>
+            <td className="p-2">12354334</td>
+            <td className="p-2">Dr. ABCD</td>
+            <td className="p-2">
+              <Eye size={16} />
+            </td>
             <td className="p-2 flex gap-2 justify-center">
               <button
                 className={`p-1 rounded transition ${
@@ -145,17 +149,37 @@ export default function PurchaseTable({ darkMode }) {
             <td className="p-2">#P-00267</td>
             <td className="p-2">Feb 21, 2025</td>
             <td className="p-2">Renata</td>
-            <td className="p-2">3,763</td>
-            <td className="p-2">5,000.00</td>
-            <td className="p-2">5,754.95</td>
+            <td className="p-2">1234567898</td>
+            <td className="p-2">Dr. FGH</td>
+            <td className="p-2">
+              <Eye size={16} />
+            </td>
             <td className="p-2 flex gap-2 justify-center">
-              <button className="p-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+              <button
+                className={`p-1 rounded transition ${
+                  darkMode
+                    ? "bg-blue-600 text-white hover:bg-blue-700"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                }`}
+              >
                 <Eye size={16} />
               </button>
-              <button className="p-1 bg-green-500 text-white rounded hover:bg-green-600">
+              <button
+                className={`p-1 rounded transition ${
+                  darkMode
+                    ? "bg-green-600 text-white hover:bg-green-700"
+                    : "bg-green-500 text-white hover:bg-green-600"
+                }`}
+              >
                 <Edit size={16} />
               </button>
-              <button className="p-1 bg-orange-500 text-white rounded hover:bg-orange-600">
+              <button
+                className={`p-1 rounded transition ${
+                  darkMode
+                    ? "bg-orange-600 text-white hover:bg-orange-700"
+                    : "bg-orange-500 text-white hover:bg-orange-600"
+                }`}
+              >
                 <Trash2 size={16} />
               </button>
             </td>
