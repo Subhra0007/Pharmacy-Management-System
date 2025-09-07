@@ -60,7 +60,7 @@ export default function Dashboard() {
           />
           <StatCard
             icon={<AlertTriangle className="text-yellow-500" />}
-            title="Out of Stock"
+            title="Low Stock"
             value="102"
             change="-09%"
             color="yellow"

@@ -16,7 +16,7 @@ export default function Navbar({ darkMode, setDarkMode }) {
         {/* Dark mode toggle */}
         <button
           onClick={() => setDarkMode(!darkMode)}
-          className={`p-2 rounded-lg transition-colors duration-300 
+          className={`p-2 rounded-lg transition-colors duration-300 cursor-pointer
             ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}
           `}
         >

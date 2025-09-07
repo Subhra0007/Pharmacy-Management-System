@@ -105,9 +105,9 @@ export default function Sidebar({ darkMode }) {
             >
               Preferences
             </p>
-            <Link to="/help-support" className={linkClass("/help-support")}>
+            <Link to="/help-supports" className={linkClass("/help-supports")}>
               <HelpCircle size={20} />
-              <span>Help & Support</span>
+              <span>Help & Supports</span>
             </Link>
             <Link to="/settings" className={linkClass("/settings")}>
               <Settings size={20} />
