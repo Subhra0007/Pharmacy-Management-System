@@ -12,6 +12,9 @@ import {
   HelpCircle,
   Pill,
   Stethoscope,
+  ScrollText,
+  BanknoteArrowDown,
+  IdCardLanyard
 } from "lucide-react";
 
 export default function Sidebar({ darkMode }) {
@@ -55,9 +58,9 @@ export default function Sidebar({ darkMode }) {
               <ShoppingCart size={20} />
               <span>Purchase</span>
             </Link>
-            <Link to="/sales-report" className={linkClass("/sales-report")}>
+            <Link to="/analytics" className={linkClass("/analytics")}>
               <BarChart size={20} />
-              <span>Sales Report</span>
+              <span>Analytics</span>
             </Link>
             <Link to="/suppliers" className={linkClass("/suppliers")}>
               <Truck size={20} />
@@ -78,21 +81,33 @@ export default function Sidebar({ darkMode }) {
               <Users size={20} />
               <span>Customer</span>
             </Link>
-            <Link to="/medicine" className={linkClass("/medicine")}>
+            <Link to="/product" className={linkClass("/product")}>
               <Pill size={20} />
-              <span>Medicine</span>
+              <span>Product</span>
             </Link>
             <Link to="/doctor" className={linkClass("/doctor")}>
               <Stethoscope size={20} />
               <span>Doctor</span>
             </Link>
-            <Link to="/invoice" className={linkClass("/invoice")}>
+            <Link to="/supplier-orders" className={linkClass("/supplier-orders")}>
               <FileText size={20} />
-              <span>Invoice</span>
+              <span>Supplier Orders</span>
             </Link>
-            <Link to="/orders" className={linkClass("/orders")}>
+            <Link to="/customer-orders" className={linkClass("/customer-orders")}>
               <ClipboardList size={20} />
-              <span>Orders</span>
+              <span>Customer Orders</span>
+            </Link>
+              <Link to="/notes" className={linkClass("/notes")}>
+              <ScrollText size={20} />
+              <span>Notes</span>
+            </Link>
+              <Link to="/expenses" className={linkClass("/expenses")}>
+              <BanknoteArrowDown size={20} />
+              <span>Expenses</span>
+            </Link>
+             <Link to="/employee" className={linkClass("/employee")}>
+              <IdCardLanyard size={20} />
+              <span>Employee</span>
             </Link>
           </div>
 

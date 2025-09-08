@@ -1,72 +1,92 @@
-// pages/Customer.jsx
+import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Search, Filter, Plus, Edit, Eye, Trash2, Users } from "lucide-react";
-import { BarChart, Bar, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 import { FiUserPlus } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
 
 export default function Customer() {
   const { darkMode } = useOutletContext();
 
-    const customers = [
+  const customers = [
     {
       id: "#CUS001",
       name: "A Khan",
       phone: "01893531209",
-      doctor: "Dr. A.K",
       balance: "$53,546.00",
-      date: "Feb 24, 2025",
+      address: "Kolkata,710000"
     },
     {
       id: "#CUS002",
       name: "A Ghogh",
       phone: "01893531209",
-      doctor: "Dr. A.G",
       balance: "$23,732.00",
-      date: "Feb 25, 2025",
+      address: "Kolkata,710000"
     },
     {
       id: "#CUS003",
       name: "J Khan",
       phone: "01893531209",
-      doctor: "DR. J.k",
       balance: "$15,324.00",
-      date: "Feb 26, 2025",
+      address: "Kolkata,710000"
     },
     {
       id: "#CUS004",
       name: "Hasan Khan",
-      phone: "01893531209",
-      doctor: "Dr. H.K",
+      phone: "01893531209", 
       balance: "$18,435.00",
-      date: "Feb 27, 2025",
+      address: "Kolkata,710000"
     },
     {
       id: "#CUS005",
       name: "Ali Khan",
       phone: "01893531209",
-      doctor: "Dr. W",
       balance: "$19,324.00",
-      date: "Feb 28, 2025",
+      address: "Kolkata,710000"
     },
     {
       id: "#CUS006",
       name: "A S",
       phone: "01893531209",
-      doctor: "Dr. A.B.D",
       balance: "$34,768.00",
-      date: "Mar 01, 2025",
+      address: "Kolkata,710000"
     },
     {
       id: "#CUS007",
       name: "J Khan",
       phone: "01893531209",
-      doctor: "Dr A.S",
       balance: "$52,324.00",
-      date: "Mar 02, 2025",
+      address: "Kolkata,710000"
     },
   ];
 
+  // State for modal functionality
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [orderFrequencyData, setOrderFrequencyData] = useState([]);
+
+  const handleOpenModal = (customer) => {
+    // Generate example static data for order frequency per customer
+    const data = [
+      { month: "Jan", orders: Math.floor(Math.random() * 10) + 1 },
+      { month: "Feb", orders: Math.floor(Math.random() * 10) + 1 },
+      { month: "Mar", orders: Math.floor(Math.random() * 10) + 1 },
+      { month: "Apr", orders: Math.floor(Math.random() * 10) + 1 },
+      { month: "May", orders: Math.floor(Math.random() * 10) + 1 },
+      { month: "Jun", orders: Math.floor(Math.random() * 10) + 1 },
+      { month: "Jul", orders: Math.floor(Math.random() * 10) + 1 },
+      { month: "Aug", orders: Math.floor(Math.random() * 10) + 1 },
+    ];
+    setOrderFrequencyData(data);
+    setSelectedCustomer(customer);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedCustomer(null);
+    setOrderFrequencyData([]);
+  };
 
   return (
     <div
@@ -270,17 +290,6 @@ export default function Customer() {
               }`}
             />
           </div>
-          <button
-            className={`flex items-center gap-2 border px-4 py-2 rounded-lg transition ${
-              darkMode
-                ? "border-gray-500 text-gray-100 hover:bg-gray-600"
-                : "border-gray-300 text-gray-900 hover:bg-gray-100"
-            }`}
-          >
-            <Filter size={18} />
-            Filter
-            <IoIosArrowDown className="ml-3" />
-          </button>
         </div>
 
         {/* Table */}
@@ -294,15 +303,12 @@ export default function Customer() {
               className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
             >
               <tr>
-                {/* <th className="p-3">
-                  <input type="checkbox" />
-                </th> */}
                 <th className="p-3">Customer ID</th>
                 <th className="p-3">Customer Name</th>
                 <th className="p-3">Phone Number</th>
-                <th className="p-3">Doctor Name</th>
-                <th className="p-3">Balance</th>
-                <th className="p-3">Order Date</th>
+                <th className="p-3">Total Purchase</th>
+                <th className="p-3">Order Frequency</th>
+                <th className="p-3">Address</th>
                 <th className="p-3">Action</th>
               </tr>
             </thead>
@@ -316,22 +322,16 @@ export default function Customer() {
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  {/* <td className="p-3">
-                    <input type="checkbox" />
-                  </td> */}
                   <td className="p-3">{c.id}</td>
                   <td className="p-3 flex items-center gap-2">
-                    <img
-                      src={""}
-                      alt={c.name}
-                      className="w-8 h-8 rounded-full"
-                    />
                     {c.name}
                   </td>
                   <td className="p-3">{c.phone}</td>
-                  <td className="p-3">{c.doctor}</td>
                   <td className="p-3">{c.balance}</td>
-                  <td className="p-3">{c.date}</td>
+                  <td className="p-3 cursor-pointer hover:text-blue-500" onClick={() => handleOpenModal(c)}>
+                    <Eye size={16} className="text-blue-500" />
+                  </td>
+                  <td className="p-3">{c.address}</td>
                   <td className="p-3 flex gap-2">
                     <button
                       className={`p-2 rounded transition ${
@@ -442,6 +442,82 @@ export default function Customer() {
           </div>
         </div>
       </div>
+
+      {/* Graph Only Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div
+            className={`rounded-lg w-11/12 max-w-4xl relative transition-colors duration-300 ${
+              darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
+            }`}
+          >
+            <button
+              onClick={handleCloseModal}
+              className={`absolute top-3 right-3 p-2 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors duration-300 z-10`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            {/* Simple title with customer's name */}
+            <div className="p-6 pb-2">
+              <h3 className="text-xl font-bold text-center">
+                {selectedCustomer?.name} - Order Frequency
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-1">
+                Customer ID: {selectedCustomer?.id}
+              </p>
+            </div>
+
+            {/* Chart Container */}
+            <div className="p-6">
+              <ResponsiveContainer width="100%" height={400}>
+                <BarChart data={orderFrequencyData}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke={darkMode ? "#374151" : "#e5e7eb"}
+                  />
+                  <XAxis
+                    dataKey="month"
+                    stroke={darkMode ? "#9ca3af" : "#6b7280"}
+                    fontSize={12}
+                  />
+                  <YAxis
+                    stroke={darkMode ? "#9ca3af" : "#6b7280"}
+                    fontSize={12}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: darkMode ? "#374151" : "#ffffff",
+                      border: `1px solid ${darkMode ? "#4b5563" : "#e5e7eb"}`,
+                      borderRadius: "8px",
+                      color: darkMode ? "#f9fafb" : "#111827",
+                    }}
+                  />
+                  <Bar
+                    dataKey="orders"
+                    fill={darkMode ? "#60a5fa" : "#2563eb"}
+                    radius={[4, 4, 0, 0]}
+                    barSize={20}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Simple legend */}
+            <div className="p-4 text-center border-t border-gray-200 dark:border-gray-600">
+              <div className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                <span>Orders per month</span>
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Recent order trends
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

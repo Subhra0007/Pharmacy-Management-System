@@ -1,5 +1,5 @@
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend } from "recharts";
-
+import { IoIosArrowDown } from "react-icons/io";
 export default function RevenueExpense({ data, darkMode }) {
   return (
     <div
@@ -7,7 +7,19 @@ export default function RevenueExpense({ data, darkMode }) {
         darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
       }`}
     >
+        <div className="flex justify-between items-center mb-4">
       <h2 className="font-bold mb-2">Over All Revenue vs Expense</h2>
+       <button
+                className={`flex items-center gap-1 border text-xs px-2 py-1 rounded-md transition ${
+                  darkMode
+                    ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
+                    : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
+                }`}
+              >
+                This Week
+                <IoIosArrowDown className="ml-3" />
+              </button>
+                </div>
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={data}>
           <XAxis dataKey="month" stroke={darkMode ? "#9ca3af" : "#6b7280"} />

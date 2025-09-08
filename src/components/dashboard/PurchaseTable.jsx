@@ -23,7 +23,7 @@ export default function PurchaseTable({ darkMode }) {
 
       {/* Table */}
       <table
-        className={`w-full text-sm shadow text-center ${
+        className={`w-full text-sm shadow text-center overflow-x-auto ${
           darkMode ? "border-gray-600" : "border-gray-200"
         }`}
       >
@@ -40,7 +40,7 @@ export default function PurchaseTable({ darkMode }) {
             <th className="p-2">Total Amount</th>
             <th className="p-2">Paid Amount</th>
             <th className="p-2">Due</th>
-            <th className="p-2">Medicine List</th>
+            <th className="p-2">Product List</th>
             <th className="p-2">Action</th>
           </tr>
         </thead>
@@ -64,7 +64,7 @@ export default function PurchaseTable({ darkMode }) {
               <Eye size={16} />
             </td>
             <td className="p-2 flex gap-2 justify-center">
-              <button
+              {/* <button
                 className={`p-1 rounded transition ${
                   darkMode
                     ? "bg-blue-600 text-white hover:bg-blue-700"
@@ -72,7 +72,7 @@ export default function PurchaseTable({ darkMode }) {
                 }`}
               >
                 <Printer size={16} />
-              </button>
+              </button> */}
               <button
                 className={`p-1 rounded transition ${
                   darkMode
@@ -112,7 +112,7 @@ export default function PurchaseTable({ darkMode }) {
               <Eye size={16} />
             </td>
             <td className="p-2 flex gap-2 justify-center">
-              <button
+              {/* <button
                 className={`p-1 rounded transition ${
                   darkMode
                     ? "bg-blue-600 text-white hover:bg-blue-700"
@@ -120,7 +120,7 @@ export default function PurchaseTable({ darkMode }) {
                 }`}
               >
                 <Printer size={16} />
-              </button>
+              </button> */}
               <button
                 className={`p-1 rounded transition ${
                   darkMode
@@ -159,9 +159,9 @@ export default function PurchaseTable({ darkMode }) {
               <Eye size={16} />
             </td>
             <td className="p-2 flex gap-2 justify-center">
-              <button className="p-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+              {/* <button className="p-1 bg-blue-500 text-white rounded hover:bg-blue-600">
                 <Printer size={16} />
-              </button>
+              </button> */}
               <button className="p-1 bg-green-500 text-white rounded hover:bg-green-600">
                 <Edit size={16} />
               </button>

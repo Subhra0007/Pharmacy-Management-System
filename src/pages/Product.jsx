@@ -1,10 +1,10 @@
-//pages/Medicine.jsx
+//pages/Product.jsx
 import { useState } from "react";
 import { Eye, Edit, Trash2, Search, Filter, Plus } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 
-export default function Medicine() {
+export default function Product() {
   const { darkMode } = useOutletContext();
 
   const [medicines, setMedicines] = useState([
@@ -21,7 +21,7 @@ export default function Medicine() {
     >
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Medicine List</h2>
+          <h2 className="text-2xl font-bold">Product List</h2>
           <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
             Manage the inventory of medicines.
           </p>
@@ -61,7 +61,7 @@ export default function Medicine() {
               }`}
             />
           </div>
-          <button
+          {/* <button
             className={`flex items-center gap-2 border px-4 py-2 rounded-lg transition ${
               darkMode
                 ? "border-gray-500 text-gray-100 hover:bg-gray-600"
@@ -71,7 +71,7 @@ export default function Medicine() {
             <Filter size={18} />
             Filter
             <IoIosArrowDown className="ml-3" />
-          </button>
+          </button> */}
         </div>
 
         <div className="overflow-x-auto">

@@ -1,16 +1,15 @@
-//pages/Purchase.jsx
 import { useState } from "react";
-import { Eye, Edit, Trash2, Search, Filter, Plus, Printer} from "lucide-react";
+import { Eye, Edit, Trash2, Search, Filter, Plus } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 
-export default function Purchase() {
+export default function Notes() {
   const { darkMode } = useOutletContext();
 
-  const [purchases, setPurchases] = useState([
-    { id: "#P-001", date: "Feb 19, 2025", supplier: "Square", amount: 2500, paid: 2300, deu:200, list:<Eye/> },
-    { id: "#P-002", date: "Feb 20, 2025", supplier: "Beximco", amount: 660,  paid: 300, deu:200, list:<Eye/>},
-    { id: "#P-003", date: "Feb 21, 2025", supplier: "Renata", amount: 3763, paid: 3300, deu:200, list:<Eye/> },
+  const [notes, setNotes] = useState([
+    { title: "Inventory Check",  },
+    {  title: "Supplier Meeting"},
+    {  title: "Staff Training" },
   ]);
 
   return (
@@ -21,9 +20,9 @@ export default function Purchase() {
     >
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Purchase List</h2>
+          <h2 className="text-2xl font-bold">Notes</h2>
           <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
-            Manage purchases from suppliers.
+            Manage notes for pharmacy operations and reminders.
           </p>
         </div>
         <button
@@ -34,7 +33,7 @@ export default function Purchase() {
           }`}
         >
           <Plus size={18} />
-          Add New Purchase
+          Add New Note
         </button>
       </div>
 
@@ -76,7 +75,7 @@ export default function Purchase() {
 
         <div className="overflow-x-auto">
           <table
-            className={`w-full border rounded-lg  text-lg overflow-x-auto ${
+            className={`w-full border rounded-lg overflow-hidden ${
               darkMode ? "border-gray-600" : "border-gray-200"
             }`}
           >
@@ -84,21 +83,15 @@ export default function Purchase() {
               className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
             >
               <tr>
-                {/* <th className="p-3">
-                  <input type="checkbox" />
-                </th> */}
-                <th className="p-3">Purchase ID</th>
-                <th className="p-3">Date</th>
-                <th className="p-3">Supplier</th>
-                <th className="p-3">Total Amount</th>
-                <th className="p-3">Paid Amount</th>
-                <th className="p-3">Due</th>
-                <th className="p-3">Product List</th>
+               
+                {/* <th className="p-3">Note ID</th> */}
+                <th className="p-3">Notes</th>
+              
                 <th className="p-3">Action</th>
               </tr>
             </thead>
             <tbody>
-              {purchases.map((purchase, index) => (
+              {notes.map((note, index) => (
                 <tr
                   key={index}
                   className={`border-t transition-colors duration-300 text-center ${
@@ -107,19 +100,11 @@ export default function Purchase() {
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  {/* <td className="p-3">
-                    <input type="checkbox" />
-                  </td> */}
-                  <td className="p-3">{purchase.id}</td>
-                  <td className="p-3">{purchase.date}</td>
-                  <td className="p-3">{purchase.supplier}</td>
-                  <td className="p-3">${purchase.amount.toLocaleString()}</td>
-                  <td className="p-3">${purchase.paid}</td>
-                  <td className="p-3">${purchase.deu}</td>
-                  <td className="p-2">
-                        <Eye size={16} />
-                  </td>
-                  <td className="p-3 flex gap-2">
+                 
+                  {/* <td className="p-3">{note.id}</td> */}
+                  <td className="p-3">{note.title}</td>
+                
+                  <td className="p-3 flex gap-2 justify-center">
                     {/* <button
                       className={`p-2 rounded transition ${
                         darkMode
@@ -127,7 +112,7 @@ export default function Purchase() {
                           : "bg-green-500 text-white hover:bg-green-600"
                       }`}
                     >
-                      <Printer size={16} />
+                      <Eye size={16} />
                     </button> */}
                     <button
                       className={`p-2 rounded transition ${

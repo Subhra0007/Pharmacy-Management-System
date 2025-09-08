@@ -25,7 +25,7 @@ export default function TopMedicine({ darkMode }) {
               : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
           }`}
         >
-          This Month
+          This Week
           <IoIosArrowDown className="ml-3" />
         </button>
       </div>

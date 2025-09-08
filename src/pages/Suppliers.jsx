@@ -61,7 +61,7 @@ export default function Suppliers() {
               }`}
             />
           </div>
-          <button
+          {/* <button
             className={`flex items-center gap-2 border px-4 py-2 rounded-lg transition ${
               darkMode
                 ? "border-gray-500 text-gray-100 hover:bg-gray-600"
@@ -71,7 +71,7 @@ export default function Suppliers() {
             <Filter size={18} />
             Filter
             <IoIosArrowDown className="ml-3" />
-          </button>
+          </button> */}
         </div>
 
         <div className="overflow-x-auto">
@@ -114,11 +114,11 @@ export default function Suppliers() {
                   <td className="p-3">{supplier.phone}</td>
                   <td className="p-3">{supplier.email}</td>
                    <td className="p-3">{supplier.address}</td>
-                    <td className="p-2">
+                  <td className="p-2">
                         <Eye size={16} />
                   </td>
                   <td className="p-3 flex gap-2">
-                    <button
+                    {/* <button
                       className={`p-2 rounded transition ${
                         darkMode
                           ? "bg-green-600 text-white hover:bg-green-700"
@@ -126,7 +126,7 @@ export default function Suppliers() {
                       }`}
                     >
                       <Printer size={16} />
-                    </button>
+                    </button> */}
                     <button
                       className={`p-2 rounded transition ${
                         darkMode

@@ -9,7 +9,7 @@ export default function StackedReport({ data, darkMode }) {
       }`}
     >
       <div className="flex justify-between items-center mb-4">
-        <h3 className="font-semibold">Graph Report Today</h3>
+        <h3 className="font-semibold">Graph Report Yesterday</h3>
         <PiDotsThree
           className={`size-10 p-2 shadow ${
             darkMode ? "text-gray-300 bg-gray-600" : "text-gray-900 bg-gray-100"

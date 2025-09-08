@@ -1,16 +1,18 @@
-//pages/Orders.jsx
+//pages/CustomerOrders.jsx
 import { useState } from "react";
 import { Eye, Edit, Trash2, Search, Filter, Plus, Printer } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 
-export default function Orders() {
+export default function CustomerOrders() {
   const { darkMode } = useOutletContext();
 
   const [orders, setOrders] = useState([
     { id: "#ORD001", date: "Feb 24, 2025", customer: "A Khan", amount:1200, status: "Pending", date:"12:09:2025" },
     { id: "#ORD002", date: "Feb 25, 2025", customer: "B Smith", amount:1200, status: "Completed", date:"12:09:2025" },
     { id: "#ORD003", date: "Feb 26, 2025", customer: "C Johnson", amount:1200, status: "Processing" , date:"12:09:2025"},
+    { id: "#ORD004", date: "Feb 26, 2025", customer: "C Johnson", amount:1200, status: "Out of Delivery" , date:"12:09:2025"},
+    { id: "#ORD005", date: "Feb 26, 2025", customer: "C Johnson", amount:1200, status: "Delivered" , date:"12:09:2025"},
   ]);
 
   return (
@@ -21,7 +23,7 @@ export default function Orders() {
     >
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Orders List</h2>
+          <h2 className="text-2xl font-bold">Customer Orders List</h2>
           <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
             Manage customer orders and their statuses.
           </p>
@@ -34,7 +36,7 @@ export default function Orders() {
           }`}
         >
           <Plus size={18} />
-          Add New Order
+          Add New Customer Order
         </button>
       </div>
 
@@ -61,7 +63,7 @@ export default function Orders() {
               }`}
             />
           </div>
-          <button
+          {/* <button
             className={`flex items-center gap-2 border px-4 py-2 rounded-lg transition ${
               darkMode
                 ? "border-gray-500 text-gray-100 hover:bg-gray-600"
@@ -71,7 +73,7 @@ export default function Orders() {
             <Filter size={18} />
             Filter
             <IoIosArrowDown className="ml-3" />
-          </button>
+          </button> */}
         </div>
 
         <div className="overflow-x-auto">
