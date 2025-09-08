@@ -251,11 +251,11 @@ export default function Customer() {
       <div className="grid grid-cols-3 gap-4">
         {/* Card 1 */}
         <div
-          className={`p-4 shadow rounded-md flex justify-between items-center transition-colors duration-300 ${
+          className={`p-4 shadow rounded-md flex flex-col justify-between items-center transition-colors duration-300 ${
             darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
           }`}
         >
-          <div className="space-y-2">
+          <div className="space-y-2 w-full">
             <div className="flex items-center gap-2">
               <div
                 className={`p-2 rounded-full ${
@@ -269,38 +269,49 @@ export default function Customer() {
             <h2 className="text-2xl font-bold">1,253</h2>
             <p className="text-green-600 text-xs">↑ 12% Since last week</p>
           </div>
-          <div className="w-28 h-16">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={[
-                  { value: 5 },
-                  { value: 7 },
-                  { value: 4 },
-                  { value: 8 },
-                  { value: 10 },
-                  { value: 9 },
-                  { value: 6 },
-                  { value: 7 },
-                ]}
-              >
-                <Bar
-                  dataKey="value"
-                  fill={darkMode ? "#60a5fa" : "#2563eb"}
-                  radius={[4, 4, 0, 0]}
-                  barSize={6}
-                />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="w-full">
+            <div className="flex justify-end mb-2">
+              <button className={`flex items-center gap-1 border text-xs px-2 py-1 rounded-md transition ${
+                darkMode
+                  ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
+                  : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
+              }`}>
+                This Week <IoIosArrowDown size={14} />
+              </button>
+            </div>
+            <div className="w-full h-16">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={[
+                    { value: 5 },
+                    { value: 7 },
+                    { value: 4 },
+                    { value: 8 },
+                    { value: 10 },
+                    { value: 9 },
+                    { value: 6 },
+                    { value: 7 },
+                  ]}
+                >
+                  <Bar
+                    dataKey="value"
+                    fill={darkMode ? "#60a5fa" : "#2563eb"}
+                    radius={[4, 4, 0, 0]}
+                    barSize={6}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
 
         {/* Card 2 */}
         <div
-          className={`p-4 shadow rounded-md flex justify-between items-center transition-colors duration-300 ${
+          className={`p-4 shadow rounded-md flex flex-col justify-between items-center transition-colors duration-300 ${
             darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
           }`}
         >
-          <div className="space-y-2">
+          <div className="space-y-2 w-full">
             <div className="flex items-center gap-2">
               <div
                 className={`p-2 rounded-full ${
@@ -319,38 +330,49 @@ export default function Customer() {
               </span>
             </p>
           </div>
-          <div className="w-28 h-16">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={[
-                  { value: 3 },
-                  { value: 6 },
-                  { value: 4 },
-                  { value: 7 },
-                  { value: 5 },
-                  { value: 8 },
-                  { value: 6 },
-                  { value: 7 },
-                ]}
-              >
-                <Bar
-                  dataKey="value"
-                  fill={darkMode ? "#86efac" : "#22c55e"}
-                  radius={[4, 4, 0, 0]}
-                  barSize={6}
-                />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="w-full">
+            <div className="flex justify-end mb-2">
+              <button className={`flex items-center gap-1 border text-xs px-2 py-1 rounded-md transition ${
+                darkMode
+                  ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
+                  : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
+              }`}>
+                This Week <IoIosArrowDown size={14} />
+              </button>
+            </div>
+            <div className="w-full h-16">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={[
+                    { value: 3 },
+                    { value: 6 },
+                    { value: 4 },
+                    { value: 7 },
+                    { value: 5 },
+                    { value: 8 },
+                    { value: 6 },
+                    { value: 7 },
+                  ]}
+                >
+                  <Bar
+                    dataKey="value"
+                    fill={darkMode ? "#86efac" : "#22c55e"}
+                    radius={[4, 4, 0, 0]}
+                    barSize={6}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
 
         {/* Card 3 */}
         <div
-          className={`p-4 shadow rounded-md flex justify-between items-center transition-colors duration-300 ${
+          className={`p-4 shadow rounded-md flex flex-col justify-between items-center transition-colors duration-300 ${
             darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
           }`}
         >
-          <div className="space-y-2">
+          <div className="space-y-2 w-full">
             <div className="flex items-center gap-2">
               <div
                 className={`p-2 rounded-full ${
@@ -369,28 +391,39 @@ export default function Customer() {
               </span>
             </p>
           </div>
-          <div className="w-28 h-16">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={[
-                  { value: 4 },
-                  { value: 7 },
-                  { value: 6 },
-                  { value: 9 },
-                  { value: 5 },
-                  { value: 8 },
-                  { value: 7 },
-                  { value: 6 },
-                ]}
-              >
-                <Bar
-                  dataKey="value"
-                  fill={darkMode ? "#fb923c" : "#f97316"}
-                  radius={[4, 4, 0, 0]}
-                  barSize={6}
-                />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="w-full">
+            <div className="flex justify-end mb-2">
+              <button className={`flex items-center gap-1 border text-xs px-2 py-1 rounded-md transition ${
+                darkMode
+                  ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
+                  : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
+              }`}>
+                This Week <IoIosArrowDown size={14} />
+              </button>
+            </div>
+            <div className="w-full h-16">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={[
+                    { value: 4 },
+                    { value: 7 },
+                    { value: 6 },
+                    { value: 9 },
+                    { value: 5 },
+                    { value: 8 },
+                    { value: 7 },
+                    { value: 6 },
+                  ]}
+                >
+                  <Bar
+                    dataKey="value"
+                    fill={darkMode ? "#fb923c" : "#f97316"}
+                    radius={[4, 4, 0, 0]}
+                    barSize={6}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       </div>
@@ -420,7 +453,7 @@ export default function Customer() {
               }`}
             />
           </div>
-          <ScrollText/>
+          <ScrollText />
         </div>
 
         {/* Table */}
@@ -637,9 +670,9 @@ export default function Customer() {
 
       {/* Graph Only Modal with Blur Background */}
       {showModal && (
-        <div className="fixed inset-0 bg-opacity-100 backdrop-blur-sm flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
           <div
-            className={`rounded-lg w-11/12 max-w-xl relative transition-colors duration-300 ${
+            className={`rounded-lg w-11/12 max-w-xl p-6 relative transition-colors duration-300 ${
               darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
             }`}
           >
@@ -652,18 +685,25 @@ export default function Customer() {
               </svg>
             </button>
             
-            {/* Simple title with customer's name */}
-            <div className="p-6 pb-2">
-              <h3 className="text-xl font-bold text-center">
+            <div className="text-center mb-4">
+              <h3 className="text-xl font-bold">
                 {selectedCustomer?.name} - Order Frequency
               </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-1">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                 Customer ID: {selectedCustomer?.id}
               </p>
             </div>
 
-            {/* Chart Container */}
-            <div className="p-6">
+            <div className="mb-4">
+              <div className="flex justify-end mb-2">
+                <button className={`flex items-center gap-1 border text-xs px-2 py-1 rounded-md transition ${
+                  darkMode
+                    ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
+                    : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
+                }`}>
+                  This Week <IoIosArrowDown size={14} />
+                </button>
+              </div>
               <ResponsiveContainer width="100%" height={400}>
                 <BarChart data={orderFrequencyData}>
                   <CartesianGrid
@@ -697,8 +737,7 @@ export default function Customer() {
               </ResponsiveContainer>
             </div>
 
-            {/* Simple legend */}
-            <div className="p-4 text-center border-t border-gray-200 dark:border-gray-600">
+            <div className="text-center border-t border-gray-200 dark:border-gray-600 pt-4">
               <div className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                 <div className="w-3 h-3 rounded-full bg-blue-500"></div>
                 <span>Orders per month</span>

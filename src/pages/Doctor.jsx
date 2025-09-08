@@ -1,4 +1,3 @@
-//pages/Doctor.jsx
 import { useState } from "react";
 import { Eye, Edit, Trash2, Search, Filter, Plus, ScrollText } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
@@ -252,9 +251,9 @@ export default function Doctor() {
 
       {/* Graph Only Modal */}
       {showModal && (
-        <div className="fixed inset-0  bg-opacity-100 flex justify-center items-center z-50">
+        <div className="fixed inset-0  bg-opacity-100 backdrop-blur-sm flex justify-center items-center z-50">
           <div
-            className={`rounded-lg w-11/12 max-w-lg relative transition-colors duration-300 ${
+            className={`rounded-lg w-11/12 max-w-lg p-6 relative transition-colors duration-300 ${
               darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
             }`}
           >
@@ -268,17 +267,26 @@ export default function Doctor() {
             </button>
             
             {/* Simple title with doctor's name */}
-            <div className="p-6 pb-2">
-              <h3 className="text-xl font-bold text-center">
+            <div className="text-center mb-4">
+              <h3 className="text-xl font-bold">
                 {selectedDoctor?.name} - Appointment Statistics
               </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-1">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                 {selectedDoctor?.specialty}
               </p>
             </div>
 
             {/* Chart Container */}
-            <div className="p-6">
+            <div className="mb-4">
+              <div className="flex justify-end mb-2">
+                <button className={`flex items-center gap-1 border text-xs px-2 py-1 rounded-md transition ${
+                  darkMode
+                    ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
+                    : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
+                }`}>
+                  This Week <IoIosArrowDown size={14} />
+                </button>
+              </div>
               <ResponsiveContainer width="100%" height={400}>
                 <LineChart data={sampleAppointmentsData}>
                   <defs>
@@ -322,7 +330,7 @@ export default function Doctor() {
             </div>
 
             {/* Simple legend */}
-            <div className="p-4 text-center border-t border-gray-200 dark:border-gray-600">
+            <div className="text-center border-t border-gray-200 dark:border-gray-600 pt-4">
               <div className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                 <div className="w-3 h-3 rounded-full bg-blue-500"></div>
                 <span>Appointments per day</span>

@@ -140,7 +140,7 @@ export default function PurchaseTable({ darkMode }) {
             }`}
           >
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold">Medicine List</h3>
+              <h3 className="text-xl font-bold">Product List</h3>
               <button
                 onClick={() => setShowModal(false)}
                 className={`p-2 rounded ${
@@ -158,7 +158,7 @@ export default function PurchaseTable({ darkMode }) {
                   className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
                 >
                   <tr>
-                    <th className="p-3 text-left">Medicine Name</th>
+                    <th className="p-3 text-left">Product Name</th>
                     <th className="p-3 text-left">Quantity</th>
                     <th className="p-3 text-left">Price</th>
                   </tr>
