@@ -8,9 +8,9 @@ export default function Doctor() {
   const { darkMode } = useOutletContext();
 
   const [doctors, setDoctors] = useState([
-    { id: "#DOC001", name: "Dr. A.K", specialty: "General Physician", phone: "01893531209" },
-    { id: "#DOC002", name: "Dr. A.G", specialty: "Cardiologist", phone: "01893531210" },
-    { id: "#DOC003", name: "Dr. J.K", specialty: "Pediatrician", phone: "01893531211" },
+    { id: "#DOC001", name: "Dr. A.K", specialty: "General Physician", phone: "01893531209" ,app: 10,fees:1200, day: "Mon, Tue, Sat", time: "10:00 am to 12:00pm" },
+    { id: "#DOC002", name: "Dr. A.G", specialty: "Cardiologist", phone: "01893531210", app: 10, fees:1500 ,day: "Mon, Tue, Sat", time: "10:00 am to 12:00pm"  },
+    { id: "#DOC003", name: "Dr. J.K", specialty: "Pediatrician", phone: "01893531211", app: 10, fees:1000, day: "Mon, Tue, Sat", time: "10:00 am to 12:00pm"  },
   ]);
 
   return (
@@ -35,6 +35,16 @@ export default function Doctor() {
         >
           <Plus size={18} />
           Add New Doctor
+        </button>
+         <button
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
+            darkMode
+              ? "bg-blue-600 text-white hover:bg-blue-700"
+              : "bg-blue-600 text-white hover:bg-blue-700"
+          }`}
+        >
+          <Plus size={18} />
+          Add New Appt.
         </button>
       </div>
 
@@ -76,7 +86,7 @@ export default function Doctor() {
 
         <div className="overflow-x-auto">
           <table
-            className={`w-full border rounded-lg overflow-hidden ${
+            className={`w-full border rounded-lg overflow-hidden text-xs text-center  ${
               darkMode ? "border-gray-600" : "border-gray-200"
             }`}
           >
@@ -84,13 +94,17 @@ export default function Doctor() {
               className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
             >
               <tr>
-                <th className="p-3">
+                {/* <th className="p-3">
                   <input type="checkbox" />
-                </th>
+                </th> */}
                 <th className="p-3">Doctor ID</th>
                 <th className="p-3">Name</th>
                 <th className="p-3">Specialty</th>
                 <th className="p-3">Phone</th>
+                <th className="p-3">No of Appt.</th>
+                <th className="p-3">Fees</th>
+                <th className="p-3">Day</th>
+                <th className="p-3">Time</th>
                 <th className="p-3">Action</th>
               </tr>
             </thead>
@@ -104,13 +118,17 @@ export default function Doctor() {
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  <td className="p-3">
+                  {/* <td className="p-3">
                     <input type="checkbox" />
-                  </td>
+                  </td> */}
                   <td className="p-3">{doc.id}</td>
                   <td className="p-3">{doc.name}</td>
                   <td className="p-3">{doc.specialty}</td>
                   <td className="p-3">{doc.phone}</td>
+                  <td className="p-3">{doc.app}</td>
+                  <td className="p-3">{doc.fees}</td>
+                  <td className="p-3">{doc.day}</td>
+                  <td className="p-3">{doc.time}</td>
                   <td className="p-3 flex gap-2">
                     <button
                       className={`p-2 rounded transition ${

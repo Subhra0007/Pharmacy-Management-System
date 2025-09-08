@@ -124,14 +124,14 @@ export default function Sidebar({ darkMode }) {
             darkMode ? "bg-gray-700 text-gray-100" : "bg-blue-50 text-gray-800"
           }`}
         >
-          <p className="text-sm font-semibold">Upgrade Pro</p>
+          {/* <p className="text-sm font-semibold">Upgrade Pro</p>
           <p
             className={`text-xs mt-1 ${
               darkMode ? "text-gray-300" : "text-gray-500"
             }`}
           >
             Master your pharmacy with detailed analytics and clear graphs.
-          </p>
+          </p> */}
           <p className="text-lg text-green-600 mt-1">234 days left</p>
           <button
             className={`mt-3 w-full py-2 rounded-lg text-sm font-medium transition ${

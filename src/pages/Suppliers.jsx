@@ -1,6 +1,6 @@
 //pages/Suppliers.jsx
 import { useState } from "react";
-import { Eye, Edit, Trash2, Search, Filter, Plus } from "lucide-react";
+import { Eye, Edit, Trash2, Search, Filter, Plus, Printer } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -8,9 +8,9 @@ export default function Suppliers() {
   const { darkMode } = useOutletContext();
 
   const [suppliers, setSuppliers] = useState([
-    { id: "#SUP001", name: "Square Ltd.", phone: "01893531209", email: "square@example.com" },
-    { id: "#SUP002", name: "Beximco", phone: "01893531210", email: "beximco@example.com" },
-    { id: "#SUP003", name: "Renata", phone: "01893531211", email: "renata@example.com" },
+    { id: "#SUP001", name: "Square Ltd.", phone: "01893531209", email: "square@example.com", address: "Kolkata", list: <Eye/> },
+    { id: "#SUP002", name: "Beximco", phone: "01893531210", email: "beximco@example.com", address: "Howrah", list: <Eye/> },
+    { id: "#SUP003", name: "Renata", phone: "01893531211", email: "renata@example.com", address: "Hooghly", list: <Eye/> },
   ]);
 
   return (
@@ -76,7 +76,7 @@ export default function Suppliers() {
 
         <div className="overflow-x-auto">
           <table
-            className={`w-full border rounded-lg overflow-hidden ${
+            className={`w-full border rounded-lg overflow-hidden text-sm ${
               darkMode ? "border-gray-600" : "border-gray-200"
             }`}
           >
@@ -84,13 +84,15 @@ export default function Suppliers() {
               className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
             >
               <tr>
-                <th className="p-3">
+                {/* <th className="p-3">
                   <input type="checkbox" />
-                </th>
+                </th> */}
                 <th className="p-3">Supplier ID</th>
                 <th className="p-3">Name</th>
                 <th className="p-3">Phone</th>
                 <th className="p-3">Email</th>
+                <th className="p-3">Address</th>
+                <th className="p-3">Product List</th>
                 <th className="p-3">Action</th>
               </tr>
             </thead>
@@ -104,13 +106,17 @@ export default function Suppliers() {
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  <td className="p-3">
+                  {/* <td className="p-3">
                     <input type="checkbox" />
-                  </td>
+                  </td> */}
                   <td className="p-3">{supplier.id}</td>
                   <td className="p-3">{supplier.name}</td>
                   <td className="p-3">{supplier.phone}</td>
                   <td className="p-3">{supplier.email}</td>
+                   <td className="p-3">{supplier.address}</td>
+                    <td className="p-2">
+                        <Eye size={16} />
+                  </td>
                   <td className="p-3 flex gap-2">
                     <button
                       className={`p-2 rounded transition ${

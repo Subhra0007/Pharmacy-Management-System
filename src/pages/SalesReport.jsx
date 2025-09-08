@@ -60,7 +60,7 @@ export default function SalesReport() {
             View sales data and top-selling medicines.
           </p>
         </div>
-        <button
+        {/* <button
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
             darkMode
               ? "bg-blue-600 text-white hover:bg-blue-700"
@@ -69,7 +69,7 @@ export default function SalesReport() {
         >
           <Plus size={18} />
           Add New Report
-        </button>
+        </button> */}
       </div>
 
       <div
@@ -149,9 +149,9 @@ export default function SalesReport() {
                 className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
               >
                 <tr>
-                  <th className="p-3">
+                  {/* <th className="p-3">
                     <input type="checkbox" />
-                  </th>
+                  </th> */}
                   <th className="p-3">Report ID</th>
                   <th className="p-3">Date</th>
                   <th className="p-3">Customer</th>
@@ -162,15 +162,15 @@ export default function SalesReport() {
                 {reports.map((report, index) => (
                   <tr
                     key={index}
-                    className={`border-t transition-colors duration-300 ${
+                    className={`border-t transition-colors duration-300 text-center ${
                       darkMode
                         ? "border-gray-600 hover:bg-gray-600"
                         : "border-gray-200 hover:bg-gray-50"
                     }`}
                   >
-                    <td className="p-3">
+                    {/* <td className="p-3">
                       <input type="checkbox" />
-                    </td>
+                    </td> */}
                     <td className="p-3">{report.id}</td>
                     <td className="p-3">{report.date}</td>
                     <td className="p-3">{report.customer}</td>

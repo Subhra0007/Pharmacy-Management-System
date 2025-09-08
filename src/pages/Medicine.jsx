@@ -8,9 +8,9 @@ export default function Medicine() {
   const { darkMode } = useOutletContext();
 
   const [medicines, setMedicines] = useState([
-    { id: "#MED001", name: "Paracetamol", type: "Tablet", stock: 150 },
-    { id: "#MED002", name: "Crosin", type: "Syrup", stock: 80 },
-    { id: "#MED003", name: "Benadryl", type: "Capsule", stock: 120 },
+    { id: "#MED001", name: "Paracetamol", type: "Tablet", stock: 150, single: 1500, mfg: "13:07:2025", exp: "27:10:2026" },
+    { id: "#MED002", name: "Crosin", type: "Syrup", stock: 80,  single: 80, mfg: "25:07:2025", exp: "27:10:2026" },
+    { id: "#MED003", name: "Benadryl", type: "Capsule", stock: 120,  single: 1200, mfg: "30:07:2025", exp: "27:10:2026" },
   ]);
 
   return (
@@ -76,7 +76,7 @@ export default function Medicine() {
 
         <div className="overflow-x-auto">
           <table
-            className={`w-full border rounded-lg overflow-hidden ${
+            className={`w-full border rounded-lg overflow-hidden text-center ${
               darkMode ? "border-gray-600" : "border-gray-200"
             }`}
           >
@@ -84,13 +84,16 @@ export default function Medicine() {
               className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
             >
               <tr>
-                <th className="p-3">
+                {/* <th className="p-3">
                   <input type="checkbox" />
-                </th>
+                </th> */}
                 <th className="p-3">Medicine ID</th>
                 <th className="p-3">Name</th>
                 <th className="p-3">Type</th>
                 <th className="p-3">Stock</th>
+                <th className="p-3">Single Count</th>
+                <th className="p-3">MFG Date</th>
+                <th className="p-3">Exp. Date</th>
                 <th className="p-3">Action</th>
               </tr>
             </thead>
@@ -98,19 +101,22 @@ export default function Medicine() {
               {medicines.map((med, index) => (
                 <tr
                   key={index}
-                  className={`border-t transition-colors duration-300 ${
+                  className={`border-t transition-colors duration-300 text-center ${
                     darkMode
                       ? "border-gray-600 hover:bg-gray-600"
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  <td className="p-3">
+                  {/* <td className="p-3">
                     <input type="checkbox" />
-                  </td>
+                  </td> */}
                   <td className="p-3">{med.id}</td>
                   <td className="p-3">{med.name}</td>
                   <td className="p-3">{med.type}</td>
                   <td className="p-3">{med.stock}</td>
+                   <td className="p-3">{med.single}</td>
+                    <td className="p-3">{med.mfg}</td>
+                     <td className="p-3">{med.exp}</td>
                   <td className="p-3 flex gap-2">
                     <button
                       className={`p-2 rounded transition ${

@@ -1,6 +1,6 @@
 //pages/Orders.jsx
 import { useState } from "react";
-import { Eye, Edit, Trash2, Search, Filter, Plus } from "lucide-react";
+import { Eye, Edit, Trash2, Search, Filter, Plus, Printer } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -8,9 +8,9 @@ export default function Orders() {
   const { darkMode } = useOutletContext();
 
   const [orders, setOrders] = useState([
-    { id: "#ORD001", date: "Feb 24, 2025", customer: "A Khan", status: "Pending" },
-    { id: "#ORD002", date: "Feb 25, 2025", customer: "B Smith", status: "Completed" },
-    { id: "#ORD003", date: "Feb 26, 2025", customer: "C Johnson", status: "Processing" },
+    { id: "#ORD001", date: "Feb 24, 2025", customer: "A Khan", amount:1200, status: "Pending", date:"12:09:2025" },
+    { id: "#ORD002", date: "Feb 25, 2025", customer: "B Smith", amount:1200, status: "Completed", date:"12:09:2025" },
+    { id: "#ORD003", date: "Feb 26, 2025", customer: "C Johnson", amount:1200, status: "Processing" , date:"12:09:2025"},
   ]);
 
   return (
@@ -76,7 +76,7 @@ export default function Orders() {
 
         <div className="overflow-x-auto">
           <table
-            className={`w-full border rounded-lg overflow-hidden ${
+            className={`w-full border rounded-lg overflow-hidden text-center text-sm ${
               darkMode ? "border-gray-600" : "border-gray-200"
             }`}
           >
@@ -84,13 +84,16 @@ export default function Orders() {
               className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
             >
               <tr>
-                <th className="p-3">
+                {/* <th className="p-3">
                   <input type="checkbox" />
-                </th>
+                </th> */}
                 <th className="p-3">Order ID</th>
                 <th className="p-3">Date</th>
                 <th className="p-3">Customer</th>
+                <th className="p-3">List</th>
+                <th className="p-3">Total Amount</th>
                 <th className="p-3">Status</th>
+                 <th className="p-3">Delivery Date</th>
                 <th className="p-3">Action</th>
               </tr>
             </thead>
@@ -104,13 +107,18 @@ export default function Orders() {
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  <td className="p-3">
+                  {/* <td className="p-3">
                     <input type="checkbox" />
-                  </td>
+                  </td> */}
                   <td className="p-3">{order.id}</td>
                   <td className="p-3">{order.date}</td>
                   <td className="p-3">{order.customer}</td>
+                   <td className="p-2">
+                        <Eye size={16} />
+                  </td>
+                  <td className="p-3">{order.amount}</td>
                   <td className="p-3">{order.status}</td>
+                  <td className="p-3">{order.date}</td>
                   <td className="p-3 flex gap-2">
                     <button
                       className={`p-2 rounded transition ${
@@ -119,7 +127,7 @@ export default function Orders() {
                           : "bg-green-500 text-white hover:bg-green-600"
                       }`}
                     >
-                      <Eye size={16} />
+                      <Printer size={16} />
                     </button>
                     <button
                       className={`p-2 rounded transition ${

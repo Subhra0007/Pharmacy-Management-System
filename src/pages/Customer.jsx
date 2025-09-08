@@ -286,7 +286,7 @@ export default function Customer() {
         {/* Table */}
         <div className="overflow-x-auto">
           <table
-            className={`w-full border rounded-lg overflow-hidden ${
+            className={`w-full border rounded-lg overflow-hidden text-sm ${
               darkMode ? "border-gray-600" : "border-gray-200"
             }`}
           >
@@ -294,9 +294,9 @@ export default function Customer() {
               className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
             >
               <tr>
-                <th className="p-3">
+                {/* <th className="p-3">
                   <input type="checkbox" />
-                </th>
+                </th> */}
                 <th className="p-3">Customer ID</th>
                 <th className="p-3">Customer Name</th>
                 <th className="p-3">Phone Number</th>
@@ -316,9 +316,9 @@ export default function Customer() {
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  <td className="p-3">
+                  {/* <td className="p-3">
                     <input type="checkbox" />
-                  </td>
+                  </td> */}
                   <td className="p-3">{c.id}</td>
                   <td className="p-3 flex items-center gap-2">
                     <img

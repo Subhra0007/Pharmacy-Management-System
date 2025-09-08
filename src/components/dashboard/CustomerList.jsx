@@ -1,4 +1,4 @@
-import { Eye, Edit, Trash2 } from "lucide-react";
+import { Eye, Edit, Trash2,  Printer } from "lucide-react";
 
 export default function ClipboardList({ darkMode }) {
   return (
@@ -31,9 +31,9 @@ export default function ClipboardList({ darkMode }) {
           className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-600"}
         >
           <tr>
-            <th className="p-2">
+            {/* <th className="p-2">
               <input type="checkbox" />
-            </th>
+            </th> */}
             <th className="p-2">Invoice ID</th>
             <th className="p-2">Date</th>
             <th className="p-2">Customer Name</th>
@@ -45,61 +45,61 @@ export default function ClipboardList({ darkMode }) {
         </thead>
         <tbody>
           {/* Row 1 */}
-          <tr
-            className={`shadow transition-colors duration-300 ${
-              darkMode ? "hover:bg-gray-600" : "hover:bg-gray-50"
-            }`}
-          >
-            <td className="p-2 text-center">
-              <input type="checkbox" />
-            </td>
-            <td className="p-2">#P-00270</td>
-            <td className="p-2">Feb 19, 2025</td>
-            <td className="p-2">Ab Kar</td>
-            <td className="p-2">1234567899</td>
-            <td className="p-2">Dr. ABC</td>
-            <td className="p-2">
-              <Eye size={16} />
-            </td>
-            <td className="p-2 flex gap-2 justify-center">
-              <button
-                className={`p-1 rounded transition ${
-                  darkMode
-                    ? "bg-blue-600 text-white hover:bg-blue-700"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
-              >
-                <Eye size={16} />
-              </button>
-              <button
-                className={`p-1 rounded transition ${
-                  darkMode
-                    ? "bg-green-600 text-white hover:bg-green-700"
-                    : "bg-green-500 text-white hover:bg-green-600"
-                }`}
-              >
-                <Edit size={16} />
-              </button>
-              <button
-                className={`p-1 rounded transition ${
-                  darkMode
-                    ? "bg-orange-600 text-white hover:bg-orange-700"
-                    : "bg-orange-500 text-white hover:bg-orange-600"
-                }`}
-              >
-                <Trash2 size={16} />
-              </button>
-            </td>
-          </tr>
+     <tr
+    className={`shadow transition-colors duration-300 text-center ${
+      darkMode ? "hover:bg-gray-600" : "hover:bg-gray-50"
+    }`}
+  >
+    {/* <td className="p-2 text-center">
+      <input type="checkbox" />
+    </td> */}
+    <td className="p-2">#P-00270</td>
+    <td className="p-2">Feb 19, 2025</td>
+    <td className="p-2">Ab Kar</td>
+    <td className="p-2">1234567899</td>
+    <td className="p-2">Dr. ABC</td>
+    <td className="p-2">
+      <Eye size={16} />
+    </td>
+    <td className="p-2 flex gap-2 justify-center">
+      <button
+        className={`p-1 rounded transition ${
+          darkMode
+            ? "bg-blue-600 text-white hover:bg-blue-700"
+            : "bg-blue-500 text-white hover:bg-blue-600"
+        }`}
+      >
+        <Printer size={16} />
+      </button>
+      <button
+        className={`p-1 rounded transition ${
+          darkMode
+            ? "bg-green-600 text-white hover:bg-green-700"
+            : "bg-green-500 text-white hover:bg-green-600"
+        }`}
+      >
+        <Edit size={16} />
+      </button>
+      <button
+        className={`p-1 rounded transition ${
+          darkMode
+            ? "bg-orange-600 text-white hover:bg-orange-700"
+            : "bg-orange-500 text-white hover:bg-orange-600"
+        }`}
+      >
+        <Trash2 size={16} />
+      </button>
+    </td>
+  </tr>
           {/* Repeat for other rows */}
           <tr
-            className={`shadow transition-colors duration-300 ${
+            className={`shadow transition-colors duration-300 text-center ${
               darkMode ? "hover:bg-gray-600" : "hover:bg-gray-50"
             }`}
           >
-            <td className="p-2 text-center">
+            {/* <td className="p-2 text-center">
               <input type="checkbox" />
-            </td>
+            </td> */}
             <td className="p-2">#P-00268</td>
             <td className="p-2">Feb 20, 2025</td>
             <td className="p-2">Beximco</td>
@@ -116,7 +116,7 @@ export default function ClipboardList({ darkMode }) {
                     : "bg-blue-500 text-white hover:bg-blue-600"
                 }`}
               >
-                <Eye size={16} />
+                <Printer size={16} />
               </button>
               <button
                 className={`p-1 rounded transition ${
@@ -139,13 +139,13 @@ export default function ClipboardList({ darkMode }) {
             </td>
           </tr>
           <tr
-            className={`shadow transition-colors duration-300 ${
+            className={`shadow transition-colors duration-300 text-center ${
               darkMode ? "hover:bg-gray-600" : "hover:bg-gray-50"
             }`}
           >
-            <td className="p-2 text-center">
+            {/* <td className="p-2 text-center">
               <input type="checkbox" />
-            </td>
+            </td> */}
             <td className="p-2">#P-00267</td>
             <td className="p-2">Feb 21, 2025</td>
             <td className="p-2">Renata</td>
@@ -162,7 +162,7 @@ export default function ClipboardList({ darkMode }) {
                     : "bg-blue-500 text-white hover:bg-blue-600"
                 }`}
               >
-                <Eye size={16} />
+                <Printer size={16} />
               </button>
               <button
                 className={`p-1 rounded transition ${

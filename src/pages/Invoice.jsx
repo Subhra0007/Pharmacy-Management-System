@@ -1,6 +1,6 @@
 //pages/Invoice.jsx
 import { useState } from "react";
-import { Eye, Edit, Trash2, Search, Filter, Plus } from "lucide-react";
+import { Eye, Edit, Trash2, Search, Filter, Plus, Printer } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -8,9 +8,9 @@ export default function Invoice() {
   const { darkMode } = useOutletContext();
 
   const [invoices, setInvoices] = useState([
-    { id: "#INV001", date: "Feb 24, 2025", customer: "A Khan", total: 1234 },
-    { id: "#INV002", date: "Feb 25, 2025", customer: "B Smith", total: 5678 },
-    { id: "#INV003", date: "Feb 26, 2025", customer: "C Johnson", total: 9101 },
+    { id: "#INV001", date: "Feb 24, 2025", customer: "A Khan", total: 1234, paid: 123, deu: 125, invoice:<Eye/> },
+    { id: "#INV002", date: "Feb 25, 2025", customer: "B Smith", total: 5678, paid: 163, deu: 155, invoice:<Eye/> },
+    { id: "#INV003", date: "Feb 26, 2025", customer: "C Johnson", total: 9101, paid: 543, deu: 175, invoice:<Eye/> },
   ]);
 
   return (
@@ -76,7 +76,7 @@ export default function Invoice() {
 
         <div className="overflow-x-auto">
           <table
-            className={`w-full border rounded-lg overflow-hidden ${
+            className={`w-full border rounded-lg overflow-hidden text-center text-sm ${
               darkMode ? "border-gray-600" : "border-gray-200"
             }`}
           >
@@ -84,13 +84,16 @@ export default function Invoice() {
               className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
             >
               <tr>
-                <th className="p-3">
+                {/* <th className="p-3">
                   <input type="checkbox" />
-                </th>
+                </th> */}
                 <th className="p-3">Invoice ID</th>
                 <th className="p-3">Date</th>
-                <th className="p-3">Customer</th>
+                <th className="p-3">Suppliers</th>
                 <th className="p-3">Total Amount</th>
+                <th className="p-3">Paid Amount</th>
+                <th className="p-3">Deu</th>
+                <th className="p-3"> Download Invoice</th>
                 <th className="p-3">Action</th>
               </tr>
             </thead>
@@ -104,13 +107,18 @@ export default function Invoice() {
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  <td className="p-3">
+                  {/* <td className="p-3">
                     <input type="checkbox" />
-                  </td>
+                  </td> */}
                   <td className="p-3">{inv.id}</td>
                   <td className="p-3">{inv.date}</td>
                   <td className="p-3">{inv.customer}</td>
                   <td className="p-3">${inv.total.toLocaleString()}</td>
+                  <td className="p-3">${inv.paid}</td>
+                  <td className="p-3">${inv.deu}</td>
+                 <td className="p-2">
+                        <Eye size={16} />
+                  </td>
                   <td className="p-3 flex gap-2">
                     <button
                       className={`p-2 rounded transition ${
@@ -119,7 +127,7 @@ export default function Invoice() {
                           : "bg-green-500 text-white hover:bg-green-600"
                       }`}
                     >
-                      <Eye size={16} />
+                      <Printer size={16} />
                     </button>
                     <button
                       className={`p-2 rounded transition ${
