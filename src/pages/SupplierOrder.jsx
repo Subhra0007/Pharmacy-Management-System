@@ -1,18 +1,88 @@
-//pages/SupplierOrder.jsx
 import { useState } from "react";
-import { Eye, Edit, Trash2, Search, Filter, Plus, Printer } from "lucide-react";
+import { Eye, Edit, Trash2, Search, Filter, Plus, Printer, ScrollText } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function SupplierOrder() {
   const { darkMode } = useOutletContext();
 
   const [invoices, setInvoices] = useState([
-    { id: "#INV001", date: "Feb 24, 2025", customer: "A Khan", total: 1234, paid: 123, deu: 125, status:"Order Receive"},
-    { id: "#INV002", date: "Feb 25, 2025", customer: "B Smith", total: 5678, paid: 163, deu: 155, status:"On the way"},
-    { id: "#INV003", date: "Feb 26, 2025", customer: "C Johnson", total: 9101, paid: 543, deu: 175, status:" Rejected"},
-    { id: "#INV004", date: "Feb 26, 2025", customer: "C Johnson", total: 9101, paid: 543, deu: 175, status:"Processing" },
+    { 
+      id: "#INV001", 
+      date: "Feb 24, 2025", 
+      customer: "A Khan", 
+      total: 1234, 
+      paid: 123, 
+      due: 125, 
+      status: "Order Placed",
+      products: [
+        { name: "Paracetamol", quantity: 100, price: 5 },
+        { name: "Ibuprofen", quantity: 50, price: 8 }
+      ]
+    },
+    { 
+      id: "#INV002", 
+      date: "Feb 25, 2025", 
+      customer: "B Smith", 
+      total: 5678, 
+      paid: 163, 
+      due: 155, 
+      status: "Order Received",
+      products: [
+        { name: "Amoxicillin", quantity: 30, price: 15 },
+        { name: "Ciprofloxacin", quantity: 20, price: 20 }
+      ]
+    },
+    { 
+      id: "#INV003", 
+      date: "Feb 26, 2025", 
+      customer: "C Johnson", 
+      total: 9101, 
+      paid: 543, 
+      due: 175, 
+      status: "Order Received",
+      products: [
+        { name: "Metformin", quantity: 60, price: 12 },
+        { name: "Amlodipine", quantity: 40, price: 10 }
+      ]
+    },
+    { 
+      id: "#INV004", 
+      date: "Feb 26, 2025", 
+      customer: "C Johnson", 
+      total: 9101, 
+      paid: 543, 
+      due: 175, 
+      status: "Order Cancelled",
+      products: [
+        { name: "Losartan", quantity: 25, price: 18 },
+        { name: "Aspirin", quantity: 80, price: 3 }
+      ]
+    },
   ]);
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+
+  const handleViewProducts = (products) => {
+    setSelectedProducts(products);
+    setShowModal(true);
+  };
+
+  // Function to determine status background color
+  const getStatusBgColor = (status) => {
+    switch (status) {
+      case "Order Placed":
+        return darkMode ? "bg-yellow-600" : "bg-yellow-200";
+      case "Order Received":
+        return darkMode ? "bg-green-600" : "bg-green-200";
+      case "Order Cancelled":
+        return darkMode ? "bg-red-600" : "bg-red-200";
+      default:
+        return "";
+    }
+  };
 
   return (
     <div
@@ -23,9 +93,6 @@ export default function SupplierOrder() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Suppliers Orders List</h2>
-          {/* <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
-            Manage invoices for customer purchases.
-          </p> */}
         </div>
         <button
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
@@ -44,7 +111,7 @@ export default function SupplierOrder() {
           darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
         }`}
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-4 mb-4">
           <div className="relative">
             <Search
               className={`absolute left-3 top-2.5 ${
@@ -62,17 +129,7 @@ export default function SupplierOrder() {
               }`}
             />
           </div>
-          {/* <button
-            className={`flex items-center gap-2 border px-4 py-2 rounded-lg transition ${
-              darkMode
-                ? "border-gray-500 text-gray-100 hover:bg-gray-600"
-                : "border-gray-300 text-gray-900 hover:bg-gray-100"
-            }`}
-          >
-            <Filter size={18} />
-            Filter
-            <IoIosArrowDown className="ml-3" />
-          </button> */}
+          <ScrollText />
         </div>
 
         <div className="overflow-x-auto">
@@ -85,15 +142,12 @@ export default function SupplierOrder() {
               className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
             >
               <tr>
-                {/* <th className="p-3">
-                  <input type="checkbox" />
-                </th> */}
                 <th className="p-3">Invoice ID</th>
                 <th className="p-3">Date</th>
                 <th className="p-3">Suppliers</th>
                 <th className="p-3">Total Amount</th>
                 <th className="p-3">Paid Amount</th>
-                <th className="p-3">Deu</th>
+                <th className="p-3">Due</th>
                 <th className="p-3">Invoice</th>
                 <th className="p-3">Status</th>
                 <th className="p-3">Action</th>
@@ -109,29 +163,30 @@ export default function SupplierOrder() {
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  {/* <td className="p-3">
-                    <input type="checkbox" />
-                  </td> */}
                   <td className="p-3">{inv.id}</td>
                   <td className="p-3">{inv.date}</td>
                   <td className="p-3">{inv.customer}</td>
                   <td className="p-3">${inv.total.toLocaleString()}</td>
-                  <td className="p-3">${inv.paid}</td>
-                  <td className="p-3">${inv.deu}</td>
-                 <td className="p-2">
-                        <Eye size={16} />
+                  <td className="p-3">${inv.paid.toLocaleString()}</td>
+                  <td className="p-3">${inv.due.toLocaleString()}</td>
+                  <td className="p-2">
+                    <button onClick={() => handleViewProducts(inv.products)}>
+                      <Eye size={16} />
+                    </button>
                   </td>
-                    <td className="p-3">{inv.status}</td>
-                  <td className="p-3 flex gap-2">
-                    {/* <button
+                  <td className={`p-3 ${getStatusBgColor(inv.status)}`}>
+                    {inv.status}
+                  </td>
+                  <td className="p-3 flex gap-2 justify-center">
+                    <button
                       className={`p-2 rounded transition ${
                         darkMode
                           ? "bg-green-600 text-white hover:bg-green-700"
                           : "bg-green-500 text-white hover:bg-green-600"
                       }`}
                     >
-                      <Printer size={16} />
-                    </button> */}
+                      <FaWhatsapp size={16} />
+                    </button>
                     <button
                       className={`p-2 rounded transition ${
                         darkMode
@@ -231,6 +286,59 @@ export default function SupplierOrder() {
           </div>
         </div>
       </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-opacity-100 backdrop-blur-sm flex items-center justify-center z-50">
+          <div
+            className={`rounded-lg p-6 max-w-lg w-full ${
+              darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
+            }`}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">Products Ordered</h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className={`p-2 rounded ${
+                  darkMode
+                    ? "bg-gray-600 text-white hover:bg-gray-500"
+                    : "bg-gray-200 text-gray-900 hover:bg-gray-300"
+                }`}
+              >
+                Close
+              </button>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead
+                  className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
+                >
+                  <tr>
+                    <th className="p-3 text-left">Product Name</th>
+                    <th className="p-3 text-left">Quantity</th>
+                    <th className="p-3 text-left">Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedProducts.map((product, index) => (
+                    <tr
+                      key={index}
+                      className={`border-t ${
+                        darkMode
+                          ? "border-gray-600 hover:bg-gray-600"
+                          : "border-gray-200 hover:bg-gray-50"
+                      }`}
+                    >
+                      <td className="p-3">{product.name}</td>
+                      <td className="p-3">{product.quantity}</td>
+                      <td className="p-3">${product.price}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

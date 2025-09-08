@@ -7,9 +7,9 @@ export default function Expenses() {
   const { darkMode } = useOutletContext();
 
   const [expenses, setExpenses] = useState([
-    {  category: "E-Bill", amount: 5000, date: "Feb 24, 2025" },
-    { category: "Staff Salaries", amount: 2500, date: "Feb 25, 2025" },
-    {  category: "Maintenance", amount: 300, date: "Feb 26, 2025" },
+    {  category: "E-Bill", amount: 5000, paid: 3000, due: 2000,  date: "Feb 24, 2025" },
+    { category: "Staff Salaries", amount: 2500,paid: 3000, due: 2000, date: "Feb 25, 2025" },
+    {  category: "Maintenance", amount: 300,paid: 3000, due: 2000, date: "Feb 26, 2025" },
   ]);
 
   return (
@@ -87,6 +87,8 @@ export default function Expenses() {
               
                 <th className="p-3">Category</th>
                 <th className="p-3">Amount</th>
+                <th className="p-3">Paid Amount</th>
+                <th className="p-3">Due</th>
                 <th className="p-3">Date</th>
                 <th className="p-3">Action</th>
               </tr>
@@ -105,6 +107,8 @@ export default function Expenses() {
                  
                   <td className="p-3">{expense.category}</td>
                   <td className="p-3">${expense.amount.toLocaleString()}</td>
+                  <td className="p-3">${expense.paid}</td>
+                  <td className="p-3">${expense.due}</td>
                   <td className="p-3">{expense.date}</td>
                   <td className="p-3 flex gap-2 justify-center">
                     {/* <button

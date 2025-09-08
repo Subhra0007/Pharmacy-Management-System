@@ -1,6 +1,6 @@
 //pages/Doctor.jsx
 import { useState } from "react";
-import { Eye, Edit, Trash2, Search, Filter, Plus } from "lucide-react";
+import { Eye, Edit, Trash2, Search, Filter, Plus, ScrollText } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import {
@@ -87,7 +87,7 @@ export default function Doctor() {
           darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
         }`}
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-4 mb-4">
           <div className="relative">
             <Search
               className={`absolute left-3 top-2.5 ${
@@ -105,6 +105,7 @@ export default function Doctor() {
               }`}
             />
           </div>
+          <ScrollText/>
         </div>
 
         <div className="overflow-x-auto">
@@ -141,8 +142,8 @@ export default function Doctor() {
                   <td className="p-3">{doc.name}</td>
                   <td className="p-3">{doc.specialty}</td>
                   <td className="p-3">{doc.phone}</td>
-                  <td className="p-3 cursor-pointer hover:text-blue-500" onClick={() => openModal(doc)}>
-                    <Eye size={16} className="text-blue-500 mx-auto" />
+                  <td className="p-3 cursor-pointer " onClick={() => openModal(doc)}>
+                    <Eye size={16} className=" mx-auto" />
                   </td>
                   <td className="p-3">{doc.fees}</td>
                   <td className="p-3">{doc.clinic}</td>
@@ -251,9 +252,9 @@ export default function Doctor() {
 
       {/* Graph Only Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className="fixed inset-0  bg-opacity-100 flex justify-center items-center z-50">
           <div
-            className={`rounded-lg w-11/12 max-w-4xl relative transition-colors duration-300 ${
+            className={`rounded-lg w-11/12 max-w-lg relative transition-colors duration-300 ${
               darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
             }`}
           >

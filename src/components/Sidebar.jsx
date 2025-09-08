@@ -14,7 +14,8 @@ import {
   Stethoscope,
   ScrollText,
   BanknoteArrowDown,
-  IdCardLanyard
+  IdCardLanyard,
+  Undo2 
 } from "lucide-react";
 
 export default function Sidebar({ darkMode }) {
@@ -108,6 +109,10 @@ export default function Sidebar({ darkMode }) {
              <Link to="/employee" className={linkClass("/employee")}>
               <IdCardLanyard size={20} />
               <span>Employee</span>
+            </Link>
+              <Link to="/return-product" className={linkClass("/return-product")}>
+              <Undo2 size={20} />
+              <span>Return Product</span>
             </Link>
           </div>
 

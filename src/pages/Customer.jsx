@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { Search, Filter, Plus, Edit, Eye, Trash2, Users } from "lucide-react";
+import { Search, Filter, Plus, Edit, Eye, Trash2, Users, ScrollText } from "lucide-react";
 import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 import { FiUserPlus } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
@@ -8,76 +8,165 @@ import { IoIosArrowDown } from "react-icons/io";
 export default function Customer() {
   const { darkMode } = useOutletContext();
 
-  const customers = [
+  const [customers, setCustomers] = useState([
     {
       id: "#CUS001",
       name: "A Khan",
       phone: "01893531209",
       balance: "$53,546.00",
-      address: "Kolkata,710000"
+      address: "Kolkata,710000",
+      doctors: [
+        { name: "Dr. Smith", inClinic: true },
+        { name: "Dr. Lee", inClinic: false }
+      ],
+      orderFrequency: [
+        { month: "Jan", orders: 5 },
+        { month: "Feb", orders: 8 },
+        { month: "Mar", orders: 3 },
+        { month: "Apr", orders: 7 },
+        { month: "May", orders: 6 },
+        { month: "Jun", orders: 9 },
+        { month: "Jul", orders: 4 },
+        { month: "Aug", orders: 2 }
+      ]
     },
     {
       id: "#CUS002",
       name: "A Ghogh",
       phone: "01893531209",
       balance: "$23,732.00",
-      address: "Kolkata,710000"
+      address: "Kolkata,710000",
+      doctors: [
+        { name: "Dr. Johnson", inClinic: false },
+        { name: "Dr. Patel", inClinic: true }
+      ],
+      orderFrequency: [
+        { month: "Jan", orders: 3 },
+        { month: "Feb", orders: 6 },
+        { month: "Mar", orders: 2 },
+        { month: "Apr", orders: 4 },
+        { month: "May", orders: 5 },
+        { month: "Jun", orders: 1 },
+        { month: "Jul", orders: 7 },
+        { month: "Aug", orders: 3 }
+      ]
     },
     {
       id: "#CUS003",
       name: "J Khan",
       phone: "01893531209",
       balance: "$15,324.00",
-      address: "Kolkata,710000"
+      address: "Kolkata,710000",
+      doctors: [
+        { name: "Dr. Brown", inClinic: true },
+        { name: "Dr. Garcia", inClinic: false }
+      ],
+      orderFrequency: [
+        { month: "Jan", orders: 7 },
+        { month: "Feb", orders: 4 },
+        { month: "Mar", orders: 9 },
+        { month: "Apr", orders: 2 },
+        { month: "May", orders: 8 },
+        { month: "Jun", orders: 5 },
+        { month: "Jul", orders: 6 },
+        { month: "Aug", orders: 1 }
+      ]
     },
     {
       id: "#CUS004",
       name: "Hasan Khan",
-      phone: "01893531209", 
+      phone: "01893531209",
       balance: "$18,435.00",
-      address: "Kolkata,710000"
+      address: "Kolkata,710000",
+      doctors: [
+        { name: "Dr. Wilson", inClinic: false },
+        { name: "Dr. Clark", inClinic: true }
+      ],
+      orderFrequency: [
+        { month: "Jan", orders: 2 },
+        { month: "Feb", orders: 5 },
+        { month: "Mar", orders: 8 },
+        { month: "Apr", orders: 3 },
+        { month: "May", orders: 6 },
+        { month: "Jun", orders: 9 },
+        { month: "Jul", orders: 4 },
+        { month: "Aug", orders: 7 }
+      ]
     },
     {
       id: "#CUS005",
       name: "Ali Khan",
       phone: "01893531209",
       balance: "$19,324.00",
-      address: "Kolkata,710000"
+      address: "Kolkata,710000",
+      doctors: [
+        { name: "Dr. Taylor", inClinic: true },
+        { name: "Dr. Adams", inClinic: false }
+      ],
+      orderFrequency: [
+        { month: "Jan", orders: 6 },
+        { month: "Feb", orders: 9 },
+        { month: "Mar", orders: 1 },
+        { month: "Apr", orders: 5 },
+        { month: "May", orders: 8 },
+        { month: "Jun", orders: 3 },
+        { month: "Jul", orders: 7 },
+        { month: "Aug", orders: 4 }
+      ]
     },
     {
       id: "#CUS006",
       name: "A S",
       phone: "01893531209",
       balance: "$34,768.00",
-      address: "Kolkata,710000"
+      address: "Kolkata,710000",
+      doctors: [
+        { name: "Dr. Anderson", inClinic: false },
+        { name: "Dr. Walker", inClinic: true }
+      ],
+      orderFrequency: [
+        { month: "Jan", orders: 4 },
+        { month: "Feb", orders: 2 },
+        { month: "Mar", orders: 6 },
+        { month: "Apr", orders: 9 },
+        { month: "May", orders: 3 },
+        { month: "Jun", orders: 7 },
+        { month: "Jul", orders: 5 },
+        { month: "Aug", orders: 8 }
+      ]
     },
     {
       id: "#CUS007",
       name: "J Khan",
       phone: "01893531209",
       balance: "$52,324.00",
-      address: "Kolkata,710000"
+      address: "Kolkata,710000",
+      doctors: [
+        { name: "Dr. Davis", inClinic: true },
+        { name: "Dr. Harris", inClinic: false }
+      ],
+      orderFrequency: [
+        { month: "Jan", orders: 8 },
+        { month: "Feb", orders: 3 },
+        { month: "Mar", orders: 7 },
+        { month: "Apr", orders: 5 },
+        { month: "May", orders: 2 },
+        { month: "Jun", orders: 6 },
+        { month: "Jul", orders: 9 },
+        { month: "Aug", orders: 1 }
+      ]
     },
-  ];
+  ]);
 
   // State for modal functionality
   const [showModal, setShowModal] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [orderFrequencyData, setOrderFrequencyData] = useState([]);
+  const [showDoctor, setShowDoctor] = useState({});
+  const [doctorInput, setDoctorInput] = useState({});
 
   const handleOpenModal = (customer) => {
-    // Generate example static data for order frequency per customer
-    const data = [
-      { month: "Jan", orders: Math.floor(Math.random() * 10) + 1 },
-      { month: "Feb", orders: Math.floor(Math.random() * 10) + 1 },
-      { month: "Mar", orders: Math.floor(Math.random() * 10) + 1 },
-      { month: "Apr", orders: Math.floor(Math.random() * 10) + 1 },
-      { month: "May", orders: Math.floor(Math.random() * 10) + 1 },
-      { month: "Jun", orders: Math.floor(Math.random() * 10) + 1 },
-      { month: "Jul", orders: Math.floor(Math.random() * 10) + 1 },
-      { month: "Aug", orders: Math.floor(Math.random() * 10) + 1 },
-    ];
-    setOrderFrequencyData(data);
+    setOrderFrequencyData(customer.orderFrequency);
     setSelectedCustomer(customer);
     setShowModal(true);
   };
@@ -86,6 +175,47 @@ export default function Customer() {
     setShowModal(false);
     setSelectedCustomer(null);
     setOrderFrequencyData([]);
+  };
+
+  const toggleDoctorEdit = (customerId, doctors) => {
+    setShowDoctor(prev => ({
+      ...prev,
+      [customerId]: !prev[customerId]
+    }));
+    setDoctorInput(prev => ({
+      ...prev,
+      [customerId]: doctors.map(doctor => ({ ...doctor }))
+    }));
+  };
+
+  const handleDoctorNameChange = (customerId, index, value) => {
+    setDoctorInput(prev => ({
+      ...prev,
+      [customerId]: prev[customerId].map((doctor, i) =>
+        i === index ? { ...doctor, name: value } : doctor
+      )
+    }));
+  };
+
+  const addNewDoctor = (customerId) => {
+    setDoctorInput(prev => ({
+      ...prev,
+      [customerId]: [...(prev[customerId] || []), { name: "", inClinic: false }]
+    }));
+  };
+
+  const saveDoctorNames = (customerId) => {
+    setCustomers(prevCustomers =>
+      prevCustomers.map(customer =>
+        customer.id === customerId
+          ? { ...customer, doctors: doctorInput[customerId] }
+          : customer
+      )
+    );
+    setShowDoctor(prev => ({
+      ...prev,
+      [customerId]: false
+    }));
   };
 
   return (
@@ -272,7 +402,7 @@ export default function Customer() {
         }`}
       >
         {/* Search + Filter */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-4 mb-4">
           <div className="relative">
             <Search
               className={`absolute left-3 top-2.5 ${
@@ -290,6 +420,7 @@ export default function Customer() {
               }`}
             />
           </div>
+          <ScrollText/>
         </div>
 
         {/* Table */}
@@ -307,6 +438,7 @@ export default function Customer() {
                 <th className="p-3">Customer Name</th>
                 <th className="p-3">Phone Number</th>
                 <th className="p-3">Total Purchase</th>
+                <th className="p-3">Doctors</th>
                 <th className="p-3">Order Frequency</th>
                 <th className="p-3">Address</th>
                 <th className="p-3">Action</th>
@@ -328,11 +460,71 @@ export default function Customer() {
                   </td>
                   <td className="p-3">{c.phone}</td>
                   <td className="p-3">{c.balance}</td>
-                  <td className="p-3 cursor-pointer hover:text-blue-500" onClick={() => handleOpenModal(c)}>
-                    <Eye size={16} className="text-blue-500" />
+                  <td className="p-3">
+                    {showDoctor[c.id] ? (
+                      <div className="flex flex-col gap-2">
+                        {doctorInput[c.id]?.map((doctor, index) => (
+                          <div key={index} className="flex items-center gap-2">
+                            <input
+                              type="text"
+                              value={doctor.name}
+                              onChange={(e) => handleDoctorNameChange(c.id, index, e.target.value)}
+                              className={`p-1 border rounded w-32 ${
+                                doctor.inClinic ? "text-green-500" : ""
+                              } ${
+                                darkMode
+                                  ? "bg-gray-600 border-gray-500 text-gray-100"
+                                  : "bg-white border-gray-300 text-gray-900"
+                              }`}
+                            />
+                          </div>
+                        ))}
+                        <div className="flex gap-2 mt-2">
+                          <button
+                            onClick={() => addNewDoctor(c.id)}
+                            className={`flex items-center gap-1 px-2 py-1 rounded transition ${
+                              darkMode
+                                ? "bg-green-600 text-white hover:bg-green-700"
+                                : "bg-green-500 text-white hover:bg-green-600"
+                            }`}
+                          >
+                            <Plus size={16} />
+                            Add New Doctor
+                          </button>
+                          <button
+                            onClick={() => saveDoctorNames(c.id)}
+                            className={`px-2 py-1 rounded transition ${
+                              darkMode
+                                ? "bg-blue-600 text-white hover:bg-blue-700"
+                                : "bg-blue-500 text-white hover:bg-blue-600"
+                            }`}
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="flex flex-col">
+                          {c.doctors.map((doctor, index) => (
+                            <span key={index} className={doctor.inClinic ? "text-green-500" : ""}>
+                              {doctor.name}
+                            </span>
+                          ))}
+                        </div>
+                        <Eye
+                          size={16}
+                          className="cursor-pointer"
+                          onClick={() => toggleDoctorEdit(c.id, c.doctors)}
+                        />
+                      </div>
+                    )}
+                  </td>
+                  <td className="p-3 cursor-pointer" onClick={() => handleOpenModal(c)}>
+                    <Eye size={16} className="mx-auto" />
                   </td>
                   <td className="p-3">{c.address}</td>
-                  <td className="p-3 flex gap-2">
+                  <td className="p-3 flex gap-2 justify-center">
                     <button
                       className={`p-2 rounded transition ${
                         darkMode
@@ -443,11 +635,11 @@ export default function Customer() {
         </div>
       </div>
 
-      {/* Graph Only Modal */}
+      {/* Graph Only Modal with Blur Background */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-opacity-100 backdrop-blur-sm flex justify-center items-center z-50">
           <div
-            className={`rounded-lg w-11/12 max-w-4xl relative transition-colors duration-300 ${
+            className={`rounded-lg w-11/12 max-w-xl relative transition-colors duration-300 ${
               darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
             }`}
           >

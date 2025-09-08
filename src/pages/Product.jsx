@@ -1,6 +1,6 @@
 //pages/Product.jsx
 import { useState } from "react";
-import { Eye, Edit, Trash2, Search, Filter, Plus } from "lucide-react";
+import { Eye, Edit, Trash2, Search, Filter, Plus, ScrollText } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -43,7 +43,7 @@ export default function Product() {
           darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
         }`}
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-4 mb-4">
           <div className="relative">
             <Search
               className={`absolute left-3 top-2.5 ${
@@ -72,6 +72,7 @@ export default function Product() {
             Filter
             <IoIosArrowDown className="ml-3" />
           </button> */}
+          <ScrollText/>
         </div>
 
         <div className="overflow-x-auto">
@@ -118,7 +119,7 @@ export default function Product() {
                     <td className="p-3">{med.mfg}</td>
                      <td className="p-3">{med.exp}</td>
                   <td className="p-3 flex gap-2">
-                    <button
+                    {/* <button
                       className={`p-2 rounded transition ${
                         darkMode
                           ? "bg-green-600 text-white hover:bg-green-700"
@@ -126,7 +127,7 @@ export default function Product() {
                       }`}
                     >
                       <Eye size={16} />
-                    </button>
+                    </button> */}
                     <button
                       className={`p-2 rounded transition ${
                         darkMode

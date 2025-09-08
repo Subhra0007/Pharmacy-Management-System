@@ -14,6 +14,7 @@ import Settings from "./pages/Settings";
 import Notes from "./pages/Notes";
 import Expenses from "./pages/Expenses";
 import Employee from "./pages/Employees";
+import ReturnProduct from "./pages/ReturnProduct";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/notes" element={< Notes/>} />
           <Route path="/expenses" element={<Expenses />} />
           <Route path="/employee" element={<Employee />} />
+           <Route path="/return-product" element={< ReturnProduct/>} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,6 +1,5 @@
-//pages/Suppliers.jsx
 import { useState } from "react";
-import { Eye, Edit, Trash2, Search, Filter, Plus, Printer } from "lucide-react";
+import { Eye, Edit, Trash2, Search, Filter, Plus, Printer, ScrollText } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -8,10 +7,50 @@ export default function Suppliers() {
   const { darkMode } = useOutletContext();
 
   const [suppliers, setSuppliers] = useState([
-    { id: "#SUP001", name: "Square Ltd.", phone: "01893531209", email: "square@example.com", address: "Kolkata", list: <Eye/> },
-    { id: "#SUP002", name: "Beximco", phone: "01893531210", email: "beximco@example.com", address: "Howrah", list: <Eye/> },
-    { id: "#SUP003", name: "Renata", phone: "01893531211", email: "renata@example.com", address: "Hooghly", list: <Eye/> },
+    { 
+      id: "#SUP001", 
+      name: "Square Ltd.", 
+      phone: "01893531209", 
+      email: "square@example.com", 
+      address: "Kolkata", 
+      products: [
+        { name: "Paracetamol", quantity: 500 },
+        { name: "Ibuprofen", quantity: 300 },
+        { name: "Aspirin", quantity: 200 }
+      ] 
+    },
+    { 
+      id: "#SUP002", 
+      name: "Beximco", 
+      phone: "01893531210", 
+      email: "beximco@example.com", 
+      address: "Howrah", 
+      products: [
+        { name: "Amoxicillin", quantity: 400 },
+        { name: "Ciprofloxacin", quantity: 250 }
+      ] 
+    },
+    { 
+      id: "#SUP003", 
+      name: "Renata", 
+      phone: "01893531211", 
+      email: "renata@example.com", 
+      address: "Hooghly", 
+      products: [
+        { name: "Metformin", quantity: 600 },
+        { name: "Amlodipine", quantity: 350 },
+        { name: "Losartan", quantity: 150 }
+      ] 
+    },
   ]);
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedSupplier, setSelectedSupplier] = useState(null);
+
+  const handleViewProducts = (supplier) => {
+    setSelectedSupplier(supplier);
+    setShowModal(true);
+  };
 
   return (
     <div
@@ -43,7 +82,7 @@ export default function Suppliers() {
           darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
         }`}
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-4 mb-4">
           <div className="relative">
             <Search
               className={`absolute left-3 top-2.5 ${
@@ -61,22 +100,12 @@ export default function Suppliers() {
               }`}
             />
           </div>
-          {/* <button
-            className={`flex items-center gap-2 border px-4 py-2 rounded-lg transition ${
-              darkMode
-                ? "border-gray-500 text-gray-100 hover:bg-gray-600"
-                : "border-gray-300 text-gray-900 hover:bg-gray-100"
-            }`}
-          >
-            <Filter size={18} />
-            Filter
-            <IoIosArrowDown className="ml-3" />
-          </button> */}
+          <ScrollText/>
         </div>
 
         <div className="overflow-x-auto">
           <table
-            className={`w-full border rounded-lg overflow-hidden text-sm ${
+            className={`w-full border rounded-lg overflow-hidden text-sm  text-center ${
               darkMode ? "border-gray-600" : "border-gray-200"
             }`}
           >
@@ -84,9 +113,6 @@ export default function Suppliers() {
               className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
             >
               <tr>
-                {/* <th className="p-3">
-                  <input type="checkbox" />
-                </th> */}
                 <th className="p-3">Supplier ID</th>
                 <th className="p-3">Name</th>
                 <th className="p-3">Phone</th>
@@ -106,27 +132,17 @@ export default function Suppliers() {
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  {/* <td className="p-3">
-                    <input type="checkbox" />
-                  </td> */}
                   <td className="p-3">{supplier.id}</td>
                   <td className="p-3">{supplier.name}</td>
                   <td className="p-3">{supplier.phone}</td>
                   <td className="p-3">{supplier.email}</td>
                    <td className="p-3">{supplier.address}</td>
                   <td className="p-2">
-                        <Eye size={16} />
+                    <button onClick={() => handleViewProducts(supplier)}>
+                      <Eye size={16} />
+                    </button>
                   </td>
-                  <td className="p-3 flex gap-2">
-                    {/* <button
-                      className={`p-2 rounded transition ${
-                        darkMode
-                          ? "bg-green-600 text-white hover:bg-green-700"
-                          : "bg-green-500 text-white hover:bg-green-600"
-                      }`}
-                    >
-                      <Printer size={16} />
-                    </button> */}
+                  <td className="p-3 flex gap-2 justify-center">
                     <button
                       className={`p-2 rounded transition ${
                         darkMode
@@ -226,6 +242,58 @@ export default function Suppliers() {
           </div>
         </div>
       </div>
+
+      {showModal && selectedSupplier && (
+        <div className="fixed inset-0  bg-opacity-100 backdrop-blur-sm flex items-center justify-center z-50">
+          <div
+            className={`rounded-lg p-6 max-w-lg w-full ${
+              darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
+            }`}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">Products Supplied by {selectedSupplier.name}</h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className={`p-2 rounded ${
+                  darkMode
+                    ? "bg-gray-600 text-white hover:bg-gray-500"
+                    : "bg-gray-200 text-gray-900 hover:bg-gray-300"
+                }`}
+              >
+                Close
+              </button>
+            </div>
+            <p className="mb-4">Total Product Types: {selectedSupplier.products.length}</p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead
+                  className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
+                >
+                  <tr>
+                    <th className="p-3 text-left">Product Name</th>
+                    <th className="p-3 text-left">Quantity Supplied</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedSupplier.products.map((product, index) => (
+                    <tr
+                      key={index}
+                      className={`border-t ${
+                        darkMode
+                          ? "border-gray-600 hover:bg-gray-600"
+                          : "border-gray-200 hover:bg-gray-50"
+                      }`}
+                    >
+                      <td className="p-3">{product.name}</td>
+                      <td className="p-3">{product.quantity}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

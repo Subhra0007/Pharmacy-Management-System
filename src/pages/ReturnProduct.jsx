@@ -1,16 +1,82 @@
 import { useState } from "react";
-import { Eye, Edit, Trash2, Search, Filter, Plus } from "lucide-react";
+import { Search, Edit, Trash2 } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
-import { IoIosArrowDown } from "react-icons/io";
 
-export default function Notes() {
+export default function ReturnProduct() {
   const { darkMode } = useOutletContext();
 
-  const [notes, setNotes] = useState([
-    { title: "Inventory Check",  },
-    {  title: "Supplier Meeting"},
-    {  title: "Staff Training" },
+  const [returns, setReturns] = useState([
+    {
+      id: "#RET001",
+      orderId: "#ORD001",
+      product: "Paracetamol",
+      customer: "A Khan",
+      reason: "Damaged",
+      returnDate: "Feb 25, 2025",
+      status: "Pending",
+    },
+    {
+      id: "#RET002",
+      orderId: "#ORD002",
+      product: "Amoxicillin",
+      customer: "B Smith",
+      reason: "Expired",
+      returnDate: "Feb 26, 2025",
+      status: "Approved",
+    },
+    {
+      id: "#RET003",
+      orderId: "#ORD003",
+      product: "Metformin",
+      customer: "C Johnson",
+      reason: "Damaged",
+      returnDate: "Feb 27, 2025",
+      status: "Rejected",
+    },
+    {
+      id: "#RET004",
+      orderId: "#ORD004",
+      product: "Losartan",
+      customer: "C Johnson",
+      reason: "Expired",
+      returnDate: "Feb 27, 2025",
+      status: "Pending",
+    },
+    {
+      id: "#RET005",
+      orderId: "#ORD005",
+      product: "Aspirin",
+      customer: "C Johnson",
+      reason: "Damaged",
+      returnDate: "Feb 28, 2025",
+      status: "Approved",
+    },
   ]);
+
+  // Function to determine status background color
+  const getStatusBgColor = (status) => {
+    switch (status) {
+      case "Pending":
+        return darkMode ? "bg-red-600" : "bg-red-200";
+      case "Approved":
+        return darkMode ? "bg-green-600" : "bg-green-200";
+      case "Rejected":
+        return darkMode ? "bg-orange-600" : "bg-orange-200";
+      default:
+        return "";
+    }
+  };
+
+  // Placeholder functions for approve/reject actions
+  const handleApprove = (id) => {
+    alert(`Approving return ${id}...`);
+    // Add logic to update status to "Approved"
+  };
+
+  const handleReject = (id) => {
+    alert(`Rejecting return ${id}...`);
+    // Add logic to update status to "Rejected"
+  };
 
   return (
     <div
@@ -20,21 +86,11 @@ export default function Notes() {
     >
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Notes</h2>
+          <h2 className="text-2xl font-bold">Return Product List</h2>
           <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
-            Manage notes for pharmacy operations and reminders.
+            Manage damaged and expired product returns.
           </p>
         </div>
-        <button
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
-            darkMode
-              ? "bg-blue-600 text-white hover:bg-blue-700"
-              : "bg-blue-600 text-white hover:bg-blue-700"
-          }`}
-        >
-          <Plus size={18} />
-          Add New Note
-        </button>
       </div>
 
       <div
@@ -42,7 +98,7 @@ export default function Notes() {
           darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
         }`}
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-4 mb-4">
           <div className="relative">
             <Search
               className={`absolute left-3 top-2.5 ${
@@ -52,7 +108,7 @@ export default function Notes() {
             />
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search returns..."
               className={`pl-10 pr-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                 darkMode
                   ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -60,22 +116,11 @@ export default function Notes() {
               }`}
             />
           </div>
-          {/* <button
-            className={`flex items-center gap-2 border px-4 py-2 rounded-lg transition ${
-              darkMode
-                ? "border-gray-500 text-gray-100 hover:bg-gray-600"
-                : "border-gray-300 text-gray-900 hover:bg-gray-100"
-            }`}
-          >
-            <Filter size={18} />
-            Filter
-            <IoIosArrowDown className="ml-3" />
-          </button> */}
         </div>
 
         <div className="overflow-x-auto">
           <table
-            className={`w-full border rounded-lg overflow-hidden ${
+            className={`w-full border rounded-lg overflow-hidden text-center text-sm ${
               darkMode ? "border-gray-600" : "border-gray-200"
             }`}
           >
@@ -83,52 +128,55 @@ export default function Notes() {
               className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
             >
               <tr>
-               
-                {/* <th className="p-3">Note ID</th> */}
-                <th className="p-3">Notes</th>
-              
+                <th className="p-3">Return ID</th>
+                <th className="p-3">Order ID</th>
+                <th className="p-3">Product</th>
+                <th className="p-3">Customer</th>
+                <th className="p-3">Reason</th>
+                <th className="p-3">Return Date</th>
+                <th className="p-3">Status</th>
                 <th className="p-3">Action</th>
               </tr>
             </thead>
             <tbody>
-              {notes.map((note, index) => (
+              {returns.map((returnItem, index) => (
                 <tr
                   key={index}
-                  className={`border-t transition-colors duration-300 text-center ${
+                  className={`border-t transition-colors duration-300 ${
                     darkMode
                       ? "border-gray-600 hover:bg-gray-600"
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                 
-                  {/* <td className="p-3">{note.id}</td> */}
-                  <td className="p-3">{note.title}</td>
-                
+                  <td className="p-3">{returnItem.id}</td>
+                  <td className="p-3">{returnItem.orderId}</td>
+                  <td className="p-3">{returnItem.product}</td>
+                  <td className="p-3">{returnItem.customer}</td>
+                  <td className="p-3">{returnItem.reason}</td>
+                  <td className="p-3">{returnItem.returnDate}</td>
+                  <td className={`p-3 ${getStatusBgColor(returnItem.status)}`}>
+                    {returnItem.status}
+                  </td>
                   <td className="p-3 flex gap-2 justify-center">
                     <button
+                      onClick={() => handleApprove(returnItem.id)}
                       className={`p-2 rounded transition ${
                         darkMode
                           ? "bg-green-600 text-white hover:bg-green-700"
                           : "bg-green-500 text-white hover:bg-green-600"
                       }`}
-                    >
-                      <Eye size={16} />
-                    </button>
-                    <button
-                      className={`p-2 rounded transition ${
-                        darkMode
-                          ? "bg-blue-600 text-white hover:bg-blue-700"
-                          : "bg-blue-500 text-white hover:bg-blue-600"
-                      }`}
+                      disabled={returnItem.status !== "Pending"}
                     >
                       <Edit size={16} />
                     </button>
                     <button
+                      onClick={() => handleReject(returnItem.id)}
                       className={`p-2 rounded transition ${
                         darkMode
                           ? "bg-orange-600 text-white hover:bg-orange-700"
                           : "bg-orange-500 text-white hover:bg-orange-600"
                       }`}
+                      disabled={returnItem.status !== "Pending"}
                     >
                       <Trash2 size={16} />
                     </button>
@@ -144,7 +192,7 @@ export default function Notes() {
             darkMode ? "text-gray-400" : "text-gray-600"
           }`}
         >
-          <span>Showing 1 to 3 of 50 entries</span>
+          <span>Showing 1 to 5 of 20 entries</span>
           <div className="flex items-center gap-2">
             <button
               className={`px-2 py-1 border rounded ${
@@ -171,25 +219,7 @@ export default function Notes() {
             >
               2
             </button>
-            <button
-              className={`px-3 py-1 border rounded ${
-                darkMode
-                  ? "border-gray-500 text-gray-100 hover:bg-gray-600"
-                  : "border-gray-300 text-gray-900 hover:bg-gray-100"
-              }`}
-            >
-              3
-            </button>
             <span>...</span>
-            <button
-              className={`px-3 py-1 border rounded ${
-                darkMode
-                  ? "border-gray-500 text-gray-100 hover:bg-gray-600"
-                  : "border-gray-300 text-gray-900 hover:bg-gray-100"
-              }`}
-            >
-              10
-            </button>
             <button
               className={`px-2 py-1 border rounded ${
                 darkMode ? "border-gray-500 hover:bg-gray-600" : "border-gray-300 hover:bg-gray-100"
@@ -197,19 +227,6 @@ export default function Notes() {
             >
               &gt;
             </button>
-          </div>
-          <div>
-            <select
-              className={`border rounded px-2 py-1 ${
-                darkMode
-                  ? "bg-gray-600 border-gray-500 text-gray-100"
-                  : "bg-white border-gray-300 text-gray-900"
-              }`}
-            >
-              <option>Show 8</option>
-              <option>Show 10</option>
-              <option>Show 20</option>
-            </select>
           </div>
         </div>
       </div>

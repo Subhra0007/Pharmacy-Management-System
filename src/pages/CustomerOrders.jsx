@@ -1,19 +1,98 @@
-//pages/CustomerOrders.jsx
 import { useState } from "react";
-import { Eye, Edit, Trash2, Search, Filter, Plus, Printer } from "lucide-react";
+import { Eye, Edit, Trash2, Search, Filter, Plus, Printer, ScrollText } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function CustomerOrders() {
   const { darkMode } = useOutletContext();
 
   const [orders, setOrders] = useState([
-    { id: "#ORD001", date: "Feb 24, 2025", customer: "A Khan", amount:1200, status: "Pending", date:"12:09:2025" },
-    { id: "#ORD002", date: "Feb 25, 2025", customer: "B Smith", amount:1200, status: "Completed", date:"12:09:2025" },
-    { id: "#ORD003", date: "Feb 26, 2025", customer: "C Johnson", amount:1200, status: "Processing" , date:"12:09:2025"},
-    { id: "#ORD004", date: "Feb 26, 2025", customer: "C Johnson", amount:1200, status: "Out of Delivery" , date:"12:09:2025"},
-    { id: "#ORD005", date: "Feb 26, 2025", customer: "C Johnson", amount:1200, status: "Delivered" , date:"12:09:2025"},
+    { 
+      id: "#ORD001", 
+      date: "Feb 24, 2025", 
+      customer: "A Khan", 
+      amount: 1200, 
+      status: "Pending", 
+      deliveryDate: "12:09:2025",
+      products: [
+        { name: "Paracetamol", quantity: 50, price: 10 },
+        { name: "Ibuprofen", quantity: 30, price: 15 }
+      ]
+    },
+    { 
+      id: "#ORD002", 
+      date: "Feb 25, 2025", 
+      customer: "B Smith", 
+      amount: 1200, 
+      status: "Delivered", 
+      deliveryDate: "12:09:2025",
+      products: [
+        { name: "Amoxicillin", quantity: 20, price: 25 },
+        { name: "Ciprofloxacin", quantity: 15, price: 30 }
+      ]
+    },
+    { 
+      id: "#ORD003", 
+      date: "Feb 26, 2025", 
+      customer: "C Johnson", 
+      amount: 1200, 
+      status: "Processing", 
+      deliveryDate: "12:09:2025",
+      products: [
+        { name: "Metformin", quantity: 40, price: 12 },
+        { name: "Amlodipine", quantity: 25, price: 18 }
+      ]
+    },
+    { 
+      id: "#ORD004", 
+      date: "Feb 26, 2025", 
+      customer: "C Johnson", 
+      amount: 1200, 
+      status: "Out of Delivery", 
+      deliveryDate: "12:09:2025",
+      products: [
+        { name: "Losartan", quantity: 30, price: 20 },
+        { name: "Aspirin", quantity: 100, price: 5 }
+      ]
+    },
+    { 
+      id: "#ORD005", 
+      date: "Feb 26, 2025", 
+      customer: "C Johnson", 
+      amount: 1200, 
+      status: "Delivered", 
+      deliveryDate: "12:09:2025",
+      products: [
+        { name: "Paracetamol", quantity: 60, price: 10 },
+        { name: "Metformin", quantity: 35, price: 12 }
+      ]
+    },
   ]);
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+
+  const handleViewProducts = (products) => {
+    setSelectedProducts(products);
+    setShowModal(true);
+  };
+
+  // Function to determine status background color
+  const getStatusBgColor = (status) => {
+    switch (status) {
+      case "Pending":
+        return darkMode ? "bg-red-600" : "bg-red-200";
+      case "Delivered":
+        return darkMode ? "bg-green-600" : "bg-green-200";
+      case "Processing":
+        return darkMode ? "bg-orange-600" : "bg-orange-200";
+      case "Out of Delivery":
+        return darkMode ? "bg-yellow-600" : "bg-yellow-200";
+      default:
+        return "";
+    }
+  };
 
   return (
     <div
@@ -45,7 +124,7 @@ export default function CustomerOrders() {
           darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
         }`}
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-4 mb-4">
           <div className="relative">
             <Search
               className={`absolute left-3 top-2.5 ${
@@ -63,17 +142,7 @@ export default function CustomerOrders() {
               }`}
             />
           </div>
-          {/* <button
-            className={`flex items-center gap-2 border px-4 py-2 rounded-lg transition ${
-              darkMode
-                ? "border-gray-500 text-gray-100 hover:bg-gray-600"
-                : "border-gray-300 text-gray-900 hover:bg-gray-100"
-            }`}
-          >
-            <Filter size={18} />
-            Filter
-            <IoIosArrowDown className="ml-3" />
-          </button> */}
+          <ScrollText />
         </div>
 
         <div className="overflow-x-auto">
@@ -86,16 +155,13 @@ export default function CustomerOrders() {
               className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
             >
               <tr>
-                {/* <th className="p-3">
-                  <input type="checkbox" />
-                </th> */}
                 <th className="p-3">Order ID</th>
                 <th className="p-3">Date</th>
                 <th className="p-3">Customer</th>
                 <th className="p-3">List</th>
                 <th className="p-3">Total Amount</th>
                 <th className="p-3">Status</th>
-                 <th className="p-3">Delivery Date</th>
+                <th className="p-3">Delivery Date</th>
                 <th className="p-3">Action</th>
               </tr>
             </thead>
@@ -109,19 +175,29 @@ export default function CustomerOrders() {
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  {/* <td className="p-3">
-                    <input type="checkbox" />
-                  </td> */}
                   <td className="p-3">{order.id}</td>
                   <td className="p-3">{order.date}</td>
                   <td className="p-3">{order.customer}</td>
-                   <td className="p-2">
-                        <Eye size={16} />
+                  <td className="p-2">
+                    <button onClick={() => handleViewProducts(order.products)}>
+                      <Eye size={16} />
+                    </button>
                   </td>
-                  <td className="p-3">{order.amount}</td>
-                  <td className="p-3">{order.status}</td>
-                  <td className="p-3">{order.date}</td>
-                  <td className="p-3 flex gap-2">
+                  <td className="p-3">${order.amount.toLocaleString()}</td>
+                  <td className={`p-3 ${getStatusBgColor(order.status)}`}>
+                    {order.status}
+                  </td>
+                  <td className="p-3">{order.deliveryDate}</td>
+                  <td className="p-3 flex gap-2 justify-center">
+                    <button
+                      className={`p-2 rounded transition ${
+                        darkMode
+                          ? "bg-green-600 text-white hover:bg-green-700"
+                          : "bg-green-500 text-white hover:bg-green-600"
+                      }`}
+                    >
+                      <FaWhatsapp size={16} />
+                    </button>
                     <button
                       className={`p-2 rounded transition ${
                         darkMode
@@ -161,7 +237,7 @@ export default function CustomerOrders() {
             darkMode ? "text-gray-400" : "text-gray-600"
           }`}
         >
-          <span>Showing 1 to 3 of 50 entries</span>
+          <span>Showing 1 to 5 of 50 entries</span>
           <div className="flex items-center gap-2">
             <button
               className={`px-2 py-1 border rounded ${
@@ -230,6 +306,59 @@ export default function CustomerOrders() {
           </div>
         </div>
       </div>
-      </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-opacity-100 backdrop-blur-sm flex items-center justify-center z-50">
+          <div
+            className={`rounded-lg p-6 max-w-lg w-full ${
+              darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
+            }`}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">Products Ordered</h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className={`p-2 rounded ${
+                  darkMode
+                    ? "bg-gray-600 text-white hover:bg-gray-500"
+                    : "bg-gray-200 text-gray-900 hover:bg-gray-300"
+                }`}
+              >
+                Close
+              </button>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead
+                  className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
+                >
+                  <tr>
+                    <th className="p-3 text-left">Product Name</th>
+                    <th className="p-3 text-left">Quantity</th>
+                    <th className="p-3 text-left">Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedProducts.map((product, index) => (
+                    <tr
+                      key={index}
+                      className={`border-t ${
+                        darkMode
+                          ? "border-gray-600 hover:bg-gray-600"
+                          : "border-gray-200 hover:bg-gray-50"
+                      }`}
+                    >
+                      <td className="p-3">{product.name}</td>
+                      <td className="p-3">{product.quantity}</td>
+                      <td className="p-3">${product.price}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

@@ -1,96 +1,199 @@
-import { useState } from "react";
-import { Plus, Save, Upload, X , } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Plus, Edit, Eye, Trash2 } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
+import Chart from "chart.js/auto";
 
 export default function Employee() {
   const { darkMode } = useOutletContext();
 
-  // State for form data
-  const [formData, setFormData] = useState({
-    picture: null,
-    name: "",
-    mobile: "",
-    email: "",
-    aadhaar: "",
-    address: "",
-    role: "",
-  });
+  // Dummy employee data
+  const initialEmployees = [
+    {
+      id: "#EMP001",
+      name: "Ravi Sharma",
+      mobile: "9876543210",
+      email: "ravi.sharma@example.com",
+      aadhaar: "123456789012",
+      address: "Mumbai, 400001",
+      role: "Employee",
+      hoursWorked: [
+        { month: "Jan", hours: 160 },
+        { month: "Feb", hours: 150 },
+        { month: "Mar", hours: 170 },
+        { month: "Apr", hours: 165 },
+        { month: "May", hours: 155 },
+        { month: "Jun", hours: 180 },
+        { month: "Jul", hours: 175 },
+        { month: "Aug", hours: 160 },
+      ],
+    },
+    {
+      id: "#EMP002",
+      name: "Priya Patel",
+      mobile: "8765432109",
+      email: "priya.patel@example.com",
+      aadhaar: "234567890123",
+      address: "Delhi, 110001",
+      role: "Employee",
+      hoursWorked: [
+        { month: "Jan", hours: 140 },
+        { month: "Feb", hours: 145 },
+        { month: "Mar", hours: 150 },
+        { month: "Apr", hours: 135 },
+        { month: "May", hours: 160 },
+        { month: "Jun", hours: 155 },
+        { month: "Jul", hours: 165 },
+        { month: "Aug", hours: 150 },
+      ],
+    },
+    {
+      id: "#EMP003",
+      name: "Amit Kumar",
+      mobile: "7654321098",
+      email: "amit.kumar@example.com",
+      aadhaar: "345678901234",
+      address: "Bangalore, 560001",
+      role: "Technician",
+      hoursWorked: [
+        { month: "Jan", hours: 170 },
+        { month: "Feb", hours: 160 },
+        { month: "Mar", hours: 175 },
+        { month: "Apr", hours: 165 },
+        { month: "May", hours: 180 },
+        { month: "Jun", hours: 170 },
+        { month: "Jul", hours: 160 },
+        { month: "Aug", hours: 155 },
+      ],
+    },
+    {
+      id: "#EMP004",
+      name: "Sneha Gupta",
+      mobile: "6543210987",
+      email: "sneha.gupta@example.com",
+      aadhaar: "456789012345",
+      address: "Chennai, 600001",
+      role: "Staff",
+      hoursWorked: [
+        { month: "Jan", hours: 150 },
+        { month: "Feb", hours: 155 },
+        { month: "Mar", hours: 160 },
+        { month: "Apr", hours: 170 },
+        { month: "May", hours: 165 },
+        { month: "Jun", hours: 175 },
+        { month: "Jul", hours: 160 },
+        { month: "Aug", hours: 180 },
+      ],
+    },
+  ];
 
-  // State for form errors
-  const [errors, setErrors] = useState({});
-  // State for picture preview
-  const [picturePreview, setPicturePreview] = useState(null);
   // State for employee list
-  const [employees, setEmployees] = useState([]);
+  const [employees, setEmployees] = useState(initialEmployees);
 
-  // Handle form input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  // Handle Add New Employee
+  const handleAddEmployee = () => {
+    console.log("Add New Employee clicked");
+    // Implement form logic or redirect to a form page
+    alert("Add New Employee functionality to be implemented");
   };
 
-  // Handle file input for picture
-  const handlePictureChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFormData({ ...formData, picture: file });
-      setPicturePreview(URL.createObjectURL(file));
+  // Handle View action
+  const handleView = (employee) => {
+    console.log("View Employee:", employee);
+    // Implement view logic
+    alert(`Viewing ${employee.name}'s details:\n` +
+          `ID: ${employee.id}\n` +
+          `Mobile: ${employee.mobile}\n` +
+          `Email: ${employee.email}\n` +
+          `Aadhaar: ${employee.aadhaar}\n` +
+          `Address: ${employee.address}\n` +
+          `Role: ${employee.role}`);
+  };
+
+  // Handle Edit action
+  const handleEdit = (employee) => {
+    console.log("Edit Employee:", employee);
+    // Implement edit logic
+    alert(`Editing ${employee.name}'s details`);
+  };
+
+  // Handle Delete action
+  const handleDelete = (index) => {
+    if (window.confirm("Are you sure you want to delete this employee?")) {
+      setEmployees(employees.filter((_, i) => i !== index));
+      console.log("Deleted employee at index:", index);
     }
   };
 
-  // Validate form
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.mobile.trim()) newErrors.mobile = "Mobile number is required";
-    else if (!/^\d{10}$/.test(formData.mobile)) newErrors.mobile = "Mobile number must be 10 digits";
-    if (!formData.email.trim()) newErrors.email = "Email is required";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = "Invalid email format";
-    if (!formData.aadhaar.trim()) newErrors.aadhaar = "Aadhaar number is required";
-    else if (!/^\d{12}$/.test(formData.aadhaar)) newErrors.aadhaar = "Aadhaar number must be 12 digits";
-    if (!formData.address.trim()) newErrors.address = "Address is required";
-    if (!formData.role) newErrors.role = "Role is required";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  // Chart setup
+  const chartRef = useRef(null);
+  const chartInstance = useRef(null);
 
-  // Handle form submission
-  const handleSave = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      // Add employee to list (excluding picture file for simplicity)
-      setEmployees([
-        ...employees,
-        {
-          name: formData.name,
-          mobile: formData.mobile,
-          email: formData.email,
-          aadhaar: formData.aadhaar,
-          address: formData.address,
-          role: formData.role,
+  useEffect(() => {
+    const ctx = chartRef.current.getContext("2d");
+
+    if (chartInstance.current) {
+      chartInstance.current.destroy();
+    }
+
+    const labels = employees.map((emp) => emp.name);
+    const data = employees.map((emp) => emp.hoursWorked[emp.hoursWorked.length - 1].hours);
+
+    chartInstance.current = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "Hours Worked (August 2025)",
+          data: data,
+          backgroundColor: [
+            "rgba(0, 128, 128, 0.8)", // Teal for Dipankar
+            "rgba(0, 191, 255, 0.8)", // Light blue for Priya
+            "rgba(0, 0, 255, 0.8)",   // Medium blue for Amit
+            "rgba(128, 0, 128, 0.8)", // Purple for Sneha
+          ],
+          borderColor: [
+            "rgba(0, 128, 128, 1)",
+            "rgba(0, 191, 255, 1)",
+            "rgba(0, 0, 255, 1)",
+            "rgba(128, 0, 128, 1)",
+          ],
+          borderWidth: 1,
+        }],
+      },
+      options: {
+        indexAxis: "y", // Horizontal bars
+        scales: {
+          x: {
+            beginAtZero: true,
+            max: 200,
+            title: {
+              display: true,
+              text: "Hours",
+            },
+          },
+          y: {
+            title: {
+              display: true,
+              text: "Employees",
+            },
+          },
         },
-      ]);
-      // Reset form
-      resetForm();
-      // Log data (replace with API call in production)
-      console.log("Saved Employee:", formData);
-    }
-  };
-
-  // Reset form for new employee
-  const resetForm = () => {
-    setFormData({
-      picture: null,
-      name: "",
-      mobile: "",
-      email: "",
-      aadhaar: "",
-      address: "",
-      role: "",
+        plugins: {
+          legend: {
+            display: true,
+            position: "top",
+          },
+        },
+        maintainAspectRatio: false,
+      },
     });
-    setPicturePreview(null);
-    setErrors({});
-  };
+
+    return () => {
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+      }
+    };
+  }, [employees, darkMode]);
 
   return (
     <div
@@ -103,11 +206,11 @@ export default function Employee() {
         <div>
           <h2 className="text-2xl font-bold">Employee Management</h2>
           <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
-            Add and manage employee details.
+            Manage employee details.
           </p>
         </div>
         <button
-          onClick={resetForm}
+          onClick={handleAddEmployee}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
             darkMode
               ? "bg-blue-600 text-white hover:bg-blue-700"
@@ -119,233 +222,6 @@ export default function Employee() {
         </button>
       </div>
 
-      {/* Form */}
-      <div
-        className={`p-4 shadow rounded-md transition-colors duration-300 ${
-          darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
-        }`}
-      >
-        <form onSubmit={handleSave} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Picture Upload */}
-            <div>
-              <label
-                className={`block text-sm font-medium ${
-                  darkMode ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                Profile Picture
-              </label>
-              <div className="mt-1 flex items-center">
-                <label
-                  htmlFor="picture"
-                  className={`flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer transition ${
-                    darkMode
-                      ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
-                      : "border-gray-300 bg-white text-gray-900 hover:bg-gray-100"
-                  }`}
-                >
-                  <Upload size={18} />
-                  Upload Picture
-                  <input
-                    id="picture"
-                    type="file"
-                    accept="image/*"
-                    name="picture"
-                    onChange={handlePictureChange}
-                    className="hidden"
-                  />
-                </label>
-              </div>
-              {picturePreview && (
-                <div className="mt-2">
-                  <img
-                    src={picturePreview}
-                    alt="Preview"
-                    className="h-24 w-24 rounded-full object-cover"
-                  />
-                </div>
-              )}
-            </div>
-
-            {/* Name */}
-            <div>
-              <label
-                className={`block text-sm font-medium ${
-                  darkMode ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className={`mt-1 w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                  darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}
-                placeholder="Enter name"
-              />
-              {errors.name && (
-                <p className="mt-1 text-sm text-red-500">{errors.name}</p>
-              )}
-            </div>
-
-            {/* Mobile Number */}
-            <div>
-              <label
-                className={`block text-sm font-medium ${
-                  darkMode ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                Mobile Number
-              </label>
-              <input
-                type="text"
-                name="mobile"
-                value={formData.mobile}
-                onChange={handleInputChange}
-                className={`mt-1 w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                  darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}
-                placeholder="Enter mobile number"
-              />
-              {errors.mobile && (
-                <p className="mt-1 text-sm text-red-500">{errors.mobile}</p>
-              )}
-            </div>
-
-            {/* Email */}
-            <div>
-              <label
-                className={`block text-sm font-medium ${
-                  darkMode ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className={`mt-1 w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                  darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}
-                placeholder="Enter email"
-              />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-              )}
-            </div>
-
-            {/* Aadhaar Number */}
-            <div>
-              <label
-                className={`block text-sm font-medium ${
-                  darkMode ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                Aadhaar Number
-              </label>
-              <input
-                type="text"
-                name="aadhaar"
-                value={formData.aadhaar}
-                onChange={handleInputChange}
-                className={`mt-1 w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                  darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}
-                placeholder="Enter 12-digit Aadhaar number"
-              />
-              {errors.aadhaar && (
-                <p className="mt-1 text-sm text-red-500">{errors.aadhaar}</p>
-              )}
-            </div>
-
-            {/* Address */}
-            <div>
-              <label
-                className={`block text-sm font-medium ${
-                  darkMode ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                Address
-              </label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                className={`mt-1 w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                  darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}
-                placeholder="Enter address"
-              />
-              {errors.address && (
-                <p className="mt-1 text-sm text-red-500">{errors.address}</p>
-              )}
-            </div>
-
-            {/* Role */}
-            <div>
-              <label
-                className={`block text-sm font-medium ${
-                  darkMode ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                Role
-              </label>
-              <select
-                name="role"
-                value={formData.role}
-                onChange={handleInputChange}
-                className={`mt-1 w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                  darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100"
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}
-              >
-                <option value="">Select Role</option>
-                <option value="Employee">Employee</option>
-                <option value="Staff">Staff</option>
-                <option value="Manager">Manager</option>
-                <option value="Technician">Technician</option>
-              </select>
-              {errors.role && (
-                <p className="mt-1 text-sm text-red-500">{errors.role}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Save Button */}
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
-                darkMode
-                  ? "bg-green-600 text-white hover:bg-green-700"
-                  : "bg-green-500 text-white hover:bg-green-600"
-              }`}
-            >
-              <Save size={18} />
-              Save
-            </button>
-          </div>
-        </form>
-      </div>
-
       {/* Employee List */}
       <div
         className={`p-4 shadow rounded-md transition-colors duration-300 ${
@@ -355,7 +231,7 @@ export default function Employee() {
         <h3 className="text-lg font-semibold mb-4">Employee List</h3>
         <div className="overflow-x-auto">
           <table
-            className={`w-full border rounded-lg text-center ${
+            className={`w-full border rounded-lg text-center text-sm ${
               darkMode ? "border-gray-600" : "border-gray-200"
             }`}
           >
@@ -363,18 +239,20 @@ export default function Employee() {
               className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
             >
               <tr>
+                <th className="p-3">Employee ID</th>
                 <th className="p-3">Name</th>
                 <th className="p-3">Mobile</th>
                 <th className="p-3">Email</th>
                 <th className="p-3">Aadhaar</th>
                 <th className="p-3">Address</th>
                 <th className="p-3">Role</th>
+                <th className="p-3">Action</th>
               </tr>
             </thead>
             <tbody>
               {employees.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="p-3 text-center">
+                  <td colSpan="8" className="p-3 text-center">
                     No employees added yet.
                   </td>
                 </tr>
@@ -388,17 +266,65 @@ export default function Employee() {
                         : "border-gray-200 hover:bg-gray-50"
                     }`}
                   >
+                    <td className="p-3">{emp.id}</td>
                     <td className="p-3">{emp.name}</td>
                     <td className="p-3">{emp.mobile}</td>
                     <td className="p-3">{emp.email}</td>
                     <td className="p-3">{emp.aadhaar}</td>
                     <td className="p-3">{emp.address}</td>
                     <td className="p-3">{emp.role}</td>
+                    <td className="p-3 flex gap-2 justify-center">
+                      <button
+                        onClick={() => handleView(emp)}
+                        className={`p-2 rounded transition ${
+                          darkMode
+                            ? "bg-green-600 text-white hover:bg-green-700"
+                            : "bg-green-500 text-white hover:bg-green-600"
+                        }`}
+                        title="View"
+                      >
+                        <Eye size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleEdit(emp)}
+                        className={`p-2 rounded transition ${
+                          darkMode
+                            ? "bg-blue-600 text-white hover:bg-blue-700"
+                            : "bg-blue-500 text-white hover:bg-blue-600"
+                        }`}
+                        title="Edit"
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(index)}
+                        className={`p-2 rounded transition ${
+                          darkMode
+                            ? "bg-orange-600 text-white hover:bg-orange-700"
+                            : "bg-orange-500 text-white hover:bg-orange-600"
+                        }`}
+                        title="Delete"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </td>
                   </tr>
                 ))
               )}
             </tbody>
           </table>
+        </div>
+      </div>
+
+      {/* Graph Section */}
+      <div
+        className={`p-4 shadow rounded-md transition-colors duration-300 ${
+          darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
+        }`}
+      >
+        <h3 className="text-lg font-semibold mb-4">Employee Hours Worked (August 2025)</h3>
+        <div className="h-64">
+          <canvas ref={chartRef}></canvas>
         </div>
       </div>
     </div>
