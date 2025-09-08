@@ -125,7 +125,7 @@ export default function Suppliers() {
                           : "bg-green-500 text-white hover:bg-green-600"
                       }`}
                     >
-                      <Eye size={16} />
+                      <Printer size={16} />
                     </button>
                     <button
                       className={`p-2 rounded transition ${
