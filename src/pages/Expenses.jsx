@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Eye, Edit, Trash2, Search, Filter, Plus } from "lucide-react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 
 export default function Expenses() {
   const { darkMode } = useOutletContext();
-
+  const navigate = useNavigate();
   const [expenses, setExpenses] = useState([
     { category: "E-Bill", amount: 5000, paid: 3000, due: 2000, date: "24.08.2025" },
     { category: "Staff Salaries", amount: 2500, paid: 3000, due: 2000, date: "25.08.2025" },
@@ -17,6 +17,15 @@ export default function Expenses() {
     { id: 2, name: "Jane Smith", phone: "2345678901", address: "456 Oak Ave, Mumbai", salary: 4500 },
     { id: 3, name: "Bob Johnson", phone: "3456789012", address: "789 MG Rd, Kolkata", salary: 4800 },
   ]);
+
+  // Navigation handlers
+  const handleAddExpense= () => {
+    navigate("/add-expense");
+  };
+
+  const handleAddEmployee = () => {
+    navigate("/add-employee");
+  };
 
   return (
     <div
@@ -34,6 +43,7 @@ export default function Expenses() {
         </div>
         <div className="flex gap-4">
           <button
+           onClick={handleAddExpense}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
               darkMode
                 ? "bg-blue-600 text-white hover:bg-blue-700"
@@ -44,6 +54,7 @@ export default function Expenses() {
             Add New Expense
           </button>
           <button
+          onClick={handleAddEmployee}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
               darkMode
                 ? "bg-blue-600 text-white hover:bg-blue-700"
@@ -51,7 +62,7 @@ export default function Expenses() {
             }`}
           >
             <Plus size={18} />
-            Add New Employee
+            Add Employee
           </button>
         </div>
       </div>

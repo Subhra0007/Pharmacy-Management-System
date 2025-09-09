@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Search, Edit, Trash2 } from "lucide-react";
-import { useOutletContext } from "react-router-dom";
+import { Search, Edit, Trash2, Plus } from "lucide-react";
+import { useOutletContext, useNavigate } from "react-router-dom";
 
 export default function ReturnProduct() {
   const { darkMode } = useOutletContext();
-
+ const navigate = useNavigate();
   const [returns, setReturns] = useState([
     {
       id: "#RET001",
@@ -78,6 +78,12 @@ export default function ReturnProduct() {
     // Add logic to update status to "Rejected"
   };
 
+  // Handle Add New Employee
+  const handleAddReturnProduct = () => {
+     navigate("/add-return-product");
+  };
+
+
   return (
     <div
       className={`p-6 space-y-6 transition-colors duration-300 ${
@@ -91,6 +97,17 @@ export default function ReturnProduct() {
             Manage damaged and expired product returns.
           </p>
         </div>
+         <button
+          onClick={handleAddReturnProduct}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
+            darkMode
+              ? "bg-blue-600 text-white hover:bg-blue-700"
+              : "bg-blue-600 text-white hover:bg-blue-700"
+          }`}
+        >
+          <Plus size={18} />
+          Add New Return Product
+        </button>
       </div>
 
       <div

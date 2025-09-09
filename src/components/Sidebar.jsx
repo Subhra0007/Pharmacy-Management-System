@@ -146,7 +146,9 @@ export default function Sidebar({ darkMode }) {
       <div className="p-4">
         <div
           className={`rounded-xl p-4 text-center shadow-sm transition-colors duration-300 ${
-            darkMode ? "bg-gray-700 text-gray-100" : "bg-blue-50 text-gray-800"
+            darkMode 
+              ? "bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900 text-gray-100" 
+              : "bg-gradient-to-br from-blue-50 via-sky-100 to-indigo-100 text-gray-800"
           }`}
         >
           {/* <p className="text-sm font-semibold">Upgrade Pro</p>

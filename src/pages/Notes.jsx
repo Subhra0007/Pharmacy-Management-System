@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { Eye, Edit, Trash2, Search, Filter, Plus } from "lucide-react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 
 export default function Notes() {
   const { darkMode } = useOutletContext();
-
+const navigate = useNavigate();
   const [notes, setNotes] = useState([
     { title: "Inventory Check",  },
     {  title: "Supplier Meeting"},
     {  title: "Staff Training" },
   ]);
-
+const handleAddNewCustomer = () => {
+    navigate('/add-note');
+  };
   return (
     <div
       className={`p-6 space-y-6 transition-colors duration-300 ${
@@ -26,6 +28,7 @@ export default function Notes() {
           </p>
         </div>
         <button
+         onClick={handleAddNewCustomer}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
             darkMode
               ? "bg-blue-600 text-white hover:bg-blue-700"

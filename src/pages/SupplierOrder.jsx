@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Eye, Edit, Trash2, Search, Filter, Plus, Printer, ScrollText } from "lucide-react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import { FaWhatsapp } from "react-icons/fa";
 
 export default function SupplierOrder() {
   const { darkMode } = useOutletContext();
-
+  const navigate = useNavigate();
   const [invoices, setInvoices] = useState([
     { 
       id: "#INV001", 
@@ -83,6 +83,9 @@ export default function SupplierOrder() {
         return "";
     }
   };
+  const handleAddNewCustomer = () => {
+    navigate('/add-supplier-order');
+  };
 
   return (
     <div
@@ -95,6 +98,7 @@ export default function SupplierOrder() {
           <h2 className="text-2xl font-bold">Suppliers Orders List</h2>
         </div>
         <button
+        onClick={handleAddNewCustomer}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
             darkMode
               ? "bg-blue-600 text-white hover:bg-blue-700"

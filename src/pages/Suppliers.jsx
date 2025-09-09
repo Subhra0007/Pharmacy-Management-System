@@ -1,10 +1,12 @@
+//src/pages/Suppliers.jsx
 import { useState } from "react";
 import { Eye, Edit, Trash2, Search, Filter, Plus, Printer, ScrollText } from "lucide-react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 
 export default function Suppliers() {
   const { darkMode } = useOutletContext();
+  const navigate = useNavigate();
 
   const [suppliers, setSuppliers] = useState([
     { 
@@ -14,9 +16,9 @@ export default function Suppliers() {
       email: "square@example.com", 
       address: "Kolkata", 
       products: [
-        { name: "Paracetamol", quantity: 500 },
-        { name: "Ibuprofen", quantity: 300 },
-        { name: "Aspirin", quantity: 200 }
+        { name: "Paracetamol" },
+        { name: "Ibuprofen" },
+        { name: "Aspirin"}
       ] 
     },
     { 
@@ -26,8 +28,8 @@ export default function Suppliers() {
       email: "beximco@example.com", 
       address: "Howrah", 
       products: [
-        { name: "Amoxicillin", quantity: 400 },
-        { name: "Ciprofloxacin", quantity: 250 }
+        { name: "Amoxicillin"},
+        { name: "Ciprofloxacin"}
       ] 
     },
     { 
@@ -37,9 +39,9 @@ export default function Suppliers() {
       email: "renata@example.com", 
       address: "Hooghly", 
       products: [
-        { name: "Metformin", quantity: 600 },
-        { name: "Amlodipine", quantity: 350 },
-        { name: "Losartan", quantity: 150 }
+        { name: "Metformin"},
+        { name: "Amlodipine"},
+        { name: "Losartan"}
       ] 
     },
   ]);
@@ -50,6 +52,15 @@ export default function Suppliers() {
   const handleViewProducts = (supplier) => {
     setSelectedSupplier(supplier);
     setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedSupplier(null);
+  };
+
+  const handleAddNewSupplier = () => {
+    navigate('/add-supplier');
   };
 
   return (
@@ -66,6 +77,7 @@ export default function Suppliers() {
           </p>
         </div>
         <button
+          onClick={handleAddNewSupplier}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
             darkMode
               ? "bg-blue-600 text-white hover:bg-blue-700"
@@ -100,12 +112,11 @@ export default function Suppliers() {
               }`}
             />
           </div>
-          {/* <ScrollText/> */}
         </div>
 
         <div className="overflow-x-auto">
           <table
-            className={`w-full border rounded-lg overflow-hidden text-sm  text-center ${
+            className={`w-full border rounded-lg overflow-hidden text-sm text-center ${
               darkMode ? "border-gray-600" : "border-gray-200"
             }`}
           >
@@ -136,8 +147,8 @@ export default function Suppliers() {
                   <td className="p-3">{supplier.name}</td>
                   <td className="p-3">{supplier.phone}</td>
                   <td className="p-3">{supplier.email}</td>
-                   <td className="p-3">{supplier.address}</td>
-                  <td className="p-2">
+                  <td className="p-3">{supplier.address}</td>
+                  <td className="p-3">
                     <button onClick={() => handleViewProducts(supplier)}>
                       <Eye size={16} />
                     </button>
@@ -244,7 +255,7 @@ export default function Suppliers() {
       </div>
 
       {showModal && selectedSupplier && (
-        <div className="fixed inset-0  bg-opacity-100 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
           <div
             className={`rounded-lg p-6 max-w-lg w-full ${
               darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
@@ -253,7 +264,7 @@ export default function Suppliers() {
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold">Products Supplied by {selectedSupplier.name}</h3>
               <button
-                onClick={() => setShowModal(false)}
+                onClick={handleCloseModal}
                 className={`p-2 rounded ${
                   darkMode
                     ? "bg-gray-600 text-white hover:bg-gray-500"
@@ -271,7 +282,6 @@ export default function Suppliers() {
                 >
                   <tr>
                     <th className="p-3 text-left">Product Name</th>
-                    <th className="p-3 text-left">Quantity Supplied</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -285,7 +295,6 @@ export default function Suppliers() {
                       }`}
                     >
                       <td className="p-3">{product.name}</td>
-                      <td className="p-3">{product.quantity}</td>
                     </tr>
                   ))}
                 </tbody>

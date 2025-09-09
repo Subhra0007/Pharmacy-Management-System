@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 import { Eye, Edit, Trash2, Plus } from "lucide-react";
 import { IoIosArrowDown } from "react-icons/io";
 
 export default function Branch() {
   const { darkMode } = useOutletContext();
-
+const navigate = useNavigate();
   // Branch data with updated suppliers structure
   const [branches] = useState([
     {
@@ -91,7 +91,7 @@ export default function Branch() {
   };
 
   const handleAddBranch = () => {
-    alert("Add new branch functionality to be implemented");
+     navigate("/add-branch");
   };
 
   const toggleRevenueDropdown = () => {
@@ -102,6 +102,8 @@ export default function Branch() {
     setShowExpenseDropdown(!showExpenseDropdown);
   };
 
+  
+  
   return (
     <div className={`p-6 space-y-6 transition-colors duration-300 ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"}`}>
       <div className="flex items-center justify-between">

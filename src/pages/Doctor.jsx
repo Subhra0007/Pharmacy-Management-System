@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Eye, Edit, Trash2, Search, Filter, Plus, ScrollText } from "lucide-react";
-import { useOutletContext } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import {
   LineChart,
@@ -14,6 +14,7 @@ import {
 
 export default function Doctor() {
   const { darkMode } = useOutletContext();
+  const navigate = useNavigate(); // Hook for navigation
 
   const [doctors, setDoctors] = useState([
     { name: "Dr. A.K", specialty: "General Physician", phone: "01893531209", fees: 1200, clinic: 1000, day: "Mon, Tue, Sat", time: "10:00 am to 12:00pm" },
@@ -44,6 +45,15 @@ export default function Doctor() {
     setSelectedDoctor(null);
   };
 
+  // Navigation handlers
+  const handleAddDoctor = () => {
+    navigate("/add-doctor");
+  };
+
+  const handleAddAppointment = () => {
+    navigate("/add-appointment");
+  };
+
   return (
     <div
       className={`p-6 space-y-6 transition-colors duration-300 ${
@@ -59,6 +69,7 @@ export default function Doctor() {
         </div>
         <div className="flex gap-2">
           <button
+            onClick={handleAddDoctor}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
               darkMode
                 ? "bg-blue-600 text-white hover:bg-blue-700"
@@ -69,6 +80,7 @@ export default function Doctor() {
             Add New Doctor
           </button>
           <button
+            onClick={handleAddAppointment}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
               darkMode
                 ? "bg-blue-600 text-white hover:bg-blue-700"
@@ -141,8 +153,8 @@ export default function Doctor() {
                   <td className="p-3">{doc.name}</td>
                   <td className="p-3">{doc.specialty}</td>
                   <td className="p-3">{doc.phone}</td>
-                  <td className="p-3 cursor-pointer " onClick={() => openModal(doc)}>
-                    <Eye size={16} className=" mx-auto" />
+                  <td className="p-3 cursor-pointer" onClick={() => openModal(doc)}>
+                    <Eye size={16} className="mx-auto" />
                   </td>
                   <td className="p-3">{doc.fees}</td>
                   <td className="p-3">{doc.clinic}</td>
@@ -251,7 +263,7 @@ export default function Doctor() {
 
       {/* Graph Only Modal */}
       {showModal && (
-        <div className="fixed inset-0  bg-opacity-100 backdrop-blur-sm flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-opacity-100 backdrop-blur-sm flex justify-center items-center z-50">
           <div
             className={`rounded-lg w-11/12 max-w-lg p-6 relative transition-colors duration-300 ${
               darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"

@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { Plus, Edit, Eye, Trash2, ChevronDown } from "lucide-react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import Chart from "chart.js/auto";
 
 export default function Employee() {
   const { darkMode } = useOutletContext();
-
+  const navigate = useNavigate();
   // Dummy employee data
   const initialEmployees = [
     {
@@ -97,8 +97,7 @@ export default function Employee() {
 
   // Handle Add New Employee
   const handleAddEmployee = () => {
-    console.log("Add New Employee clicked");
-    alert("Add New Employee functionality to be implemented");
+     navigate("/add-new-employee");
   };
 
   // Handle View action

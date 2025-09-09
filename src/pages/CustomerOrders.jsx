@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Eye, Edit, Trash2, Search, Filter, Plus, Printer, ScrollText } from "lucide-react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext,useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import { FaWhatsapp } from "react-icons/fa";
 
 export default function CustomerOrders() {
   const { darkMode } = useOutletContext();
-
+const navigate = useNavigate();
   const [orders, setOrders] = useState([
     { 
       id: "#ORD001", 
@@ -95,7 +95,9 @@ export default function CustomerOrders() {
         return "";
     }
   };
-
+const handleAddNewCustomer = () => {
+    navigate('/add-customer-order');
+  };
   return (
     <div
       className={`p-6 space-y-6 transition-colors duration-300 ${
@@ -110,6 +112,7 @@ export default function CustomerOrders() {
           </p>
         </div>
         <button
+         onClick={handleAddNewCustomer}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
             darkMode
               ? "bg-blue-600 text-white hover:bg-blue-700"

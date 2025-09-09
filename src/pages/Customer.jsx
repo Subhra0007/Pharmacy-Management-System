@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { Search, Plus, Eye, Trash2, Users, Edit } from "lucide-react";
 import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 import { FiUserPlus } from "react-icons/fi";
@@ -7,7 +7,7 @@ import { IoIosArrowDown } from "react-icons/io";
 
 export default function Customer() {
   const { darkMode } = useOutletContext();
-
+  const navigate = useNavigate();
   const [customers, setCustomers] = useState([
     {
       id: "#CUS001",
@@ -188,6 +188,9 @@ export default function Customer() {
     setShowDoctorModal(false);
     setSelectedDoctors([]);
   };
+   const handleAddNewCustomer = () => {
+    navigate('/add-customer');
+  };
 
   return (
     <div
@@ -207,6 +210,7 @@ export default function Customer() {
           </p>
         </div>
         <button
+          onClick={handleAddNewCustomer}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
             darkMode
               ? "bg-blue-600 text-white hover:bg-blue-700"

@@ -1,17 +1,21 @@
 //pages/Product.jsx
 import { useState } from "react";
 import { Eye, Edit, Trash2, Search, Filter, Plus, ScrollText } from "lucide-react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 
 export default function Product() {
   const { darkMode } = useOutletContext();
+  const navigate = useNavigate();
 
   const [medicines, setMedicines] = useState([
     { id: "#MED001", name: "Paracetamol", type: "Tablet", stock: 150, single: 1500, mfg: "13.07.2025", exp: "27.10.2026" },
     { id: "#MED002", name: "Crosin", type: "Syrup", stock: 80,  single: 80, mfg: "25.07.2025", exp: "27.10.2026" },
     { id: "#MED003", name: "Benadryl", type: "Capsule", stock: 120,  single: 1200, mfg: "30.07.2025", exp: "27.10.2026" },
   ]);
+  const handleAddNewProduct = () => {
+    navigate('/add-product');
+  };
 
   return (
     <div
@@ -22,11 +26,12 @@ export default function Product() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Product List</h2>
-          <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
+          {/* <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
             Manage the inventory of medicines.
-          </p>
+          </p> */}
         </div>
         <button
+          onClick={handleAddNewProduct}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
             darkMode
               ? "bg-blue-600 text-white hover:bg-blue-700"
@@ -34,7 +39,7 @@ export default function Product() {
           }`}
         >
           <Plus size={18} />
-          Add New Medicine
+          Add New Product
         </button>
       </div>
 

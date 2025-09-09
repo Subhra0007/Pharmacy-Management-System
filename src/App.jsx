@@ -16,11 +16,26 @@ import Expenses from "./pages/Expenses";
 import Employee from "./pages/Employees";
 import ReturnProduct from "./pages/ReturnProduct";
 import Branch from "./pages/Branch"
+          //Add-form
+import AddCustomer from "./addform/AddCustomer";
+import AddSupplier from "./addform/AddSuppliers";
+import AddProduct from "./addform/AddProduct";
+import AddDoctor from "./addform/AddDoctor";
+import AddAppointment from "./addform/AddAppointment";
+import AddNewSupplierOrder from "./addform/AddSupplierOrder";
+import AddCustomerOrder from "./addform/AddCustomerOrder";
+import AddNote from "./addform/AddNote";
+import AddExpense from "./addform/AddExpense";
+import AddEmployee from "./addform/AddEmployee";
+import AddNewEmployee from "./addform/AddNewEmployee";
+import AddReturnProduct from "./addform/AddReturnProduct";
+import AddBranch from "./addform/AddBranch";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
+                   {/*Pages */}
           <Route path="/" element={<Dashboard />} />
           <Route path="/customer" element={<Customer />} />
           {/* <Route path="/purchase" element={<Purchase />} /> */}
@@ -36,7 +51,21 @@ function App() {
           <Route path="/expenses" element={<Expenses />} />
           <Route path="/employee" element={<Employee />} />
            <Route path="/return-product" element={< ReturnProduct/>} />
-            <Route path="/branch" element={< Branch/>} />
+          <Route path="/branch" element={< Branch/>} />
+                     {/*Add-Form */}
+          <Route path="/add-customer" element={<AddCustomer/>} />
+          <Route path="/add-supplier" element={<AddSupplier/>} />
+          <Route path="/add-product" element={<AddProduct/>} />
+          <Route path="/add-doctor" element={<AddDoctor/>} />
+          <Route path="/add-appointment" element={<AddAppointment/>} />
+          <Route path="/add-supplier-order" element={<AddNewSupplierOrder/>} />
+          <Route path="/add-customer-order" element={<AddCustomerOrder/>} />
+          <Route path="/add-note" element={<AddNote/>} />
+          <Route path="/add-expense" element={<AddExpense/>} />
+          <Route path="/add-employee" element={<AddEmployee/>} />
+          <Route path="/add-new-employee" element={<AddNewEmployee/>} />
+          <Route path="/add-return-product" element={<AddReturnProduct/>} />
+          <Route path="/add-branch" element={<AddBranch/>} />
         </Route>
       </Routes>
     </BrowserRouter>
