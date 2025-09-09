@@ -140,7 +140,7 @@ export default function Notes() {
         </div>
 
         <div
-          className={`flex items-center justify-between mt-4 text-sm ${
+          className={`flex items-center justify-between mt-4 text-sm text-center ${
             darkMode ? "text-gray-400" : "text-gray-600"
           }`}
         >

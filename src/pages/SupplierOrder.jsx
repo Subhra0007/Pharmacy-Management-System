@@ -129,7 +129,7 @@ export default function SupplierOrder() {
               }`}
             />
           </div>
-          <ScrollText />
+          {/* <ScrollText /> */}
         </div>
 
         <div className="overflow-x-auto">
@@ -148,7 +148,7 @@ export default function SupplierOrder() {
                 <th className="p-3">Total Amount</th>
                 <th className="p-3">Paid Amount</th>
                 <th className="p-3">Due</th>
-                <th className="p-3">Invoice</th>
+                <th className="p-3">Products</th>
                 <th className="p-3">Status</th>
                 <th className="p-3">Action</th>
               </tr>

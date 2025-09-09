@@ -8,9 +8,9 @@ export default function Product() {
   const { darkMode } = useOutletContext();
 
   const [medicines, setMedicines] = useState([
-    { id: "#MED001", name: "Paracetamol", type: "Tablet", stock: 150, single: 1500, mfg: "13:07:2025", exp: "27:10:2026" },
-    { id: "#MED002", name: "Crosin", type: "Syrup", stock: 80,  single: 80, mfg: "25:07:2025", exp: "27:10:2026" },
-    { id: "#MED003", name: "Benadryl", type: "Capsule", stock: 120,  single: 1200, mfg: "30:07:2025", exp: "27:10:2026" },
+    { id: "#MED001", name: "Paracetamol", type: "Tablet", stock: 150, single: 1500, mfg: "13.07.2025", exp: "27.10.2026" },
+    { id: "#MED002", name: "Crosin", type: "Syrup", stock: 80,  single: 80, mfg: "25.07.2025", exp: "27.10.2026" },
+    { id: "#MED003", name: "Benadryl", type: "Capsule", stock: 120,  single: 1200, mfg: "30.07.2025", exp: "27.10.2026" },
   ]);
 
   return (
@@ -72,7 +72,7 @@ export default function Product() {
             Filter
             <IoIosArrowDown className="ml-3" />
           </button> */}
-          <ScrollText/>
+          {/* <ScrollText/> */}
         </div>
 
         <div className="overflow-x-auto">
@@ -102,7 +102,7 @@ export default function Product() {
               {medicines.map((med, index) => (
                 <tr
                   key={index}
-                  className={`border-t transition-colors duration-300 text-center ${
+                  className={`border-t transition-colors duration-300 text-center text-sm ${
                     darkMode
                       ? "border-gray-600 hover:bg-gray-600"
                       : "border-gray-200 hover:bg-gray-50"

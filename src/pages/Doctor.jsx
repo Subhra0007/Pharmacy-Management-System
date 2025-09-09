@@ -104,7 +104,7 @@ export default function Doctor() {
               }`}
             />
           </div>
-          <ScrollText/>
+          {/* <ScrollText/> */}
         </div>
 
         <div className="overflow-x-auto">

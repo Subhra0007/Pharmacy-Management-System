@@ -15,7 +15,8 @@ import {
   ScrollText,
   BanknoteArrowDown,
   IdCardLanyard,
-  Undo2 
+  Undo2,
+  House
 } from "lucide-react";
 
 export default function Sidebar({ darkMode }) {
@@ -55,10 +56,10 @@ export default function Sidebar({ darkMode }) {
               <LayoutDashboard size={20} />
               <span>Dashboard</span>
             </Link>
-            <Link to="/purchase" className={linkClass("/purchase")}>
+            {/* <Link to="/purchase" className={linkClass("/purchase")}>
               <ShoppingCart size={20} />
               <span>Purchase</span>
-            </Link>
+            </Link> */}
             <Link to="/analytics" className={linkClass("/analytics")}>
               <BarChart size={20} />
               <span>Analytics</span>
@@ -91,7 +92,7 @@ export default function Sidebar({ darkMode }) {
               <span>Doctor</span>
             </Link>
             <Link to="/supplier-orders" className={linkClass("/supplier-orders")}>
-              <FileText size={20} />
+              <ShoppingCart size={20} />
               <span>Supplier Orders</span>
             </Link>
             <Link to="/customer-orders" className={linkClass("/customer-orders")}>
@@ -113,6 +114,10 @@ export default function Sidebar({ darkMode }) {
               <Link to="/return-product" className={linkClass("/return-product")}>
               <Undo2 size={20} />
               <span>Return Product</span>
+            </Link>
+             <Link to="/branch" className={linkClass("/branch")}>
+              <House size={20} />
+              <span>Branch</span>
             </Link>
           </div>
 

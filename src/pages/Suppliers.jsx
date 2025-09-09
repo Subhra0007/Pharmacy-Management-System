@@ -100,7 +100,7 @@ export default function Suppliers() {
               }`}
             />
           </div>
-          <ScrollText/>
+          {/* <ScrollText/> */}
         </div>
 
         <div className="overflow-x-auto">

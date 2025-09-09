@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Plus, Edit, Eye, Trash2 } from "lucide-react";
+import { Plus, Edit, Eye, Trash2, ChevronDown } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import Chart from "chart.js/auto";
 
@@ -86,20 +86,24 @@ export default function Employee() {
     },
   ];
 
-  // State for employee list
+  // State for employee list and filter mode
   const [employees, setEmployees] = useState(initialEmployees);
+  const [filterMode, setFilterMode] = useState("week"); // Default to "week"
+
+  // Handle filter mode change via dropdown
+  const handleFilterChange = (e) => {
+    setFilterMode(e.target.value);
+  };
 
   // Handle Add New Employee
   const handleAddEmployee = () => {
     console.log("Add New Employee clicked");
-    // Implement form logic or redirect to a form page
     alert("Add New Employee functionality to be implemented");
   };
 
   // Handle View action
   const handleView = (employee) => {
     console.log("View Employee:", employee);
-    // Implement view logic
     alert(`Viewing ${employee.name}'s details:\n` +
           `ID: ${employee.id}\n` +
           `Mobile: ${employee.mobile}\n` +
@@ -112,7 +116,6 @@ export default function Employee() {
   // Handle Edit action
   const handleEdit = (employee) => {
     console.log("Edit Employee:", employee);
-    // Implement edit logic
     alert(`Editing ${employee.name}'s details`);
   };
 
@@ -136,20 +139,38 @@ export default function Employee() {
     }
 
     const labels = employees.map((emp) => emp.name);
-    const data = employees.map((emp) => emp.hoursWorked[emp.hoursWorked.length - 1].hours);
+    let data;
+    let maxValue;
+
+    if (filterMode === "month") {
+      data = employees.map((emp) =>
+        emp.name === "Ravi Sharma" ? 5 : emp.hoursWorked[emp.hoursWorked.length - 1].hours
+      );
+      maxValue = 200;
+    } else if (filterMode === "week") {
+      data = employees.map((emp) =>
+        emp.name === "Ravi Sharma" ? 3 : Math.round(emp.hoursWorked[emp.hoursWorked.length - 1].hours / 4)
+      );
+      maxValue = 50;
+    } else {
+      data = employees.map((emp) => emp.hoursWorked.reduce((sum, entry) => sum + entry.hours, 0));
+      maxValue = 2000;
+    }
+
+    const textColor = darkMode ? "#94a3b8" : "#1a202c"; // Deep text color
 
     chartInstance.current = new Chart(ctx, {
       type: "bar",
       data: {
         labels: labels,
         datasets: [{
-          label: "Hours Worked (August 2025)",
+          label: `Hours Worked (${filterMode === "month" ? "This Month" : filterMode === "week" ? "This Week" : "This Year"})`,
           data: data,
           backgroundColor: [
-            "rgba(0, 128, 128, 0.8)", // Teal for Dipankar
-            "rgba(0, 191, 255, 0.8)", // Light blue for Priya
-            "rgba(0, 0, 255, 0.8)",   // Medium blue for Amit
-            "rgba(128, 0, 128, 0.8)", // Purple for Sneha
+            "rgba(0, 128, 128, 0.8)",
+            "rgba(0, 191, 255, 0.8)",
+            "rgba(0, 0, 255, 0.8)",
+            "rgba(128, 0, 128, 0.8)",
           ],
           borderColor: [
             "rgba(0, 128, 128, 1)",
@@ -165,16 +186,32 @@ export default function Employee() {
         scales: {
           x: {
             beginAtZero: true,
-            max: 200,
+            max: maxValue,
             title: {
               display: true,
               text: "Hours",
+              color: textColor,
+              font: {
+                size: 14,
+                weight: "bold",
+              },
+            },
+            ticks: {
+              color: textColor,
             },
           },
           y: {
             title: {
               display: true,
               text: "Employees",
+              color: textColor,
+              font: {
+                size: 14,
+                weight: "bold",
+              },
+            },
+            ticks: {
+              color: textColor,
             },
           },
         },
@@ -182,6 +219,22 @@ export default function Employee() {
           legend: {
             display: true,
             position: "top",
+            labels: {
+              color: textColor,
+              font: {
+                size: 12,
+                weight: "bold",
+              },
+            },
+          },
+          title: {
+            display: true,
+            text: "Employee Hours Worked",
+            color: textColor,
+            font: {
+              size: 18,
+              weight: "bold",
+            },
           },
         },
         maintainAspectRatio: false,
@@ -193,7 +246,7 @@ export default function Employee() {
         chartInstance.current.destroy();
       }
     };
-  }, [employees, darkMode]);
+  }, [employees, darkMode, filterMode]);
 
   return (
     <div
@@ -322,7 +375,22 @@ export default function Employee() {
           darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
         }`}
       >
-        <h3 className="text-lg font-semibold mb-4">Employee Hours Worked (August 2025)</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">Employee Hours Worked</h3>
+          <select
+            value={filterMode}
+            onChange={handleFilterChange}
+            className={`border text-xs px-2 py-1 rounded-md transition appearance-none ${
+              darkMode
+                ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500 focus:bg-gray-500"
+                : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200 focus:bg-gray-200"
+            }`}
+          >
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="year">This Year</option>
+          </select>
+        </div>
         <div className="h-64">
           <canvas ref={chartRef}></canvas>
         </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { Search, Filter, Plus, Edit, Eye, Trash2, Users, ScrollText } from "lucide-react";
+import { Search, Plus, Eye, Trash2, Users, Edit } from "lucide-react";
 import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 import { FiUserPlus } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
@@ -158,12 +158,14 @@ export default function Customer() {
     },
   ]);
 
-  // State for modal functionality
+  // State for order frequency modal
   const [showModal, setShowModal] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [orderFrequencyData, setOrderFrequencyData] = useState([]);
-  const [showDoctor, setShowDoctor] = useState({});
-  const [doctorInput, setDoctorInput] = useState({});
+
+  // State for doctor popup
+  const [showDoctorModal, setShowDoctorModal] = useState(false);
+  const [selectedDoctors, setSelectedDoctors] = useState([]);
 
   const handleOpenModal = (customer) => {
     setOrderFrequencyData(customer.orderFrequency);
@@ -177,45 +179,14 @@ export default function Customer() {
     setOrderFrequencyData([]);
   };
 
-  const toggleDoctorEdit = (customerId, doctors) => {
-    setShowDoctor(prev => ({
-      ...prev,
-      [customerId]: !prev[customerId]
-    }));
-    setDoctorInput(prev => ({
-      ...prev,
-      [customerId]: doctors.map(doctor => ({ ...doctor }))
-    }));
+  const handleOpenDoctorModal = (doctors) => {
+    setSelectedDoctors(doctors);
+    setShowDoctorModal(true);
   };
 
-  const handleDoctorNameChange = (customerId, index, value) => {
-    setDoctorInput(prev => ({
-      ...prev,
-      [customerId]: prev[customerId].map((doctor, i) =>
-        i === index ? { ...doctor, name: value } : doctor
-      )
-    }));
-  };
-
-  const addNewDoctor = (customerId) => {
-    setDoctorInput(prev => ({
-      ...prev,
-      [customerId]: [...(prev[customerId] || []), { name: "", inClinic: false }]
-    }));
-  };
-
-  const saveDoctorNames = (customerId) => {
-    setCustomers(prevCustomers =>
-      prevCustomers.map(customer =>
-        customer.id === customerId
-          ? { ...customer, doctors: doctorInput[customerId] }
-          : customer
-      )
-    );
-    setShowDoctor(prev => ({
-      ...prev,
-      [customerId]: false
-    }));
+  const handleCloseDoctorModal = () => {
+    setShowDoctorModal(false);
+    setSelectedDoctors([]);
   };
 
   return (
@@ -453,7 +424,6 @@ export default function Customer() {
               }`}
             />
           </div>
-          <ScrollText />
         </div>
 
         {/* Table */}
@@ -493,65 +463,12 @@ export default function Customer() {
                   </td>
                   <td className="p-3">{c.phone}</td>
                   <td className="p-3">{c.balance}</td>
-                  <td className="p-3">
-                    {showDoctor[c.id] ? (
-                      <div className="flex flex-col gap-2">
-                        {doctorInput[c.id]?.map((doctor, index) => (
-                          <div key={index} className="flex items-center gap-2">
-                            <input
-                              type="text"
-                              value={doctor.name}
-                              onChange={(e) => handleDoctorNameChange(c.id, index, e.target.value)}
-                              className={`p-1 border rounded w-32 ${
-                                doctor.inClinic ? "text-green-500" : ""
-                              } ${
-                                darkMode
-                                  ? "bg-gray-600 border-gray-500 text-gray-100"
-                                  : "bg-white border-gray-300 text-gray-900"
-                              }`}
-                            />
-                          </div>
-                        ))}
-                        <div className="flex gap-2 mt-2">
-                          <button
-                            onClick={() => addNewDoctor(c.id)}
-                            className={`flex items-center gap-1 px-2 py-1 rounded transition ${
-                              darkMode
-                                ? "bg-green-600 text-white hover:bg-green-700"
-                                : "bg-green-500 text-white hover:bg-green-600"
-                            }`}
-                          >
-                            <Plus size={16} />
-                            Add New Doctor
-                          </button>
-                          <button
-                            onClick={() => saveDoctorNames(c.id)}
-                            className={`px-2 py-1 rounded transition ${
-                              darkMode
-                                ? "bg-blue-600 text-white hover:bg-blue-700"
-                                : "bg-blue-500 text-white hover:bg-blue-600"
-                            }`}
-                          >
-                            Save
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-center gap-2">
-                        <div className="flex flex-col">
-                          {c.doctors.map((doctor, index) => (
-                            <span key={index} className={doctor.inClinic ? "text-green-500" : ""}>
-                              {doctor.name}
-                            </span>
-                          ))}
-                        </div>
-                        <Eye
-                          size={16}
-                          className="cursor-pointer"
-                          onClick={() => toggleDoctorEdit(c.id, c.doctors)}
-                        />
-                      </div>
-                    )}
+                  <td className="p-3 text-center">
+                    <Eye
+                      size={16}
+                      className="cursor-pointer mx-auto"
+                      onClick={() => handleOpenDoctorModal(c.doctors)}
+                    />
                   </td>
                   <td className="p-3 cursor-pointer" onClick={() => handleOpenModal(c)}>
                     <Eye size={16} className="mx-auto" />
@@ -668,7 +585,7 @@ export default function Customer() {
         </div>
       </div>
 
-      {/* Graph Only Modal with Blur Background */}
+      {/* Order Frequency Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
           <div
@@ -745,6 +662,64 @@ export default function Customer() {
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Recent order trends
               </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Doctor Management Modal */}
+      {showDoctorModal && (
+        <div className="fixed inset-0 bg-opacity-100 backdrop-blur-sm flex justify-center items-center z-50">
+          <div
+            className={`rounded-lg w-11/12 max-w-md p-6 relative transition-colors duration-300 ${
+              darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
+            }`}
+          >
+            <button
+              onClick={handleCloseDoctorModal}
+              className={`absolute top-3 right-3 p-2 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors duration-300 z-10`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <div className="text-center mb-4">
+              <h3 className="text-xl font-bold">Doctor List</h3>
+              {/* <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                In-house doctors are shown in green
+              </p> */}
+            </div>
+
+            <div className="space-y-2">
+              {selectedDoctors.map((doctor, index) => (
+                <div
+                  key={index}
+                  className={`p-2  rounded ${
+                    doctor.inClinic
+                      ? "text-green-500 font-medium "
+                      : darkMode
+                      ? "text-gray-100 "
+                      : "text-gray-900 "
+                  } ${
+                    darkMode ? "bg-gray-600" : "bg-white"
+                  }`}
+                >
+                  {doctor.name}
+                </div>
+              ))}
+              <div className="flex justify-center mt-4">
+                {/* <button
+                  onClick={handleCloseDoctorModal}
+                  className={`px-4 py-2 rounded transition ${
+                    darkMode
+                      ? "bg-gray-600 text-white hover:bg-gray-500"
+                      : "bg-gray-300 text-gray-900 hover:bg-gray-400"
+                  }`}
+                >
+                  Close
+                </button> */}
+              </div>
             </div>
           </div>
         </div>

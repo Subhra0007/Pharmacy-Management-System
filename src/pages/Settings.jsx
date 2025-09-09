@@ -7,7 +7,7 @@ export default function Settings() {
 
   const [settings, setSettings] = useState({
     currency: "USD",
-    shiftDuration: "8",
+    shiftTimes: [{ id: 1, start: "09:00", end: "17:00" }], // Array for multiple shift times
     doctorClinicAvailable: false,
   });
 
@@ -22,6 +22,32 @@ export default function Settings() {
     setSettings((prev) => ({
       ...prev,
       [field]: value,
+    }));
+  };
+
+  const handleShiftTimeChange = (id, field, value) => {
+    setSettings((prev) => ({
+      ...prev,
+      shiftTimes: prev.shiftTimes.map((shift) =>
+        shift.id === id ? { ...shift, [field]: value } : shift
+      ),
+    }));
+  };
+
+  const handleAddShiftTime = () => {
+    const newId = settings.shiftTimes.length
+      ? Math.max(...settings.shiftTimes.map((shift) => shift.id)) + 1
+      : 1;
+    setSettings((prev) => ({
+      ...prev,
+      shiftTimes: [...prev.shiftTimes, { id: newId, start: "09:00", end: "17:00" }],
+    }));
+  };
+
+  const handleRemoveShiftTime = (id) => {
+    setSettings((prev) => ({
+      ...prev,
+      shiftTimes: prev.shiftTimes.filter((shift) => shift.id !== id),
     }));
   };
 
@@ -71,31 +97,94 @@ export default function Settings() {
           </select>
         </div>
 
-        {/* Shift Duration */}
+        {/* Shift Timing */}
         <div
-          className={`flex items-center justify-between p-4 border rounded transition-colors duration-300 ${
+          className={`p-4 border rounded transition-colors duration-300 ${
             darkMode ? "bg-gray-700 border-gray-600" : "bg-white border-gray-200"
           }`}
         >
-          <div>
-            <h3 className="font-medium text-lg">⏰ Shift Duration</h3>
-            <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
-              Set the duration for employee shifts (login/logout).
-            </p>
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="font-medium text-lg">⏰ Shift Timing</h3>
+              <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
+                Set the start and end times for employee shifts.
+              </p>
+            </div>
+            <button
+              onClick={handleAddShiftTime}
+              className={`px-3 py-1 rounded text-sm transition ${
+                darkMode
+                  ? "bg-green-600 text-white hover:bg-green-700"
+                  : "bg-green-500 text-white hover:bg-green-600"
+              }`}
+            >
+              Add New Time Duration
+            </button>
           </div>
-          <select
-            value={settings.shiftDuration}
-            onChange={(e) => handleSelectChange("shiftDuration", e.target.value)}
-            className={`border rounded px-2 py-1 text-sm ${
-              darkMode
-                ? "bg-gray-600 border-gray-500 text-gray-100"
-                : "bg-white border-gray-300 text-gray-900"
-            }`}
-          >
-            <option value="8">8 Hours</option>
-            <option value="10">10 Hours</option>
-            <option value="12">12 Hours</option>
-          </select>
+          <div className="space-y-4 mt-4">
+            {settings.shiftTimes.map((shift) => (
+              <div key={shift.id} className="flex items-center gap-4">
+                <div>
+                  <label
+                    htmlFor={`shiftStart-${shift.id}`}
+                    className={`block text-sm font-medium ${
+                      darkMode ? "text-gray-300" : "text-gray-700"
+                    }`}
+                  >
+                    Start Time
+                  </label>
+                  <input
+                    type="time"
+                    id={`shiftStart-${shift.id}`}
+                    value={shift.start}
+                    onChange={(e) =>
+                      handleShiftTimeChange(shift.id, "start", e.target.value)
+                    }
+                    className={`mt-1 border rounded px-2 py-1 text-sm ${
+                      darkMode
+                        ? "bg-gray-600 border-gray-500 text-gray-100"
+                        : "bg-white border-gray-300 text-gray-900"
+                    }`}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor={`shiftEnd-${shift.id}`}
+                    className={`block text-sm font-medium ${
+                      darkMode ? "text-gray-300" : "text-gray-700"
+                    }`}
+                  >
+                    End Time
+                  </label>
+                  <input
+                    type="time"
+                    id={`shiftEnd-${shift.id}`}
+                    value={shift.end}
+                    onChange={(e) =>
+                      handleShiftTimeChange(shift.id, "end", e.target.value)
+                    }
+                    className={`mt-1 border rounded px-2 py-1 text-sm ${
+                      darkMode
+                        ? "bg-gray-600 border-gray-500 text-gray-100"
+                        : "bg-white border-gray-300 text-gray-900"
+                    }`}
+                  />
+                </div>
+                {settings.shiftTimes.length > 1 && (
+                  <button
+                    onClick={() => handleRemoveShiftTime(shift.id)}
+                    className={`mt-6 px-3 py-1 rounded text-sm transition ${
+                      darkMode
+                        ? "bg-red-600 text-white hover:bg-red-700"
+                        : "bg-red-500 text-white hover:bg-red-600"
+                    }`}
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Doctor Clinic Availability */}

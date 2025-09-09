@@ -10,11 +10,11 @@ export default function CustomerOrders() {
   const [orders, setOrders] = useState([
     { 
       id: "#ORD001", 
-      date: "Feb 24, 2025", 
+      date: " 24.08.2025", 
       customer: "A Khan", 
       amount: 1200, 
       status: "Pending", 
-      deliveryDate: "12:09:2025",
+      deliveryDate: "12.09.2025",
       products: [
         { name: "Paracetamol", quantity: 50, price: 10 },
         { name: "Ibuprofen", quantity: 30, price: 15 }
@@ -22,11 +22,11 @@ export default function CustomerOrders() {
     },
     { 
       id: "#ORD002", 
-      date: "Feb 25, 2025", 
+      date: "25.08.2025", 
       customer: "B Smith", 
       amount: 1200, 
-      status: "Delivered", 
-      deliveryDate: "12:09:2025",
+      status: "Completed", 
+      deliveryDate: "12.09.2025",
       products: [
         { name: "Amoxicillin", quantity: 20, price: 25 },
         { name: "Ciprofloxacin", quantity: 15, price: 30 }
@@ -34,7 +34,7 @@ export default function CustomerOrders() {
     },
     { 
       id: "#ORD003", 
-      date: "Feb 26, 2025", 
+      date: "26.08.2025", 
       customer: "C Johnson", 
       amount: 1200, 
       status: "Processing", 
@@ -46,11 +46,11 @@ export default function CustomerOrders() {
     },
     { 
       id: "#ORD004", 
-      date: "Feb 26, 2025", 
+      date: "26.08.2025", 
       customer: "C Johnson", 
       amount: 1200, 
       status: "Out of Delivery", 
-      deliveryDate: "12:09:2025",
+      deliveryDate: "12.09.2025",
       products: [
         { name: "Losartan", quantity: 30, price: 20 },
         { name: "Aspirin", quantity: 100, price: 5 }
@@ -58,11 +58,11 @@ export default function CustomerOrders() {
     },
     { 
       id: "#ORD005", 
-      date: "Feb 26, 2025", 
+      date: "26.08.2025", 
       customer: "C Johnson", 
       amount: 1200, 
       status: "Delivered", 
-      deliveryDate: "12:09:2025",
+      deliveryDate: "12.09.2025",
       products: [
         { name: "Paracetamol", quantity: 60, price: 10 },
         { name: "Metformin", quantity: 35, price: 12 }
@@ -84,11 +84,13 @@ export default function CustomerOrders() {
       case "Pending":
         return darkMode ? "bg-red-600" : "bg-red-200";
       case "Delivered":
-        return darkMode ? "bg-green-600" : "bg-green-200";
+        return darkMode ? "bg-green-400" : "bg-green-200";
       case "Processing":
         return darkMode ? "bg-orange-600" : "bg-orange-200";
       case "Out of Delivery":
         return darkMode ? "bg-yellow-600" : "bg-yellow-200";
+    case "Completed":
+        return darkMode ? "bg-green-900" : "bg-green-400";
       default:
         return "";
     }
@@ -142,7 +144,7 @@ export default function CustomerOrders() {
               }`}
             />
           </div>
-          <ScrollText />
+          {/* <ScrollText /> */}
         </div>
 
         <div className="overflow-x-auto">

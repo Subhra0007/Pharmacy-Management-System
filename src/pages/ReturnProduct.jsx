@@ -10,45 +10,45 @@ export default function ReturnProduct() {
       id: "#RET001",
       orderId: "#ORD001",
       product: "Paracetamol",
-      customer: "A Khan",
+      type: "Supplier",
       reason: "Damaged",
-      returnDate: "Feb 25, 2025",
+      returnDate: "25.08.2025",
       status: "Pending",
     },
     {
       id: "#RET002",
       orderId: "#ORD002",
       product: "Amoxicillin",
-      customer: "B Smith",
+      type: "Customer",
       reason: "Expired",
-      returnDate: "Feb 26, 2025",
+      returnDate: "26.08.2025",
       status: "Approved",
     },
     {
       id: "#RET003",
       orderId: "#ORD003",
       product: "Metformin",
-      customer: "C Johnson",
+      type: "Supplier",
       reason: "Damaged",
-      returnDate: "Feb 27, 2025",
+      returnDate: "27.08.2025",
       status: "Rejected",
     },
     {
       id: "#RET004",
       orderId: "#ORD004",
       product: "Losartan",
-      customer: "C Johnson",
+      type: "Customer",
       reason: "Expired",
-      returnDate: "Feb 27, 2025",
+      returnDate: "27.08.2025",
       status: "Pending",
     },
     {
       id: "#RET005",
       orderId: "#ORD005",
       product: "Aspirin",
-      customer: "C Johnson",
+      type: "Customer",
       reason: "Damaged",
-      returnDate: "Feb 28, 2025",
+      returnDate: "28.08.2025",
       status: "Approved",
     },
   ]);
@@ -131,7 +131,7 @@ export default function ReturnProduct() {
                 <th className="p-3">Return ID</th>
                 <th className="p-3">Order ID</th>
                 <th className="p-3">Product</th>
-                <th className="p-3">Customer</th>
+                <th className="p-3">Type</th>
                 <th className="p-3">Reason</th>
                 <th className="p-3">Return Date</th>
                 <th className="p-3">Status</th>
@@ -151,7 +151,7 @@ export default function ReturnProduct() {
                   <td className="p-3">{returnItem.id}</td>
                   <td className="p-3">{returnItem.orderId}</td>
                   <td className="p-3">{returnItem.product}</td>
-                  <td className="p-3">{returnItem.customer}</td>
+                  <td className="p-3">{returnItem.type}</td>
                   <td className="p-3">{returnItem.reason}</td>
                   <td className="p-3">{returnItem.returnDate}</td>
                   <td className={`p-3 ${getStatusBgColor(returnItem.status)}`}>
