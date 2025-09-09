@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
-import { Eye, Edit, Trash2 } from "lucide-react";
+import { Eye, Edit, Trash2, Plus } from "lucide-react";
 import { IoIosArrowDown } from "react-icons/io";
 
 export default function Branch() {
@@ -90,6 +90,10 @@ export default function Branch() {
     alert(`Edit branch with id: ${id}`);
   };
 
+  const handleAddBranch = () => {
+    alert("Add new branch functionality to be implemented");
+  };
+
   const toggleRevenueDropdown = () => {
     setShowRevenueDropdown(!showRevenueDropdown);
   };
@@ -100,7 +104,16 @@ export default function Branch() {
 
   return (
     <div className={`p-6 space-y-6 transition-colors duration-300 ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"}`}>
-      <h1 className="text-2xl font-bold">Branch Management</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Branch Management</h1>
+        <button
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${darkMode ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-blue-600 text-white hover:bg-blue-700"}`}
+          onClick={handleAddBranch}
+        >
+          <Plus size={18} />
+          Add New Branch
+        </button>
+      </div>
       
       {/* Main Table */}
       <div className={`shadow rounded-md overflow-hidden ${darkMode ? "bg-gray-700" : "bg-white"}`}>
@@ -328,7 +341,7 @@ export default function Branch() {
         </div>
       )}
 
-      {/* Expense Popup */}
+{/* Expense Popup */}
       {showExpensePopup && selectedBranch && (
         <div className="fixed inset-0 bg-opacity-100 backdrop-blur-sm flex items-center justify-center z-50">
           <div className={`p-6 rounded-lg max-w-2xl w-full ${darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"}`}>
