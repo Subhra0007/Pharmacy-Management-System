@@ -16,6 +16,7 @@ export default function Employee() {
       aadhaar: "123456789012",
       address: "Mumbai, 400001",
       role: "Employee",
+      salary: 5000,
       hoursWorked: [
         { month: "Jan", hours: 160 },
         { month: "Feb", hours: 150 },
@@ -35,6 +36,7 @@ export default function Employee() {
       aadhaar: "234567890123",
       address: "Delhi, 110001",
       role: "Employee",
+      salary: 5000,
       hoursWorked: [
         { month: "Jan", hours: 140 },
         { month: "Feb", hours: 145 },
@@ -54,6 +56,7 @@ export default function Employee() {
       aadhaar: "345678901234",
       address: "Bangalore, 560001",
       role: "Technician",
+      salary: 6000,
       hoursWorked: [
         { month: "Jan", hours: 170 },
         { month: "Feb", hours: 160 },
@@ -73,6 +76,7 @@ export default function Employee() {
       aadhaar: "456789012345",
       address: "Chennai, 600001",
       role: "Staff",
+      salary: 9000,
       hoursWorked: [
         { month: "Jan", hours: 150 },
         { month: "Feb", hours: 155 },
@@ -109,7 +113,9 @@ export default function Employee() {
           `Email: ${employee.email}\n` +
           `Aadhaar: ${employee.aadhaar}\n` +
           `Address: ${employee.address}\n` +
-          `Role: ${employee.role}`);
+          `Role: ${employee.role}\n` +
+          `Salary: ${employee.salary}`
+        );
   };
 
   // Handle Edit action
@@ -298,6 +304,7 @@ export default function Employee() {
                 <th className="p-3">Aadhaar</th>
                 <th className="p-3">Address</th>
                 <th className="p-3">Role</th>
+                <th className="p-3">Salary</th>
                 <th className="p-3">Action</th>
               </tr>
             </thead>
@@ -325,6 +332,7 @@ export default function Employee() {
                     <td className="p-3">{emp.aadhaar}</td>
                     <td className="p-3">{emp.address}</td>
                     <td className="p-3">{emp.role}</td>
+                    <td className="p-3">${emp.salary}</td>
                     <td className="p-3 flex gap-2 justify-center">
                       <button
                         onClick={() => handleView(emp)}

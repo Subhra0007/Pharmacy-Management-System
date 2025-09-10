@@ -34,7 +34,7 @@ export default function AddNew({ darkMode }) {
         }`}
       >
         <Plus size={18} />
-        Add New Order
+        Add New Customer Order
       </button>
 
       <button

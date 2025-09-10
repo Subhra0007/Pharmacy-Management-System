@@ -133,7 +133,7 @@ export default function AddBranch() {
           }`}
         >
           <ArrowLeft size={18} />
-          Back to Branches
+          Back to Branch
         </button>
       </div>
 

@@ -106,7 +106,7 @@ export default function SupplierOrder() {
           }`}
         >
           <Plus size={18} />
-          Add New Suppliers Orders
+          Add New Supplier Orders
         </button>
       </div>
 

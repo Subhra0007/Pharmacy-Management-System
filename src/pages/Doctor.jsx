@@ -88,7 +88,7 @@ export default function Doctor() {
             }`}
           >
             <Plus size={18} />
-            Add New Appt.
+            Add New Doctor Appt..
           </button>
         </div>
       </div>

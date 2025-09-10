@@ -7,8 +7,9 @@ export default function Settings() {
 
   const [settings, setSettings] = useState({
     currency: "USD",
-    shiftTimes: [{ id: 1, start: "09:00", end: "17:00" }], // Array for multiple shift times
+    shiftTimes: [{ id: 1, start: "09:00", end: "17:00" }],
     doctorClinicAvailable: false,
+    gstRate: 18, // Default GST rate in percentage
   });
 
   const handleToggle = (field) => {
@@ -49,6 +50,31 @@ export default function Settings() {
       ...prev,
       shiftTimes: prev.shiftTimes.filter((shift) => shift.id !== id),
     }));
+  };
+
+  const handleGSTChange = (value) => {
+    const previousGST = settings.gstRate; // Capture previous GST value
+    console.log("Previous GST Rate:", previousGST);
+    const newValue = Math.max(0, parseFloat(value) || 0); // Ensure non-negative
+    setSettings((prev) => ({
+      ...prev,
+      gstRate: newValue,
+    }));
+    console.log("New GST Rate:", newValue);
+  };
+
+  const handleSaveSettings = () => {
+    console.log("Saving settings:", settings);
+    // Example: Save to a backend API
+    // fetch('/api/save-settings', {
+    //   method: 'POST',
+    //   body: JSON.stringify(settings),
+    //   headers: { 'Content-Type': 'application/json' },
+    // })
+    // .then(response => response.json())
+    // .then(data => console.log('Settings saved:', data))
+    // .catch(error => console.error('Error saving settings:', error));
+    alert("Settings saved successfully!");
   };
 
   const handleLogout = () => {
@@ -95,6 +121,35 @@ export default function Settings() {
             <option value="INR">INR (₹)</option>
             <option value="EUR">EUR (€)</option>
           </select>
+        </div>
+
+        {/* GST Rate */}
+        <div
+          className={`flex items-center justify-between p-4 border rounded transition-colors duration-300 ${
+            darkMode ? "bg-gray-700 border-gray-600" : "bg-white border-gray-200"
+          }`}
+        >
+          <div>
+            <h3 className="font-medium text-lg">🧾 GST Rate</h3>
+            <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
+              Set the Goods and Services Tax rate (in percentage).
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              min="0"
+              step="0.1"
+              value={settings.gstRate}
+              onChange={(e) => handleGSTChange(e.target.value)}
+              className={`w-20 border rounded px-2 py-1 text-sm text-right ${
+                darkMode
+                  ? "bg-gray-600 border-gray-500 text-gray-100"
+                  : "bg-white border-gray-300 text-gray-900"
+              }`}
+            />
+            <span>%</span>
+          </div>
         </div>
 
         {/* Shift Timing */}
@@ -210,6 +265,7 @@ export default function Settings() {
         {/* Action Buttons */}
         <div className="flex gap-4">
           <button
+            onClick={handleSaveSettings}
             className={`px-4 py-2 rounded transition ${
               darkMode
                 ? "bg-blue-600 text-white hover:bg-blue-700"

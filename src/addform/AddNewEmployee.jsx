@@ -13,7 +13,8 @@ export default function AddNewEmployee({ setEmployees }) {
     email: "",
     aadhaar: "",
     address: "",
-    role: "",
+    role: "", 
+    salary: ""
   });
 
   // Error state for validation
@@ -76,6 +77,9 @@ export default function AddNewEmployee({ setEmployees }) {
     if (!formData.role.trim()) {
       newErrors.role = "Role is required";
     }
+      if (!formData.salary.trim()) {
+      newErrors.role = "salary is required";
+    }
     return newErrors;
   };
 
@@ -115,6 +119,7 @@ export default function AddNewEmployee({ setEmployees }) {
       aadhaar: "",
       address: "",
       role: "",
+      salary: ""
     });
     setErrors({});
   };
@@ -265,6 +270,27 @@ export default function AddNewEmployee({ setEmployees }) {
               />
               {errors.address && (
                 <p className="text-red-500 text-xs mt-1">{errors.address}</p>
+              )}
+            </div>
+               <div>
+              <label className="block text-sm font-medium mb-1" htmlFor="id">
+                 Salary
+              </label>
+              <input
+                type="number"
+                name="salary"
+                id="salary"
+                value={formData.id}
+                onChange={handleChange}
+                placeholder="Enter salary"
+                className={`w-full p-2 border rounded-md transition ${
+                  darkMode
+                    ? "bg-gray-600 border-gray-500 text-gray-100"
+                    : "bg-white border-gray-300 text-gray-900"
+                } ${errors.id ? "border-red-500" : ""}`}
+              />
+              {errors.id && (
+                <p className="text-red-500 text-xs mt-1">{errors.id}</p>
               )}
             </div>
             <div>
