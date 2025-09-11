@@ -20,20 +20,20 @@ export default function AddBranch() {
     suppliers: []
   });
 
-  const [newEmployee, setNewEmployee] = useState({
-    name: "",
-    mobile: "",
-    aadhaar: "",
-    address: "",
-    role: ""
-  });
+  // const [newEmployee, setNewEmployee] = useState({
+  //   name: "",
+  //   mobile: "",
+  //   aadhaar: "",
+  //   address: "",
+  //   role: ""
+  // });
 
-  const [newSupplier, setNewSupplier] = useState({
-    name: "",
-    contact: "",
-    email: "",
-    address: ""
-  });
+  // const [newSupplier, setNewSupplier] = useState({
+  //   name: "",
+  //   contact: "",
+  //   email: "",
+  //   address: ""
+  // });
 
   const handleChange = (e, section = null) => {
     const { name, value } = e.target;
@@ -66,43 +66,43 @@ export default function AddBranch() {
     }));
   };
 
-  const handleAddEmployee = (e) => {
-    e.preventDefault();
-    if (newEmployee.name && newEmployee.mobile && newEmployee.aadhaar && newEmployee.address && newEmployee.role) {
-      const employeeId = formData.employees.length + 1;
-      setFormData(prev => ({
-        ...prev,
-        employees: [...prev.employees, { ...newEmployee, id: employeeId }]
-      }));
-      setNewEmployee({ name: "", mobile: "", aadhaar: "", address: "", role: "" });
-    }
-  };
+  // const handleAddEmployee = (e) => {
+  //   e.preventDefault();
+  //   if (newEmployee.name && newEmployee.mobile && newEmployee.aadhaar && newEmployee.address && newEmployee.role) {
+  //     const employeeId = formData.employees.length + 1;
+  //     setFormData(prev => ({
+  //       ...prev,
+  //       employees: [...prev.employees, { ...newEmployee, id: employeeId }]
+  //     }));
+  //     setNewEmployee({ name: "", mobile: "", aadhaar: "", address: "", role: "" });
+  //   }
+  // };
 
-  const handleAddSupplier = (e) => {
-    e.preventDefault();
-    if (newSupplier.name && newSupplier.contact && newSupplier.email && newSupplier.address) {
-      const supplierId = formData.suppliers.length + 1;
-      setFormData(prev => ({
-        ...prev,
-        suppliers: [...prev.suppliers, { ...newSupplier, id: supplierId }]
-      }));
-      setNewSupplier({ name: "", contact: "", email: "", address: "" });
-    }
-  };
+  // const handleAddSupplier = (e) => {
+  //   e.preventDefault();
+  //   if (newSupplier.name && newSupplier.contact && newSupplier.email && newSupplier.address) {
+  //     const supplierId = formData.suppliers.length + 1;
+  //     setFormData(prev => ({
+  //       ...prev,
+  //       suppliers: [...prev.suppliers, { ...newSupplier, id: supplierId }]
+  //     }));
+  //     setNewSupplier({ name: "", contact: "", email: "", address: "" });
+  //   }
+  // };
 
-  const handleRemoveEmployee = (id) => {
-    setFormData(prev => ({
-      ...prev,
-      employees: prev.employees.filter(emp => emp.id !== id)
-    }));
-  };
+  // const handleRemoveEmployee = (id) => {
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     employees: prev.employees.filter(emp => emp.id !== id)
+  //   }));
+  // };
 
-  const handleRemoveSupplier = (id) => {
-    setFormData(prev => ({
-      ...prev,
-      suppliers: prev.suppliers.filter(sup => sup.id !== id)
-    }));
-  };
+  // const handleRemoveSupplier = (id) => {
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     suppliers: prev.suppliers.filter(sup => sup.id !== id)
+  //   }));
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -113,7 +113,7 @@ export default function AddBranch() {
 
   return (
     <div
-      className={`p-6 space-y-6 transition-colors duration-300 ${
+      className={`p-6 space-y-6 transition-colors duration-300 mt-16 ml-64  ${
         darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
       }`}
     >
@@ -159,7 +159,7 @@ export default function AddBranch() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="e.g. Mumbai Branch"
+                // placeholder="Enter Branch Name"
                 className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                   darkMode
                     ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -184,7 +184,7 @@ export default function AddBranch() {
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
-                placeholder="e.g. 123 Pharmacy Lane, Mumbai"
+                // placeholder="Enter Branch Address"
                 className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                   darkMode
                     ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -213,7 +213,7 @@ export default function AddBranch() {
                   name="name"
                   value={formData.manager.name}
                   onChange={(e) => handleChange(e, "manager")}
-                  placeholder="e.g. Rahul Sharma"
+                  // placeholder="e.g. Rahul Sharma"
                   className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -238,7 +238,7 @@ export default function AddBranch() {
                   name="address"
                   value={formData.manager.address}
                   onChange={(e) => handleChange(e, "manager")}
-                  placeholder="e.g. 456 Manager St, Mumbai"
+                  // placeholder="e.g. 456 Manager St, Mumbai"
                   className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -263,7 +263,7 @@ export default function AddBranch() {
                   name="contact"
                   value={formData.manager.contact}
                   onChange={(e) => handleChange(e, "manager")}
-                  placeholder="e.g. 9876543210"
+                  // placeholder="e.g. 9876543210"
                   className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -288,7 +288,7 @@ export default function AddBranch() {
                   name="email"
                   value={formData.manager.email}
                   onChange={(e) => handleChange(e, "manager")}
-                  placeholder="e.g. rahul.sharma@example.com"
+                  // placeholder="e.g. rahul.sharma@example.com"
                   className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -313,7 +313,7 @@ export default function AddBranch() {
                   name="aadhaar"
                   value={formData.manager.aadhaar}
                   onChange={(e) => handleChange(e, "manager")}
-                  placeholder="e.g. 1234-5678-9012"
+                  // placeholder="e.g. 1234-5678-9012"
                   className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -325,7 +325,7 @@ export default function AddBranch() {
             </div>
           </div>
 
-          <div className="space-y-4">
+          {/* <div className="space-y-4">
             <h3 className="text-lg font-semibold">Add Employee</h3>
             <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
               Add multiple employees for this branch.
@@ -346,7 +346,7 @@ export default function AddBranch() {
                   name="name"
                   value={newEmployee.name}
                   onChange={handleEmployeeChange}
-                  placeholder="e.g. Amit Singh"
+                  // placeholder="e.g. Amit Singh"
                   className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -370,7 +370,7 @@ export default function AddBranch() {
                   name="mobile"
                   value={newEmployee.mobile}
                   onChange={handleEmployeeChange}
-                  placeholder="e.g. 9876543210"
+                  // placeholder="e.g. 9876543210"
                   className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -394,7 +394,7 @@ export default function AddBranch() {
                   name="aadhaar"
                   value={newEmployee.aadhaar}
                   onChange={handleEmployeeChange}
-                  placeholder="e.g. 1234-5678-9012"
+                  // placeholder="e.g. 1234-5678-9012"
                   className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -418,7 +418,7 @@ export default function AddBranch() {
                   name="address"
                   value={newEmployee.address}
                   onChange={handleEmployeeChange}
-                  placeholder="e.g. 456 Medical St, Mumbai"
+                  // placeholder="e.g. 456 Medical St, Mumbai"
                   className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -527,8 +527,8 @@ export default function AddBranch() {
                 </div>
               </div>
             )}
-          </div>
-
+          </div> */}
+{/* 
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Add Supplier</h3>
             <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
@@ -550,7 +550,7 @@ export default function AddBranch() {
                   name="name"
                   value={newSupplier.name}
                   onChange={handleSupplierChange}
-                  placeholder="e.g. MediCorp"
+                  // placeholder="e.g. MediCorp"
                   className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -574,7 +574,7 @@ export default function AddBranch() {
                   name="contact"
                   value={newSupplier.contact}
                   onChange={handleSupplierChange}
-                  placeholder="e.g. 9123456789"
+                  // placeholder="e.g. 9123456789"
                   className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -598,7 +598,7 @@ export default function AddBranch() {
                   name="email"
                   value={newSupplier.email}
                   onChange={handleSupplierChange}
-                  placeholder="e.g. contact@medicorp.com"
+                  // placeholder="e.g. contact@medicorp.com"
                   className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -622,7 +622,7 @@ export default function AddBranch() {
                   name="address"
                   value={newSupplier.address}
                   onChange={handleSupplierChange}
-                  placeholder="e.g. 789 Supplier Rd, Mumbai"
+                  // placeholder="e.g. 789 Supplier Rd, Mumbai"
                   className={`mt-1 w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -701,12 +701,12 @@ export default function AddBranch() {
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
 
           <div className="flex justify-end gap-4">
             <button
               type="button"
-              onClick={() => navigate("/branches")}
+              onClick={() => navigate("/branch")}
               className={`px-4 py-2 rounded-lg transition ${
                 darkMode
                   ? "bg-gray-600 text-white hover:bg-gray-700"

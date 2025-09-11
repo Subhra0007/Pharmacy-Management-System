@@ -5,16 +5,21 @@ import { Plus } from "lucide-react";
 export default function AddNewEmployee({ setEmployees }) {
   const { darkMode } = useOutletContext();
 
+  // Available branches (mirroring data from Branch.jsx)
+  const availableBranches = [
+    { id: 1, name: "Kolkata Branch" },
+  ];
+
   // Form state
   const [formData, setFormData] = useState({
-    id: "",
     name: "",
     mobile: "",
     email: "",
     aadhaar: "",
     address: "",
-    role: "", 
-    salary: ""
+    role: "",
+    salary: "",
+    branch: "",
   });
 
   // Error state for validation
@@ -56,9 +61,6 @@ export default function AddNewEmployee({ setEmployees }) {
   // Validate form
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.id.match(/^#EMP\d{3}$/)) {
-      newErrors.id = "Employee ID must be in format #EMPXXX (e.g., #EMP001)";
-    }
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
     }
@@ -77,8 +79,11 @@ export default function AddNewEmployee({ setEmployees }) {
     if (!formData.role.trim()) {
       newErrors.role = "Role is required";
     }
-      if (!formData.salary.trim()) {
-      newErrors.role = "salary is required";
+    if (!formData.salary.trim()) {
+      newErrors.salary = "Salary is required";
+    }
+    if (!formData.branch.trim()) {
+      newErrors.branch = "Branch is required";
     }
     return newErrors;
   };
@@ -112,21 +117,21 @@ export default function AddNewEmployee({ setEmployees }) {
 
     // Reset form
     setFormData({
-      id: "",
       name: "",
       mobile: "",
       email: "",
       aadhaar: "",
       address: "",
       role: "",
-      salary: ""
+      salary: "",
+      branch: "",
     });
     setErrors({});
   };
 
   return (
     <div
-      className={`p-6 space-y-6 transition-colors duration-300 ${
+      className={`p-6 space-y-6 transition-colors duration-300 mt-16 ml-64 ${
         darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
       }`}
     >
@@ -146,27 +151,6 @@ export default function AddNewEmployee({ setEmployees }) {
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="id">
-                Employee ID
-              </label>
-              <input
-                type="text"
-                name="id"
-                id="id"
-                value={formData.id}
-                onChange={handleChange}
-              
-                className={`w-full p-2 border rounded-md transition ${
-                  darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100"
-                    : "bg-white border-gray-300 text-gray-900"
-                } ${errors.id ? "border-red-500" : ""}`}
-              />
-              {errors.id && (
-                <p className="text-red-500 text-xs mt-1">{errors.id}</p>
-              )}
-            </div>
             <div>
               <label className="block text-sm font-medium mb-1" htmlFor="name">
                 Name
@@ -272,25 +256,25 @@ export default function AddNewEmployee({ setEmployees }) {
                 <p className="text-red-500 text-xs mt-1">{errors.address}</p>
               )}
             </div>
-               <div>
-              <label className="block text-sm font-medium mb-1" htmlFor="id">
-                 Salary
+            <div>
+              <label className="block text-sm font-medium mb-1" htmlFor="salary">
+                Salary
               </label>
               <input
                 type="number"
                 name="salary"
                 id="salary"
-                value={formData.id}
+                value={formData.salary}
                 onChange={handleChange}
                 placeholder="Enter salary"
                 className={`w-full p-2 border rounded-md transition ${
                   darkMode
                     ? "bg-gray-600 border-gray-500 text-gray-100"
                     : "bg-white border-gray-300 text-gray-900"
-                } ${errors.id ? "border-red-500" : ""}`}
+                } ${errors.salary ? "border-red-500" : ""}`}
               />
-              {errors.id && (
-                <p className="text-red-500 text-xs mt-1">{errors.id}</p>
+              {errors.salary && (
+                <p className="text-red-500 text-xs mt-1">{errors.salary}</p>
               )}
             </div>
             <div>
@@ -317,6 +301,32 @@ export default function AddNewEmployee({ setEmployees }) {
               </select>
               {errors.role && (
                 <p className="text-red-500 text-xs mt-1">{errors.role}</p>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1" htmlFor="branch">
+                Branch Name
+              </label>
+              <select
+                name="branch"
+                id="branch"
+                value={formData.branch}
+                onChange={handleChange}
+                className={`w-full p-2 border rounded-md transition appearance-none ${
+                  darkMode
+                    ? "bg-gray-600 border-gray-500 text-gray-100"
+                    : "bg-white border-gray-300 text-gray-900"
+                } ${errors.branch ? "border-red-500" : ""}`}
+              >
+                <option value="">Select Branch</option>
+                {availableBranches.map((branch) => (
+                  <option key={branch.id} value={branch.name}>
+                    {branch.name}
+                  </option>
+                ))}
+              </select>
+              {errors.branch && (
+                <p className="text-red-500 text-xs mt-1">{errors.branch}</p>
               )}
             </div>
             <div>

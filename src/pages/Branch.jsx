@@ -105,7 +105,8 @@ const navigate = useNavigate();
   
   
   return (
-    <div className={`p-6 space-y-6 transition-colors duration-300 ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"}`}>
+    <div className={`p-6 space-y-6 transition-colors duration-300 ml-64 mt-16
+    ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"}`}>
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Branch Management</h1>
         <button
@@ -251,7 +252,7 @@ const navigate = useNavigate();
           <div className={`p-6 rounded-lg max-w-4xl w-full ${darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"}`}>
             <h3 className="text-lg font-semibold mb-4">Supplier Details</h3>
             <div className="overflow-x-auto">
-              <table className={`w-full border text-sm text-center ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
+              <table className={`min-w-[1200px] border text-center ${darkMode ? "border-gray-600" : "border-gray-200"}`}>
                 <thead className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}>
                   <tr>
                     <th className="p-3">Name</th>

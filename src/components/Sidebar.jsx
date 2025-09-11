@@ -1,11 +1,9 @@
-// components/Sidebar.jsx
 import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   ShoppingCart,
   Truck,
   Users,
-  FileText,
   ClipboardList,
   BarChart,
   Settings,
@@ -19,7 +17,7 @@ import {
   House
 } from "lucide-react";
 
-export default function Sidebar({ darkMode }) {
+const Sidebar = ({ darkMode }) => {
   const location = useLocation();
 
   const linkClass = (path) =>
@@ -33,17 +31,14 @@ export default function Sidebar({ darkMode }) {
 
   return (
     <div
-      className={`w-64 h-screen shadow-md flex flex-col transition-colors duration-300 ${
+      className={`w-64 h-screen fixed top-0 left-0 shadow-md flex flex-col transition-colors duration-300 z-50 ${
         darkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"
       }`}
     >
-      {/* Logo / Title */}
       <div className="px-6 py-4 font-bold text-xl">Phermo</div>
-
-      {/* Navigation */}
-      <div className="flex-1 overflow-y-auto">
+      {/* 👇 Added styled scrollbar */}
+      <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-900">
         <nav className="p-4 space-y-4">
-          {/* Menu */}
           <div>
             <p
               className={`px-3 mb-2 text-xs font-semibold uppercase ${
@@ -56,10 +51,6 @@ export default function Sidebar({ darkMode }) {
               <LayoutDashboard size={20} />
               <span>Dashboard</span>
             </Link>
-            {/* <Link to="/purchase" className={linkClass("/purchase")}>
-              <ShoppingCart size={20} />
-              <span>Purchase</span>
-            </Link> */}
             <Link to="/analytics" className={linkClass("/analytics")}>
               <BarChart size={20} />
               <span>Analytics</span>
@@ -69,8 +60,6 @@ export default function Sidebar({ darkMode }) {
               <span>Suppliers</span>
             </Link>
           </div>
-
-          {/* Others */}
           <div>
             <p
               className={`px-3 mb-2 text-xs font-semibold uppercase ${
@@ -99,29 +88,27 @@ export default function Sidebar({ darkMode }) {
               <ClipboardList size={20} />
               <span>Customer Orders</span>
             </Link>
-              <Link to="/notes" className={linkClass("/notes")}>
+            <Link to="/notes" className={linkClass("/notes")}>
               <ScrollText size={20} />
               <span>Notes</span>
             </Link>
-              <Link to="/expenses" className={linkClass("/expenses")}>
+            <Link to="/expenses" className={linkClass("/expenses")}>
               <BanknoteArrowDown size={20} />
               <span>Expenses</span>
             </Link>
-             <Link to="/employee" className={linkClass("/employee")}>
+            <Link to="/employee" className={linkClass("/employee")}>
               <IdCardLanyard size={20} />
               <span>Employee</span>
             </Link>
-              <Link to="/return-product" className={linkClass("/return-product")}>
+            <Link to="/return-product" className={linkClass("/return-product")}>
               <Undo2 size={20} />
               <span>Return Product</span>
             </Link>
-             <Link to="/branch" className={linkClass("/branch")}>
+            <Link to="/branch" className={linkClass("/branch")}>
               <House size={20} />
               <span>Branch</span>
             </Link>
           </div>
-
-          {/* Preferences */}
           <div>
             <p
               className={`px-3 mb-2 text-xs font-semibold uppercase ${
@@ -141,8 +128,6 @@ export default function Sidebar({ darkMode }) {
           </div>
         </nav>
       </div>
-
-      {/* Upgrade Pro Card */}
       <div className="p-4">
         <div
           className={`rounded-xl p-4 text-center shadow-sm transition-colors duration-300 ${
@@ -151,14 +136,6 @@ export default function Sidebar({ darkMode }) {
               : "bg-gradient-to-br from-blue-50 via-sky-100 to-indigo-100 text-gray-800"
           }`}
         >
-          {/* <p className="text-sm font-semibold">Upgrade Pro</p>
-          <p
-            className={`text-xs mt-1 ${
-              darkMode ? "text-gray-300" : "text-gray-500"
-            }`}
-          >
-            Master your pharmacy with detailed analytics and clear graphs.
-          </p> */}
           <p className="text-lg text-green-600 mt-1">234 days left</p>
           <button
             className={`mt-3 w-full py-2 rounded-lg text-sm font-medium transition ${
@@ -173,4 +150,6 @@ export default function Sidebar({ darkMode }) {
       </div>
     </div>
   );
-}
+};
+
+export default Sidebar;

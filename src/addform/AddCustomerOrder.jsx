@@ -1,28 +1,25 @@
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Plus, X } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function AddNewCustomer() {
   const { darkMode } = useOutletContext();
 
-  // Mock product data for selection
   const availableProducts = [
-    { name: "Paracetamol" },
-    { name: "Ibuprofen" },
-    { name: "Aspirin" },
-    { name: "Amoxicillin" },
-    { name: "Ciprofloxacin" },
-    { name: "Metformin" },
-    { name: "Amlodipine" },
-    { name: "Losartan" }
+    { name: "Product A", price: 10.99 },
+    { name: "Product B", price: 15.99 },
+    { name: "Product C", price: 20.99 },
   ];
 
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     address: "",
-    products: [{ name: "", quantity: 1 }],
-    notes: ""
+    doctor: "",
+    products: [{ name: "", quantity: 1, isSingle: false, isFull: false, singleQuantity: 1, fullMultiplier: 1 }],
+    deliveryMethod: "",
+    notes: "",
   });
 
   const handleInputChange = (e) => {
@@ -32,12 +29,34 @@ export default function AddNewCustomer() {
 
   const handleProductChange = (index, field, value) => {
     const updatedProducts = [...formData.products];
-    updatedProducts[index] = { ...updatedProducts[index], [field]: value };
+    if (field === "isSingle") {
+      updatedProducts[index] = {
+        ...updatedProducts[index],
+        isSingle: value,
+        isFull: false, // Disable Full when Single is checked
+        [field]: value,
+      };
+    } else if (field === "isFull") {
+      updatedProducts[index] = {
+        ...updatedProducts[index],
+        isFull: value,
+        isSingle: false, // Disable Single when Full is checked
+        [field]: value,
+      };
+    } else {
+      updatedProducts[index] = { ...updatedProducts[index], [field]: value };
+    }
     setFormData({ ...formData, products: updatedProducts });
   };
 
   const addProductField = () => {
-    setFormData({ ...formData, products: [...formData.products, { name: "", quantity: 1 }] });
+    setFormData({
+      ...formData,
+      products: [
+        ...formData.products,
+        { name: "", quantity: 1, isSingle: false, isFull: false, singleQuantity: 1, fullMultiplier: 1 },
+      ],
+    });
   };
 
   const removeProductField = (index) => {
@@ -45,18 +64,98 @@ export default function AddNewCustomer() {
     setFormData({ ...formData, products: updatedProducts });
   };
 
-  const handleSubmit = (e) => {
+  const calculateTotalPrice = () => {
+    return formData.products
+      .reduce((total, product) => {
+        const productInfo = availableProducts.find(
+          (p) => p.name.toLowerCase() === product.name.toLowerCase()
+        );
+        if (productInfo) {
+          const quantity = product.isFull
+            ? product.quantity * (parseInt(product.fullMultiplier) || 1)
+            : product.isSingle
+            ? product.singleQuantity
+            : product.quantity;
+          return total + productInfo.price * quantity;
+        }
+        return total;
+      }, 0)
+      .toFixed(2);
+  };
+
+  const generateBillContent = () => {
+    let bill = `Customer Order Bill\n\n`;
+    bill += `Customer Name: ${formData.name}\n`;
+    bill += `Phone: ${formData.phone}\n`;
+    bill += `Address: ${formData.address || "N/A"}\n`;
+    bill += `Prescribing Doctor: ${formData.doctor}\n`;
+    bill += `Delivery Method: ${formData.deliveryMethod || "N/A"}\n\n`;
+    bill += `Products:\n`;
+    formData.products.forEach((product, index) => {
+      const productInfo = availableProducts.find(
+        (p) => p.name.toLowerCase() === product.name.toLowerCase()
+      );
+      const quantity = product.isFull
+        ? product.quantity * (parseInt(product.fullMultiplier) || 1)
+        : product.isSingle
+        ? product.singleQuantity
+        : product.quantity;
+      const price = productInfo ? (productInfo.price * quantity).toFixed(2) : "0.00";
+      bill += `${index + 1}. ${product.name} (${
+        product.isFull ? `Full x${product.fullMultiplier}` : product.isSingle ? "Single" : "Single"
+      } x${quantity}) - $${price}\n`;
+    });
+    bill += `\nTotal Price: $${calculateTotalPrice()}\n`;
+    bill += `Notes: ${formData.notes || "N/A"}\n`;
+    return bill;
+  };
+
+  const handleSave = (e) => {
     e.preventDefault();
-    // Add logic to handle form submission (e.g., API call)
-    console.log("Customer Data:", formData);
-    // Reset form after submission
+    console.log("Customer Data Saved:", {
+      ...formData,
+      totalPrice: calculateTotalPrice(),
+    });
     setFormData({
       name: "",
       phone: "",
       address: "",
-      products: [{ name: "", quantity: 1 }],
-      notes: ""
+      doctor: "",
+      products: [{ name: "", quantity: 1, isSingle: false, isFull: false, singleQuantity: 1, fullMultiplier: 1 }],
+      deliveryMethod: "",
+      notes: "",
     });
+  };
+
+  const handlePrintBill = () => {
+    const billContent = generateBillContent();
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Customer Bill</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 20px; }
+            pre { white-space: pre-wrap; }
+          </style>
+        </head>
+        <body>
+          <pre>${billContent}</pre>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+  };
+
+  const handleSendWhatsApp = () => {
+    if (!formData.phone) {
+      alert("Please enter a phone number to send the bill via WhatsApp.");
+      return;
+    }
+    const billContent = encodeURIComponent(generateBillContent());
+    const whatsappUrl = `https://wa.me/${formData.phone}?text=${billContent}`;
+    window.open(whatsappUrl, "_blank");
   };
 
   return (
@@ -67,19 +166,19 @@ export default function AddNewCustomer() {
     >
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Add New Customer</h2>
+          <h2 className="text-2xl font-bold">Add New Customer Order</h2>
           <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
-            Create a new customer profile.
+            Create a new customer Order.
           </p>
         </div>
       </div>
 
       <div
-        className={`p-6 shadow rounded-md transition-colors duration-300 ${
+        className={`p-6 shadow rounded-md transition-colors duration-300 mt-16 ml-64 ${
           darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
         }`}
       >
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSave} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">Customer Name</label>
@@ -128,11 +227,27 @@ export default function AddNewCustomer() {
                 placeholder="Enter address"
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Prescribe Doctor</label>
+              <input
+                type="text"
+                name="doctor"
+                value={formData.doctor}
+                onChange={handleInputChange}
+                className={`w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
+                  darkMode
+                    ? "bg-gray-600 border-gray-500 text-gray-100"
+                    : "bg-white border-gray-300 text-gray-900"
+                }`}
+                placeholder="Enter prescribing doctor's name"
+                required
+              />
+            </div>
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm font-medium">Preferred Products</label>
+              <label className="block text-sm font-medium">Products</label>
               <button
                 type="button"
                 onClick={addProductField}
@@ -148,35 +263,72 @@ export default function AddNewCustomer() {
             </div>
             {formData.products.map((product, index) => (
               <div key={index} className="flex items-center gap-4 mb-2">
-                <select
+                <input
+                  type="text"
                   value={product.name}
                   onChange={(e) => handleProductChange(index, "name", e.target.value)}
-                  className={`w-2/3 p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
+                  className={`w-1/2 p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100"
                       : "bg-white border-gray-300 text-gray-900"
                   }`}
-                  required
-                >
-                  <option value="">Select Product</option>
-                  {availableProducts.map((p) => (
-                    <option key={p.name} value={p.name}>
-                      {p.name}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="number"
-                  value={product.quantity}
-                  onChange={(e) => handleProductChange(index, "quantity", e.target.value)}
-                  min="1"
-                  className={`w-1/3 p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                    darkMode
-                      ? "bg-gray-600 border-gray-500 text-gray-100"
-                      : "bg-white border-gray-300 text-gray-900"
-                  }`}
+                  placeholder="Enter product name"
                   required
                 />
+                <div className="flex items-center gap-2 w-1/2">
+                  <div className="flex items-center gap-2">
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={product.isSingle}
+                        onChange={(e) => handleProductChange(index, "isSingle", e.target.checked)}
+                        className="mr-1"
+                        disabled={product.isFull}
+                      />
+                      Single
+                    </label>
+                    {product.isSingle && (
+                      <input
+                        type="number"
+                        value={product.singleQuantity}
+                        onChange={(e) => handleProductChange(index, "singleQuantity", e.target.value)}
+                        min="1"
+                        className={`w-1/4 p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
+                          darkMode
+                            ? "bg-gray-600 border-gray-500 text-gray-100"
+                            : "bg-white border-gray-300 text-gray-900"
+                        }`}
+                        placeholder="Single Qty"
+                        required
+                      />
+                    )}
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={product.isFull}
+                        onChange={(e) => handleProductChange(index, "isFull", e.target.checked)}
+                        className="mr-1"
+                        disabled={product.isSingle}
+                      />
+                      Full
+                    </label>
+                    {product.isFull && (
+                      <input
+                        type="number"
+                        value={product.fullMultiplier}
+                        onChange={(e) => handleProductChange(index, "fullMultiplier", e.target.value)}
+                        min="1"
+                        className={`w-1/4 p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
+                          darkMode
+                            ? "bg-gray-600 border-gray-500 text-gray-100"
+                            : "bg-white border-gray-300 text-gray-900"
+                        }`}
+                        placeholder="x"
+                        required
+                      />
+                    )}
+                  </div>
+                </div>
                 {formData.products.length > 1 && (
                   <button
                     type="button"
@@ -192,6 +344,45 @@ export default function AddNewCustomer() {
                 )}
               </div>
             ))}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Delivery Method</label>
+            <div className="flex gap-4">
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  name="deliveryMethod"
+                  value="offline"
+                  checked={formData.deliveryMethod === "offline"}
+                  onChange={handleInputChange}
+                  className="mr-2"
+                />
+                Offline Take Away
+              </label>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  name="deliveryMethod"
+                  value="online"
+                  checked={formData.deliveryMethod === "online"}
+                  onChange={handleInputChange}
+                  className="mr-2"
+                />
+                Online Delivery
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Calculate Price</label>
+            <div
+              className={`p-4 rounded-lg ${
+                darkMode ? "bg-gray-600" : "bg-gray-100"
+              }`}
+            >
+              <p className="text-lg font-semibold">Total Price: ${calculateTotalPrice()}</p>
+            </div>
           </div>
 
           <div>
@@ -223,13 +414,37 @@ export default function AddNewCustomer() {
             </button>
             <button
               type="submit"
+              onClick={handleSave}
               className={`px-4 py-2 rounded-lg transition ${
                 darkMode
                   ? "bg-blue-600 text-white hover:bg-blue-700"
                   : "bg-blue-600 text-white hover:bg-blue-700"
               }`}
             >
-              Add Customer
+              Save
+            </button>
+            <button
+              type="button"
+              onClick={handlePrintBill}
+              className={`px-4 py-2 rounded-lg transition ${
+                darkMode
+                  ? "bg-green-600 text-white hover:bg-green-700"
+                  : "bg-green-600 text-white hover:bg-green-700"
+              }`}
+            >
+              Print Bill
+            </button>
+            <button
+              type="button"
+              onClick={handleSendWhatsApp}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
+                darkMode
+                  ? "bg-green-700 text-white hover:bg-green-800"
+                  : "bg-green-700 text-white hover:bg-green-800"
+              }`}
+            >
+              <FaWhatsapp size={20} />
+              Send
             </button>
           </div>
         </form>

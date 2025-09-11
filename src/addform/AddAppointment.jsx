@@ -137,7 +137,8 @@ export default function AddAppointment() {
   };
 
   return (
-    <div className={`p-6 space-y-6 transition-colors duration-300 ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"}`}>
+    <div className={`p-6 space-y-6 transition-colors duration-300 mt-16 ml-64
+     ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"}`}>
       <div>
         <h2 className="text-2xl font-bold">Add New Appointment</h2>
         <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
@@ -280,7 +281,7 @@ export default function AddAppointment() {
                   <h4 className="text-sm font-semibold mb-2">Added Documents:</h4>
                   <ul className="space-y-2">
                     {newAppointment.documents.map((doc, index) => (
-                      <li key={index} className="flex justify-between items-center p-2 bg-gray-100 dark:bg-gray-600 rounded">
+                      <li key={index} className={`flex justify-between items-center p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${darkMode ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400" : "bg-white border-gray-300 text-gray-900"}`}>
                         <span>{doc.name} ({doc.file?.name})</span>
                         <button
                           type="button"
@@ -299,7 +300,7 @@ export default function AddAppointment() {
 
           <button
             type="submit"
-            className={`w-full p-2 rounded-lg transition ${darkMode ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-blue-600 text-white hover:bg-blue-700"}`}
+            className={`p-2 rounded-lg transition ${darkMode ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-blue-600 text-white hover:bg-blue-700"}`}
           >
             Add Appointment
           </button>

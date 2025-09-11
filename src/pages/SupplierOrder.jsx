@@ -89,7 +89,7 @@ export default function SupplierOrder() {
 
   return (
     <div
-      className={`p-6 space-y-6 transition-colors duration-300 ${
+      className={`p-6 space-y-6 transition-colors duration-300 mt-16 ml-64 ${
         darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
       }`}
     >
@@ -138,7 +138,7 @@ export default function SupplierOrder() {
 
         <div className="overflow-x-auto">
           <table
-            className={`w-full border rounded-lg overflow-hidden text-center text-sm ${
+            className={`min-w-[1200px] border rounded-lg  text-center  ${
               darkMode ? "border-gray-600" : "border-gray-200"
             }`}
           >

@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Search, Bell, Sun, Moon, ScrollText } from "lucide-react";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import navbar from "../assets/navbar.jpg";
 
-export default function Navbar({ darkMode, setDarkMode }) {
+const Navbar = ({ darkMode, setDarkMode }) => {
   const [showProfilePopup, setShowProfilePopup] = useState(false);
   const [showMessagesPopup, setShowMessagesPopup] = useState(false);
-  const [showNotesPopup, setShowNotesPopup] = useState(false);
   const [showNotificationsPopup, setShowNotificationsPopup] = useState(false);
+  const [messageText, setMessageText] = useState("");
+  const navigate = useNavigate();
 
   const profileData = {
     imageUrl: navbar,
@@ -19,17 +21,23 @@ export default function Navbar({ darkMode, setDarkMode }) {
     role: "Employee",
   };
 
+  const handleSendMessage = () => {
+    if (messageText.trim()) {
+      console.log("Sending message:", messageText);
+      setMessageText("");
+      // Add your message sending logic here
+    }
+  };
+
   return (
     <>
       <div
-        className={`flex items-center justify-between shadow-md px-6 py-3 sticky top-0 z-50 transition-colors duration-300 ${
+        className={`flex items-center justify-between shadow-md px-6 py-3 fixed top-0 left-64 right-0 z-40 transition-colors duration-300 ${
           darkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"
         }`}
       >
-        {/* Left greeting */}
         <div className="gap-4 flex mx-2 items-center">
           <h2 className="text-lg font-semibold">👋 Hello, Tahsan Khan!</h2>
-
           <button
             onClick={() => setDarkMode(!darkMode)}
             className={`p-2 rounded-lg transition-colors duration-300 cursor-pointer ${
@@ -39,8 +47,6 @@ export default function Navbar({ darkMode, setDarkMode }) {
             {darkMode ? <Sun size={18} /> : <Moon size={18} />}
           </button>
         </div>
-
-        {/* Middle search */}
         <div className="flex-1 max-w-lg">
           <div className="relative">
             <Search
@@ -60,8 +66,6 @@ export default function Navbar({ darkMode, setDarkMode }) {
             />
           </div>
         </div>
-
-        {/* Right actions */}
         <div className="flex items-center gap-2 mx-2">
           <button
             onClick={() => setShowMessagesPopup(true)}
@@ -72,7 +76,7 @@ export default function Navbar({ darkMode, setDarkMode }) {
             <IoChatboxEllipsesOutline size={18} />
           </button>
           <button
-            onClick={() => setShowNotesPopup(true)}
+            onClick={() => navigate("/add-note")}
             className={`size-8 p-2 rounded-lg ${
               darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
             }`}
@@ -90,8 +94,6 @@ export default function Navbar({ darkMode, setDarkMode }) {
               4
             </span>
           </button>
-
-          {/* Profile Section */}
           <div
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => setShowProfilePopup(true)}
@@ -115,7 +117,6 @@ export default function Navbar({ darkMode, setDarkMode }) {
         </div>
       </div>
 
-      {/* Profile Popup Modal */}
       {showProfilePopup && (
         <div className="fixed inset-0 bg-opacity-100 backdrop-blur-sm flex justify-center items-center z-50">
           <div
@@ -158,7 +159,6 @@ export default function Navbar({ darkMode, setDarkMode }) {
         </div>
       )}
 
-      {/* Messages Popup Modal */}
       {showMessagesPopup && (
         <div className="fixed inset-0 bg-opacity-100 backdrop-blur-sm flex justify-center items-center z-50">
           <div
@@ -176,45 +176,29 @@ export default function Navbar({ darkMode, setDarkMode }) {
               <h3 className="text-lg font-semibold">Messages</h3>
               <div className="space-y-2">
                 <p className="text-sm">No new messages.</p>
-                {/* Placeholder for messages content */}
-                <p className="text-sm text-gray-400">
-                  (Add your messages list or content here)
-                </p>
+                <textarea
+                  value={messageText}
+                  onChange={(e) => setMessageText(e.target.value)}
+                  placeholder="Type your message here..."
+                  className={`w-full h-24 p-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none ${
+                    darkMode
+                      ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
+                      : "bg-white border-gray-300 text-gray-900"
+                  }`}
+                />
+                <button
+                  onClick={handleSendMessage}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-blue-300"
+                  disabled={!messageText.trim()}
+                >
+                  Send
+                </button>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Notes Popup Modal */}
-      {showNotesPopup && (
-        <div className="fixed inset-0 bg-opacity-100 backdrop-blur-sm flex justify-center items-center z-50">
-          <div
-            className={`rounded-lg p-6 w-96 relative ${
-              darkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"
-            }`}
-          >
-            <button
-              onClick={() => setShowNotesPopup(false)}
-              className="absolute top-3 right-3 text-red-500 text-xl font-bold"
-            >
-              ✕
-            </button>
-            <div className="flex flex-col space-y-4">
-              <h3 className="text-lg font-semibold">Notes</h3>
-              <div className="space-y-2">
-                <p className="text-sm">No notes available.</p>
-                {/* Placeholder for notes content */}
-                <p className="text-sm text-gray-400">
-                  (Add your notes list or content here)
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Notifications Popup Modal */}
       {showNotificationsPopup && (
         <div className="fixed inset-0 bg-opacity-100 backdrop-blur-sm flex justify-center items-center z-50">
           <div
@@ -232,7 +216,6 @@ export default function Navbar({ darkMode, setDarkMode }) {
               <h3 className="text-lg font-semibold">Notifications</h3>
               <div className="space-y-2">
                 <p className="text-sm">4 new notifications.</p>
-                {/* Placeholder for notifications content */}
                 <p className="text-sm text-gray-400">
                   (Add your notifications list or content here)
                 </p>
@@ -243,4 +226,6 @@ export default function Navbar({ darkMode, setDarkMode }) {
       )}
     </>
   );
-}
+};
+
+export default Navbar;

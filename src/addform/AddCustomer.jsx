@@ -5,7 +5,6 @@ import { Plus } from "lucide-react";
 export default function AddCustomer() {
   const { darkMode } = useOutletContext();
   const [formData, setFormData] = useState({
-    id: "",
     name: "",
     phone: "",
     balance: "",
@@ -38,7 +37,6 @@ export default function AddCustomer() {
     console.log("New Customer Added:", formData);
     // Add logic to save customer data
     setFormData({
-      id: "",
       name: "",
       phone: "",
       balance: "",
@@ -49,7 +47,7 @@ export default function AddCustomer() {
 
   return (
     <div
-      className={`p-6 space-y-6 transition-colors duration-300 ${
+      className={`p-6 space-y-6 transition-colors duration-300 mt-16 ml-64 ${
         darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
       }`}
     >
@@ -63,7 +61,7 @@ export default function AddCustomer() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium">Customer ID</label>
           <input
             type="text"
@@ -75,7 +73,7 @@ export default function AddCustomer() {
             }`}
             required
           />
-        </div>
+        </div> */}
         <div>
           <label className="block text-sm font-medium">Customer Name</label>
           <input

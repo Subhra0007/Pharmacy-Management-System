@@ -6,7 +6,7 @@ import { Plus, Trash2 } from "lucide-react";
 export default function AddSuppliers() {
   const { darkMode } = useOutletContext();
   const [formData, setFormData] = useState({
-    id: "",
+ 
     name: "",
     phone: "",
     email: "",
@@ -46,7 +46,7 @@ export default function AddSuppliers() {
     console.log("New Supplier Added:", formData);
     // Add logic to save supplier data
     setFormData({
-      id: "",
+  
       name: "",
       phone: "",
       email: "",
@@ -58,7 +58,7 @@ export default function AddSuppliers() {
 
   return (
     <div
-      className={`p-6 space-y-6 transition-colors duration-300 ${
+      className={`p-6 space-y-6 transition-colors duration-300 mt-16 ml-64 ${
         darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
       }`}
     >
@@ -72,7 +72,7 @@ export default function AddSuppliers() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium">Supplier ID</label>
           <input
             type="text"
@@ -84,7 +84,7 @@ export default function AddSuppliers() {
             }`}
             required
           />
-        </div>
+        </div> */}
         <div>
           <label className="block text-sm font-medium">Name</label>
           <input

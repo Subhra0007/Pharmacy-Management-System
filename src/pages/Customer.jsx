@@ -194,7 +194,7 @@ export default function Customer() {
 
   return (
     <div
-      className={`p-6 space-y-6 transition-colors duration-300 ${
+      className={`p-6 space-y-6 ml-64 mt-16 transition-colors duration-300 ${ /* NEW: Added ml-64 mt-16 for sidebar and navbar offset */
         darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
       }`}
     >
@@ -431,9 +431,9 @@ export default function Customer() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto"> {/* NEW: Added overflow-x-auto for scroll effect */}
           <table
-            className={`w-full border rounded-lg overflow-hidden text-sm ${
+            className={`min-w-[1200px] border rounded-lg overflow-hidden text-sm text-center ${ /* NEW: Added min-w-[1200px] for scroll trigger */
               darkMode ? "border-gray-600" : "border-gray-200"
             }`}
           >

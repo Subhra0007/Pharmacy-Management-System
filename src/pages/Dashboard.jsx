@@ -1,4 +1,3 @@
-// pages/Dashboard.jsx
 import { useOutletContext } from "react-router-dom";
 import { Package, Users, AlertTriangle, Pill, Plus } from "lucide-react";
 import StatCard from "../components/dashboard/StatCard";
@@ -35,7 +34,7 @@ export default function Dashboard() {
 
   return (
     <div
-      className={`space-y-6 p-6 transition-colors duration-300 ${
+      className={`space-y-6 p-6 ml-64 mt-16 transition-colors duration-300 ${
         darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
       }`}
     >
@@ -93,8 +92,12 @@ export default function Dashboard() {
       </div>
 
       {/* Table */}
-      <PurchaseTable darkMode={darkMode} />
-      <ClipboardList darkMode={darkMode} />
+      <div className="overflow-x-auto">
+        <PurchaseTable darkMode={darkMode} />
+      </div>
+      <div className="overflow-x-auto">
+        <ClipboardList darkMode={darkMode} />
+      </div>
     </div>
   );
 }

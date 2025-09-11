@@ -1,8 +1,6 @@
-//src/pages/Suppliers.jsx
 import { useState } from "react";
-import { Eye, Edit, Trash2, Search, Filter, Plus, Printer, ScrollText } from "lucide-react";
+import { Eye, Edit, Trash2, Search, Plus } from "lucide-react";
 import { useOutletContext, useNavigate } from "react-router-dom";
-import { IoIosArrowDown } from "react-icons/io";
 
 export default function Suppliers() {
   const { darkMode } = useOutletContext();
@@ -65,10 +63,11 @@ export default function Suppliers() {
 
   return (
     <div
-      className={`p-6 space-y-6 transition-colors duration-300 ${
+      className={`p-6 space-y-6 ml-64 mt-16 transition-colors duration-300 ${
         darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
       }`}
     >
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Supplier List</h2>
@@ -78,28 +77,24 @@ export default function Suppliers() {
         </div>
         <button
           onClick={handleAddNewSupplier}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
-            darkMode
-              ? "bg-blue-600 text-white hover:bg-blue-700"
-              : "bg-blue-600 text-white hover:bg-blue-700"
-          }`}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
         >
           <Plus size={18} />
           Add New Supplier
         </button>
       </div>
 
+      {/* Table Card */}
       <div
         className={`p-4 shadow rounded-md transition-colors duration-300 ${
           darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
         }`}
       >
+        {/* Search */}
         <div className="flex items-center gap-4 mb-4">
           <div className="relative">
             <Search
-              className={`absolute left-3 top-2.5 ${
-                darkMode ? "text-gray-400" : "text-gray-400"
-              }`}
+              className={`absolute left-3 top-2.5 text-gray-400`}
               size={18}
             />
             <input
@@ -114,10 +109,11 @@ export default function Suppliers() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Table Wrapper */}
+        <div className={`overflow-x-auto rounded-md ${darkMode ? "bg-gray-700" : "bg-white"}`}>
           <table
-            className={`w-full border rounded-lg overflow-hidden text-sm text-center ${
-              darkMode ? "border-gray-600" : "border-gray-200"
+            className={`min-w-[1200px] border rounded-lg text-center ${
+              darkMode ? "border-gray-600 bg-gray-700" : "border-gray-200 bg-white"
             }`}
           >
             <thead
@@ -137,9 +133,9 @@ export default function Suppliers() {
               {suppliers.map((supplier, index) => (
                 <tr
                   key={index}
-                  className={`border-t transition-colors duration-300 ${
+                  className={`border-t transition-colors duration-300 text-center text-sm ${
                     darkMode
-                      ? "border-gray-600 hover:bg-gray-600"
+                      ? "border-gray-600 hover:bg-gray-600 text-gray-100"
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
                 >
@@ -179,6 +175,7 @@ export default function Suppliers() {
           </table>
         </div>
 
+        {/* Pagination */}
         <div
           className={`flex items-center justify-between mt-4 text-sm ${
             darkMode ? "text-gray-400" : "text-gray-600"
@@ -254,8 +251,12 @@ export default function Suppliers() {
         </div>
       </div>
 
+      {/* Modal */}
       {showModal && selectedSupplier && (
-        <div className="fixed inset-0 bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div
+          className={`fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm 
+          ${darkMode ? "bg-black/60" : "bg-gray-900/40"}`}
+        >
           <div
             className={`rounded-lg p-6 max-w-lg w-full ${
               darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
@@ -275,8 +276,12 @@ export default function Suppliers() {
               </button>
             </div>
             <p className="mb-4">Total Product Types: {selectedSupplier.products.length}</p>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+            <div>
+              <table
+                className={`text-sm w-full ${
+                  darkMode ? "border border-gray-600 bg-gray-700" : "border border-gray-200 bg-white"
+                }`}
+              >
                 <thead
                   className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
                 >

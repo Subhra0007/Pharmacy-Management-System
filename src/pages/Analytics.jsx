@@ -21,11 +21,7 @@ import { useOutletContext } from "react-router-dom";
 export default function Analytics() {
   const { darkMode } = useOutletContext();
 
-  const [reports, setReports] = useState([
-    { id: "#S-001", date: "Feb 19, 2025", customer: "A Khan", total: 500 },
-    { id: "#S-002", date: "Feb 20, 2025", customer: "B Smith", total: 1200 },
-    { id: "#S-003", date: "Feb 21, 2025", customer: "C Johnson", total: 300 },
-  ]);
+
 
   const [topMedicines, setTopMedicines] = useState([
     { name: "Dolo 650", sales: 54647 },
@@ -93,7 +89,7 @@ export default function Analytics() {
     { month: "Apr", appointments: 3 },
     { month: "May", appointments: 4 },
     { month: "Jun", appointments: 5 },
-    { month: "Jul", appointments: 10},
+    { month: "Jul", appointments: 10 },
     { month: "Aug", appointments: 7 },
     { month: "Sep", appointments: 8 },
     { month: "Oct", appointments: 9 },
@@ -103,14 +99,13 @@ export default function Analytics() {
 
   return (
     <div
-      className={`p-6 space-y-6 transition-colors duration-300 ${
+      className={`p-6 space-y-6 ml-64 mt-16 transition-colors duration-300 ${
         darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
       }`}
     >
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Analytics</h2>
-      
         </div>
       </div>
 
@@ -119,19 +114,19 @@ export default function Analytics() {
           darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
         }`}
       >
-         <div className="flex justify-between items-center mb-4">
-        <h3 className="font-medium mb-4">Revenue vs Expense</h3>
-         <button
-                className={`flex items-center gap-1 border text-xs px-2 py-1 rounded-md transition ${
-                  darkMode
-                    ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
-                    : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
-                }`}
-              >
-                This Week
-                <IoIosArrowDown className="ml-3" />
-              </button>
-              </div>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-medium mb-4">Revenue vs Expense</h3>
+          <button
+            className={`flex items-center gap-1 border text-xs px-2 py-1 rounded-md transition ${
+              darkMode
+                ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
+                : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
+            }`}
+          >
+            This Week
+            <IoIosArrowDown className="ml-3" />
+          </button>
+        </div>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={revenueExpenseData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -150,19 +145,19 @@ export default function Analytics() {
           </LineChart>
         </ResponsiveContainer>
 
-         <div className="flex justify-between items-center mb-4">
-        <h3 className="font-medium mt-6 mb-4">Top 10 Selling Medicines</h3>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-medium mt-6 mb-4">Top 10 Selling Medicines</h3>
           <button
-                className={`flex items-center gap-1 border text-xs px-2 py-1 rounded-md transition ${
-                  darkMode
-                    ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
-                    : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
-                }`}
-              >
-                This Week
-                <IoIosArrowDown className="ml-3" />
-              </button>
-              </div>
+            className={`flex items-center gap-1 border text-xs px-2 py-1 rounded-md transition ${
+              darkMode
+                ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
+                : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
+            }`}
+          >
+            This Week
+            <IoIosArrowDown className="ml-3" />
+          </button>
+        </div>
         <ResponsiveContainer width="100%" height={400}>
           <PieChart>
             <Pie
@@ -189,19 +184,20 @@ export default function Analytics() {
             <Legend layout="vertical" verticalAlign="middle" align="right" />
           </PieChart>
         </ResponsiveContainer>
+
         <div className="flex justify-between items-center mb-4">
-        <h3 className="font-medium mt-6 mb-4">Customer Data</h3>
+          <h3 className="font-medium mt-6 mb-4">Customer Data</h3>
           <button
-                className={`flex items-center gap-1 border text-xs px-2 py-1 rounded-md transition ${
-                  darkMode
-                    ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
-                    : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
-                }`}
-              >
-                This Week
-                <IoIosArrowDown className="ml-3" />
-              </button>
-              </div>
+            className={`flex items-center gap-1 border text-xs px-2 py-1 rounded-md transition ${
+              darkMode
+                ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
+                : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
+            }`}
+          >
+            This Week
+            <IoIosArrowDown className="ml-3" />
+          </button>
+        </div>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={customerData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -218,19 +214,20 @@ export default function Analytics() {
             <Bar dataKey="customers" fill="#10b981" />
           </BarChart>
         </ResponsiveContainer>
-       <div className="flex justify-between items-center mb-4">
-        <h3 className="font-medium mt-6 mb-4">Doctor Appointments</h3>
+
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-medium mt-6 mb-4">Doctor Appointments</h3>
           <button
-                className={`flex items-center gap-1 border text-xs px-2 py-1 rounded-md transition ${
-                  darkMode
-                    ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
-                    : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
-                }`}
-              >
-                This Week
-                <IoIosArrowDown className="ml-3" />
-              </button>
-              </div>
+            className={`flex items-center gap-1 border text-xs px-2 py-1 rounded-md transition ${
+              darkMode
+                ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500"
+                : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200"
+            }`}
+          >
+            This Week
+            <IoIosArrowDown className="ml-3" />
+          </button>
+        </div>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={appointmentData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -247,6 +244,10 @@ export default function Analytics() {
             <Bar dataKey="appointments" fill="#8b5cf6" />
           </BarChart>
         </ResponsiveContainer>
+
+     
+        
+     
       </div>
     </div>
   );

@@ -1,34 +1,31 @@
-//pages/Product.jsx
 import { useState } from "react";
-import { Eye, Edit, Trash2, Search, Filter, Plus, ScrollText } from "lucide-react";
+import { Eye, Edit, Trash2, Search, Plus } from "lucide-react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 
-export default function Product() {
+const Product = () => {
   const { darkMode } = useOutletContext();
   const navigate = useNavigate();
 
   const [medicines, setMedicines] = useState([
-    { id: "#MED001", name: "Paracetamol", type: "Tablet", stock: 150, single: 1500, mfg: "13.07.2025", exp: "27.10.2026" },
-    { id: "#MED002", name: "Crosin", type: "Syrup", stock: 80,  single: 80, mfg: "25.07.2025", exp: "27.10.2026" },
-    { id: "#MED003", name: "Benadryl", type: "Capsule", stock: 120,  single: 1200, mfg: "30.07.2025", exp: "27.10.2026" },
+    { id: "#MED001", name: "Paracetamol", type: "Tablet", stock: 150, single: 1500, mfg: "13.07.2025", exp: "27.10.2026", branch: "Main", priceFull: 50.00, priceSingle: 0.05 },
+    { id: "#MED002", name: "Crosin", type: "Syrup", stock: 80, single: 80, mfg: "25.07.2025", exp: "27.10.2026", branch: "Downtown", priceFull: 30.00, priceSingle: 0.40 },
+    { id: "#MED003", name: "Benadryl", type: "Capsule", stock: 120, single: 1200, mfg: "30.07.2025", exp: "27.10.2026", branch: "West", priceFull: 45.00, priceSingle: 0.08 },
   ]);
+
   const handleAddNewProduct = () => {
     navigate('/add-product');
   };
 
   return (
     <div
-      className={`p-6 space-y-6 transition-colors duration-300 ${
+      className={`p-6 ml-64 mt-16 transition-colors duration-300 ${
         darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
       }`}
     >
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Product List</h2>
-          {/* <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
-            Manage the inventory of medicines.
-          </p> */}
         </div>
         <button
           onClick={handleAddNewProduct}
@@ -44,15 +41,15 @@ export default function Product() {
       </div>
 
       <div
-        className={`p-4 shadow rounded-md transition-colors duration-300 ${
-          darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
-        }`}
+        className={`p-4 shadow rounded-md mt-4 transition-colors duration-300 ${
+          darkMode ? "bg-gray-700 text-white" : "bg-white text-gray-900"
+        } w-full`} 
       >
         <div className="flex items-center gap-4 mb-4">
           <div className="relative">
             <Search
               className={`absolute left-3 top-2.5 ${
-                darkMode ? "text-gray-400" : "text-gray-400"
+                darkMode ? "text-gray-300" : "text-gray-400"
               }`}
               size={18}
             />
@@ -61,45 +58,33 @@ export default function Product() {
               placeholder="Search..."
               className={`pl-10 pr-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                 darkMode
-                  ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
+                  ? "bg-gray-600 border-gray-500 text-white placeholder-gray-300"
                   : "bg-white border-gray-300 text-gray-900"
               }`}
             />
           </div>
-          {/* <button
-            className={`flex items-center gap-2 border px-4 py-2 rounded-lg transition ${
-              darkMode
-                ? "border-gray-500 text-gray-100 hover:bg-gray-600"
-                : "border-gray-300 text-gray-900 hover:bg-gray-100"
-            }`}
-          >
-            <Filter size={18} />
-            Filter
-            <IoIosArrowDown className="ml-3" />
-          </button> */}
-          {/* <ScrollText/> */}
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto w-full"> 
           <table
-            className={`w-full border rounded-lg overflow-hidden text-center ${
+            className={`min-w-[1200px] w-full border rounded-lg text-center ${
               darkMode ? "border-gray-600" : "border-gray-200"
-            }`}
+            }`} 
           >
             <thead
-              className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
+              className={darkMode ? "bg-gray-600 text-gray-200" : "bg-gray-100 text-gray-900"}
             >
               <tr>
-                {/* <th className="p-3">
-                  <input type="checkbox" />
-                </th> */}
                 <th className="p-3">Medicine ID</th>
                 <th className="p-3">Name</th>
                 <th className="p-3">Type</th>
                 <th className="p-3">Stock</th>
+                <th className="p-3">Price in Full</th>
                 <th className="p-3">Single Count</th>
+                <th className="p-3">Price in Single</th>
                 <th className="p-3">MFG Date</th>
                 <th className="p-3">Exp. Date</th>
+                <th className="p-3">Branch</th>        
                 <th className="p-3">Action</th>
               </tr>
             </thead>
@@ -109,30 +94,21 @@ export default function Product() {
                   key={index}
                   className={`border-t transition-colors duration-300 text-center text-sm ${
                     darkMode
-                      ? "border-gray-600 hover:bg-gray-600"
+                      ? "border-gray-600 hover:bg-gray-600 text-gray-100"
                       : "border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  {/* <td className="p-3">
-                    <input type="checkbox" />
-                  </td> */}
                   <td className="p-3">{med.id}</td>
                   <td className="p-3">{med.name}</td>
                   <td className="p-3">{med.type}</td>
                   <td className="p-3">{med.stock}</td>
-                   <td className="p-3">{med.single}</td>
-                    <td className="p-3">{med.mfg}</td>
-                     <td className="p-3">{med.exp}</td>
+                  <td className="p-3">${med.priceFull.toFixed(2)}</td>
+                  <td className="p-3">{med.single}</td>
+                  <td className="p-3">${med.priceSingle.toFixed(2)}</td>
+                  <td className="p-3">{med.mfg}</td>
+                  <td className="p-3">{med.exp}</td>
+                  <td className="p-3">{med.branch}</td>  
                   <td className="p-3 flex gap-2">
-                    {/* <button
-                      className={`p-2 rounded transition ${
-                        darkMode
-                          ? "bg-green-600 text-white hover:bg-green-700"
-                          : "bg-green-500 text-white hover:bg-green-600"
-                      }`}
-                    >
-                      <Eye size={16} />
-                    </button> */}
                     <button
                       className={`p-2 rounded transition ${
                         darkMode
@@ -160,14 +136,14 @@ export default function Product() {
 
         <div
           className={`flex items-center justify-between mt-4 text-sm ${
-            darkMode ? "text-gray-400" : "text-gray-600"
+            darkMode ? "text-gray-300" : "text-gray-600"
           }`}
         >
           <span>Showing 1 to 3 of 50 entries</span>
           <div className="flex items-center gap-2">
             <button
               className={`px-2 py-1 border rounded ${
-                darkMode ? "border-gray-500 hover:bg-gray-600" : "border-gray-300 hover:bg-gray-100"
+                darkMode ? "border-gray-500 hover:bg-gray-600 text-gray-200" : "border-gray-300 hover:bg-gray-100"
               }`}
             >
               &lt;
@@ -184,7 +160,7 @@ export default function Product() {
             <button
               className={`px-3 py-1 border rounded ${
                 darkMode
-                  ? "border-gray-500 text-gray-100 hover:bg-gray-600"
+                  ? "border-gray-500 text-gray-200 hover:bg-gray-600"
                   : "border-gray-300 text-gray-900 hover:bg-gray-100"
               }`}
             >
@@ -193,7 +169,7 @@ export default function Product() {
             <button
               className={`px-3 py-1 border rounded ${
                 darkMode
-                  ? "border-gray-500 text-gray-100 hover:bg-gray-600"
+                  ? "border-gray-500 text-gray-200 hover:bg-gray-600"
                   : "border-gray-300 text-gray-900 hover:bg-gray-100"
               }`}
             >
@@ -203,7 +179,7 @@ export default function Product() {
             <button
               className={`px-3 py-1 border rounded ${
                 darkMode
-                  ? "border-gray-500 text-gray-100 hover:bg-gray-600"
+                  ? "border-gray-500 text-gray-200 hover:bg-gray-600"
                   : "border-gray-300 text-gray-900 hover:bg-gray-100"
               }`}
             >
@@ -211,7 +187,7 @@ export default function Product() {
             </button>
             <button
               className={`px-2 py-1 border rounded ${
-                darkMode ? "border-gray-500 hover:bg-gray-600" : "border-gray-300 hover:bg-gray-100"
+                darkMode ? "border-gray-500 hover:bg-gray-600 text-gray-200" : "border-gray-300 hover:bg-gray-100"
               }`}
             >
               &gt;
@@ -221,7 +197,7 @@ export default function Product() {
             <select
               className={`border rounded px-2 py-1 ${
                 darkMode
-                  ? "bg-gray-600 border-gray-500 text-gray-100"
+                  ? "bg-gray-600 border-gray-500 text-gray-200"
                   : "bg-white border-gray-300 text-gray-900"
               }`}
             >
@@ -234,4 +210,6 @@ export default function Product() {
       </div>
     </div>
   );
-}
+};
+
+export default Product;

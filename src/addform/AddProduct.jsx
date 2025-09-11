@@ -8,11 +8,12 @@ export default function AddNewProduct() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    id: "",
     name: "",
     type: "",
     stock: "",
     singleCount: "",
+    priceFull: "",
+    priceSingle: "",
     mfg: "",
     exp: "",
     hasSingleCount: false,
@@ -50,26 +51,24 @@ export default function AddNewProduct() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add logic to handle form submission (e.g., API call to save product)
     console.log("New Product Data:", formData);
-    // Reset form after submission
     setFormData({
-      id: "",
       name: "",
       type: "",
       stock: "",
       singleCount: "",
+      priceFull: "",
+      priceSingle: "",
       mfg: "",
       exp: "",
       hasSingleCount: false,
     });
-    // Navigate back to product list
     navigate("/products");
   };
 
   return (
     <div
-      className={`p-6 space-y-6 transition-colors duration-300 ${
+      className={`p-6 space-y-6 transition-colors duration-300 ml-64 mt-16 ${
         darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
       }`}
     >
@@ -102,30 +101,6 @@ export default function AddNewProduct() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label
-                htmlFor="id"
-                className={`block text-sm font-medium ${
-                  darkMode ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                Medicine ID
-              </label>
-              <input
-                type="text"
-                name="id"
-                id="id"
-                value={formData.id}
-                onChange={handleInputChange}
-               
-                className={`mt-1 w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                  darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}
-                required
-              />
-            </div>
-            <div>
-              <label
                 htmlFor="name"
                 className={`block text-sm font-medium ${
                   darkMode ? "text-gray-300" : "text-gray-700"
@@ -139,7 +114,6 @@ export default function AddNewProduct() {
                 id="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                
                 className={`mt-1 w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                   darkMode
                     ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -233,7 +207,30 @@ export default function AddNewProduct() {
                 id="stock"
                 value={formData.stock}
                 onChange={handleInputChange}
-              
+                className={`mt-1 w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
+                  darkMode
+                    ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
+                    : "bg-white border-gray-300 text-gray-900"
+                }`}
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="priceFull"
+                className={`block text-sm font-medium ${
+                  darkMode ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
+                Price in Full
+              </label>
+              <input
+                type="number"
+                name="priceFull"
+                id="priceFull"
+                value={formData.priceFull}
+                onChange={handleInputChange}
+                step="0.01"
                 className={`mt-1 w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                   darkMode
                     ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
@@ -263,30 +260,55 @@ export default function AddNewProduct() {
               </label>
             </div>
             {formData.hasSingleCount && (
-              <div>
-                <label
-                  htmlFor="singleCount"
-                  className={`block text-sm font-medium ${
-                    darkMode ? "text-gray-300" : "text-gray-700"
-                  }`}
-                >
-                  Single Count
-                </label>
-                <input
-                  type="number"
-                  name="singleCount"
-                  id="singleCount"
-                  value={formData.singleCount}
-                  onChange={handleInputChange}
-                 
-                  className={`mt-1 w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                    darkMode
-                      ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
-                      : "bg-white border-gray-300 text-gray-900"
+              <>
+                <div>
+                  <label
+                    htmlFor="singleCount"
+                    className={`block text-sm font-medium ${
+                      darkMode ? "text-gray-300" : "text-gray-700"
                     }`}
-                  required
-                />
-              </div>
+                  >
+                    Single Count
+                  </label>
+                  <input
+                    type="number"
+                    name="singleCount"
+                    id="singleCount"
+                    value={formData.singleCount}
+                    onChange={handleInputChange}
+                    className={`mt-1 w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
+                      darkMode
+                        ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
+                        : "bg-white border-gray-300 text-gray-900"
+                    }`}
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="priceSingle"
+                    className={`block text-sm font-medium ${
+                      darkMode ? "text-gray-300" : "text-gray-700"
+                    }`}
+                  >
+                    Price in Single
+                  </label>
+                  <input
+                    type="number"
+                    name="priceSingle"
+                    id="priceSingle"
+                    value={formData.priceSingle}
+                    onChange={handleInputChange}
+                    step="0.01"
+                    className={`mt-1 w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
+                      darkMode
+                        ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
+                        : "bg-white border-gray-300 text-gray-900"
+                    }`}
+                    required
+                  />
+                </div>
+              </>
             )}
             <div>
               <label
