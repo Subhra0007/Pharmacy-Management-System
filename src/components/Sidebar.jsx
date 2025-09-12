@@ -72,7 +72,7 @@ const Sidebar = ({ darkMode }) => {
               <Users size={20} />
               <span>Customer</span>
             </Link>
-            <Link to="/product" className={linkClass("/product")}>
+            <Link to="/products" className={linkClass("/products")}>
               <Pill size={20} />
               <span>Product</span>
             </Link>

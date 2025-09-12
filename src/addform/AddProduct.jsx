@@ -1,7 +1,8 @@
+//src/addform/AddProduct.jsx
 import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { Plus, ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import api from "../components/axios.jsx";
 
 export default function AddNewProduct() {
   const { darkMode } = useOutletContext();
@@ -11,11 +12,12 @@ export default function AddNewProduct() {
     name: "",
     type: "",
     stock: "",
-    singleCount: "",
+    single: "",
     priceFull: "",
     priceSingle: "",
     mfg: "",
     exp: "",
+    branch: "",
     hasSingleCount: false,
   });
 
@@ -26,6 +28,7 @@ export default function AddNewProduct() {
   ]);
   const [newType, setNewType] = useState("");
   const [showTypeInput, setShowTypeInput] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -49,21 +52,46 @@ export default function AddNewProduct() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("New Product Data:", formData);
-    setFormData({
-      name: "",
-      type: "",
-      stock: "",
-      singleCount: "",
-      priceFull: "",
-      priceSingle: "",
-      mfg: "",
-      exp: "",
-      hasSingleCount: false,
-    });
-    navigate("/products");
+    setError(null);
+
+    const productData = {
+      name: formData.name,
+      type: formData.type,
+      stock: parseInt(formData.stock),
+      single: formData.hasSingleCount ? parseInt(formData.single) : 0,
+      priceFull: parseFloat(formData.priceFull),
+      priceSingle: formData.hasSingleCount ? parseFloat(formData.priceSingle) : 0,
+      mfg: formData.mfg,
+      exp: formData.exp,
+      branch: formData.branch,
+    };
+
+    try {
+      console.log("Sending data:", productData);
+        console.log("Request URL:", api.getUri({ url: "/products" }));
+
+      const response = await api.post("/products", productData);
+      console.log("Product added:", response.data);
+     
+      setFormData({
+        name: "",
+        type: "",
+        stock: "",
+        single: "",
+        priceFull: "",
+        priceSingle: "",
+        mfg: "",
+        exp: "",
+        branch: "",
+        hasSingleCount: false,
+      });
+      navigate("/products");
+    } catch (error) {
+      console.error("Error details:", error.response?.data || error.message);
+      setError(error.response?.data?.message || "Failed to add product");
+    }
   };
 
   return (
@@ -80,7 +108,7 @@ export default function AddNewProduct() {
           </p>
         </div>
         <button
-          onClick={() => navigate("/product")}
+          onClick={() => navigate("/products")}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
             darkMode
               ? "bg-gray-600 text-white hover:bg-gray-700"
@@ -97,6 +125,7 @@ export default function AddNewProduct() {
           darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
         }`}
       >
+        {error && <div className="mb-4 text-red-500">{error}</div>}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -263,7 +292,7 @@ export default function AddNewProduct() {
               <>
                 <div>
                   <label
-                    htmlFor="singleCount"
+                    htmlFor="single"
                     className={`block text-sm font-medium ${
                       darkMode ? "text-gray-300" : "text-gray-700"
                     }`}
@@ -272,9 +301,9 @@ export default function AddNewProduct() {
                   </label>
                   <input
                     type="number"
-                    name="singleCount"
-                    id="singleCount"
-                    value={formData.singleCount}
+                    name="single"
+                    id="single"
+                    value={formData.single}
                     onChange={handleInputChange}
                     className={`mt-1 w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                       darkMode
@@ -351,6 +380,29 @@ export default function AddNewProduct() {
                 className={`mt-1 w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                   darkMode
                     ? "bg-gray-600 border-gray-500 text-gray-100"
+                    : "bg-white border-gray-300 text-gray-900"
+                }`}
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="branch"
+                className={`block text-sm font-medium ${
+                  darkMode ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
+                Branch
+              </label>
+              <input
+                type="text"
+                name="branch"
+                id="branch"
+                value={formData.branch}
+                onChange={handleInputChange}
+                className={`mt-1 w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
+                  darkMode
+                    ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
                     : "bg-white border-gray-300 text-gray-900"
                 }`}
                 required

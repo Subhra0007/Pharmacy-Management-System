@@ -1,20 +1,34 @@
-import { useState } from "react";
+//src/pages/Product.jsx
+import { useState, useEffect } from "react";
 import { Eye, Edit, Trash2, Search, Plus } from "lucide-react";
 import { useOutletContext, useNavigate } from "react-router-dom";
-import { IoIosArrowDown } from "react-icons/io";
+import api from "../components/axios.jsx";
 
 const Product = () => {
   const { darkMode } = useOutletContext();
   const navigate = useNavigate();
+  const [medicines, setMedicines] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [medicines, setMedicines] = useState([
-    { id: "#MED001", name: "Paracetamol", type: "Tablet", stock: 150, single: 1500, mfg: "13.07.2025", exp: "27.10.2026", branch: "Main", priceFull: 50.00, priceSingle: 0.05 },
-    { id: "#MED002", name: "Crosin", type: "Syrup", stock: 80, single: 80, mfg: "25.07.2025", exp: "27.10.2026", branch: "Downtown", priceFull: 30.00, priceSingle: 0.40 },
-    { id: "#MED003", name: "Benadryl", type: "Capsule", stock: 120, single: 1200, mfg: "30.07.2025", exp: "27.10.2026", branch: "West", priceFull: 45.00, priceSingle: 0.08 },
-  ]);
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get("/products");
+      setMedicines(response.data);
+      setLoading(false);
+    } catch (error) {
+      setError(error.response?.data?.message || "Failed to fetch products");
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   const handleAddNewProduct = () => {
-    navigate('/add-product');
+    navigate("/add-product");
   };
 
   return (
@@ -43,7 +57,7 @@ const Product = () => {
       <div
         className={`p-4 shadow rounded-md mt-4 transition-colors duration-300 ${
           darkMode ? "bg-gray-700 text-white" : "bg-white text-gray-900"
-        } w-full`} 
+        } w-full`}
       >
         <div className="flex items-center gap-4 mb-4">
           <div className="relative">
@@ -65,81 +79,87 @@ const Product = () => {
           </div>
         </div>
 
-        <div className="overflow-x-auto w-full"> 
-          <table
-            className={`min-w-[1200px] w-full border rounded-lg text-center ${
-              darkMode ? "border-gray-600" : "border-gray-200"
-            }`} 
-          >
-            <thead
-              className={darkMode ? "bg-gray-600 text-gray-200" : "bg-gray-100 text-gray-900"}
+        {loading ? (
+          <div>Loading products...</div>
+        ) : error ? (
+          <div className="text-red-500">{error}</div>
+        ) : (
+          <div className="overflow-x-auto w-full">
+            <table
+              className={`min-w-[1200px] w-full border rounded-lg text-center ${
+                darkMode ? "border-gray-600" : "border-gray-200"
+              }`}
             >
-              <tr>
-                <th className="p-3">Medicine ID</th>
-                <th className="p-3">Name</th>
-                <th className="p-3">Type</th>
-                <th className="p-3">Stock</th>
-                <th className="p-3">Price in Full</th>
-                <th className="p-3">Single Count</th>
-                <th className="p-3">Price in Single</th>
-                <th className="p-3">MFG Date</th>
-                <th className="p-3">Exp. Date</th>
-                <th className="p-3">Branch</th>        
-                <th className="p-3">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {medicines.map((med, index) => (
-                <tr
-                  key={index}
-                  className={`border-t transition-colors duration-300 text-center text-sm ${
-                    darkMode
-                      ? "border-gray-600 hover:bg-gray-600 text-gray-100"
-                      : "border-gray-200 hover:bg-gray-50"
-                  }`}
-                >
-                  <td className="p-3">{med.id}</td>
-                  <td className="p-3">{med.name}</td>
-                  <td className="p-3">{med.type}</td>
-                  <td className="p-3">{med.stock}</td>
-                  <td className="p-3">${med.priceFull.toFixed(2)}</td>
-                  <td className="p-3">{med.single}</td>
-                  <td className="p-3">${med.priceSingle.toFixed(2)}</td>
-                  <td className="p-3">{med.mfg}</td>
-                  <td className="p-3">{med.exp}</td>
-                  <td className="p-3">{med.branch}</td>  
-                  <td className="p-3 flex gap-2">
-                    <button
-                      className={`p-2 rounded transition ${
-                        darkMode
-                          ? "bg-blue-600 text-white hover:bg-blue-700"
-                          : "bg-blue-500 text-white hover:bg-blue-600"
-                      }`}
-                    >
-                      <Edit size={16} />
-                    </button>
-                    <button
-                      className={`p-2 rounded transition ${
-                        darkMode
-                          ? "bg-orange-600 text-white hover:bg-orange-700"
-                          : "bg-orange-500 text-white hover:bg-orange-600"
-                      }`}
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </td>
+              <thead
+                className={darkMode ? "bg-gray-600 text-gray-200" : "bg-gray-100 text-gray-900"}
+              >
+                <tr>
+                  <th className="p-3">Product ID</th>
+                  <th className="p-3">Name</th>
+                  <th className="p-3">Type</th>
+                  <th className="p-3">Stock</th>
+                  <th className="p-3">Price in Full</th>
+                  <th className="p-3">Single Count</th>
+                  <th className="p-3">Price in Single</th>
+                  <th className="p-3">MFG Date</th>
+                  <th className="p-3">Exp. Date</th>
+                  <th className="p-3">Branch</th>
+                  <th className="p-3">Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {medicines.map((med) => (
+                  <tr
+                    key={med._id}
+                    className={`border-t transition-colors duration-300 text-center text-sm ${
+                      darkMode
+                        ? "border-gray-600 hover:bg-gray-600 text-gray-100"
+                        : "border-gray-200 hover:bg-gray-50"
+                    }`}
+                  >
+                    <td className="p-3">{med.productId}</td>
+                    <td className="p-3">{med.name}</td>
+                    <td className="p-3">{med.type}</td>
+                    <td className="p-3">{med.stock}</td>
+                    <td className="p-3">${med.priceFull.toFixed(2)}</td>
+                    <td className="p-3">{med.single}</td>
+                    <td className="p-3">${med.priceSingle.toFixed(2)}</td>
+                    <td className="p-3">{new Date(med.mfg).toLocaleDateString()}</td>
+                    <td className="p-3">{new Date(med.exp).toLocaleDateString()}</td>
+                    <td className="p-3">{med.branch}</td>
+                    <td className="p-3 flex gap-2 justify-center">
+                      <button
+                        className={`p-2 rounded transition ${
+                          darkMode
+                            ? "bg-blue-600 text-white hover:bg-blue-700"
+                            : "bg-blue-500 text-white hover:bg-blue-600"
+                        }`}
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <button
+                        className={`p-2 rounded transition ${
+                          darkMode
+                            ? "bg-orange-600 text-white hover:bg-orange-700"
+                            : "bg-orange-500 text-white hover:bg-orange-600"
+                        }`}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         <div
           className={`flex items-center justify-between mt-4 text-sm ${
             darkMode ? "text-gray-300" : "text-gray-600"
           }`}
         >
-          <span>Showing 1 to 3 of 50 entries</span>
+          <span>Showing {medicines.length} entries</span>
           <div className="flex items-center gap-2">
             <button
               className={`px-2 py-1 border rounded ${

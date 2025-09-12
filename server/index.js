@@ -7,6 +7,10 @@ import customerRoutes from "./routes/customerRoutes.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
 import supplierRoutes from "./routes/supplierRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import customerOrderRoutes from "./routes/customerOrderRoutes.js"
+import supplierOrderRoutes from "./routes/supplierOrderRoutes.js"
+import noteRoutes from "./routes/noteRoutes.js"
+import employeeRoutes from "./routes/employeeRoutes.js"
 
 dotenv.config();
 const app = express();
@@ -22,6 +26,10 @@ app.use("/api/customers", customerRoutes);
 app.use("/api/doctors", doctorRoutes); 
 app.use("/api/suppliers", supplierRoutes); 
 app.use("/api/products", productRoutes);
+app.use("/api/customerOrderRoutes", customerOrderRoutes)
+app.use("/api/supplierOrderRoutes", supplierOrderRoutes)
+app.use("/api/noteRoutes", noteRoutes)
+app.use("/api/employeeRoutes", employeeRoutes)
 
 // Error handling for invalid routes
 app.use((req, res) => {

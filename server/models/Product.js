@@ -1,11 +1,12 @@
+// models/Product.js
 import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(
   {
     productId: {
       type: String,
-      required: true,
-      unique: true, 
+      unique: true, // Keep unique constraint
+      // Remove 'required: true' to allow auto-generation
     },
     name: {
       type: String,
@@ -14,7 +15,7 @@ const productSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      required: true, 
+      required: true,
     },
     stock: {
       type: Number,
@@ -47,6 +48,15 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Generate productId before save
+productSchema.pre("save", async function (next) {
+  if (!this.productId) {
+    const count = await mongoose.model("Product").countDocuments();
+    this.productId = `PRO${String(count + 1).padStart(3, "0")}`;
+  }
+  next();
+});
 
 const Product = mongoose.model("Product", productSchema);
 
