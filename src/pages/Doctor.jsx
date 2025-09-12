@@ -265,7 +265,7 @@ export default function Doctor() {
       {showModal && (
         <div className="fixed inset-0 bg-opacity-100 backdrop-blur-sm flex justify-center items-center z-50">
           <div
-            className={`rounded-lg w-11/12 max-w-lg p-6 relative transition-colors duration-300 ${
+            className={`rounded-lg max-w-2xl w-full max-h-[520px] p-6 relative transition-colors duration-300 ${
               darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
             }`}
           >

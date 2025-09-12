@@ -1,3 +1,4 @@
+//routes/supplierRoutes.js
 import express from "express";
 import {
   getSuppliers,

@@ -1,3 +1,4 @@
+//supplierController.js
 import Supplier from "../models/Supplier.js";
 
 // @desc Get all suppliers
