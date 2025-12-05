@@ -27,8 +27,8 @@ app.use("/api/doctors", doctorRoutes);
 app.use("/api/suppliers", supplierRoutes); 
 app.use("/api/products", productRoutes);
 app.use("/api/customerOrderRoutes", customerOrderRoutes)
-app.use("/api/supplierOrderRoutes", supplierOrderRoutes)
-app.use("/api/noteRoutes", noteRoutes)
+app.use("/api/supplier-orders", supplierOrderRoutes)
+app.use("/api/notes", noteRoutes)
 app.use("/api/employeeRoutes", employeeRoutes)
 
 // Error handling for invalid routes

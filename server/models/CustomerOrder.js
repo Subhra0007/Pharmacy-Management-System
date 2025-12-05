@@ -1,3 +1,4 @@
+//models/CustomerOrder.js
 const mongoose = require('mongoose');
 
 const CustomerOrderSchema = new mongoose.Schema({
@@ -58,6 +59,15 @@ const CustomerOrderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+});
+
+// Generate customerOrderId before save
+CustomerOrderSchema.pre("save", async function (next) {
+  if (!this.supplierId) {
+    const count = await mongoose.model("Supplier").countDocuments();
+    this.customerId = `CUS-ORD${String(count + 1).padStart(3, "0")}`;
+  }
+  next();
 });
 
 // Update timestamp on save

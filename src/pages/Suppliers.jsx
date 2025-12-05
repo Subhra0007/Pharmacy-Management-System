@@ -149,9 +149,9 @@ export default function Suppliers() {
                     <td className="p-3">{supplier.phone}</td>
                     <td className="p-3">{supplier.email}</td>
                     <td className="p-3">{supplier.address}</td>
-                    <td className="p-3">
+                    <td className="p-3 ">
                       <button onClick={() => handleViewProducts(supplier)}>
-                        <Eye size={16} />
+                        <Eye size={16} className="cursor-pointer" />
                       </button>
                     </td>
                     <td className="p-3 flex gap-2 justify-center">

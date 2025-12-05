@@ -1,263 +1,203 @@
-import { useState } from "react";
+// pages/AddNewSupplierOrder.jsx
+import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Plus, X } from "lucide-react";
+import api from "../components/axios";
 
 export default function AddNewSupplierOrder() {
   const { darkMode } = useOutletContext();
-
-  // Mock supplier data (same as in Suppliers component)
-  const suppliers = [
-    { 
-      id: "#SUP001", 
-      name: "Square Ltd.", 
-      products: [
-        { name: "Paracetamol" },
-        { name: "Ibuprofen" },
-        { name: "Aspirin"}
-      ] 
-    },
-    { 
-      id: "#SUP002", 
-      name: "Beximco", 
-      products: [
-        { name: "Amoxicillin"},
-        { name: "Ciprofloxacin"}
-      ] 
-    },
-    { 
-      id: "#SUP003", 
-      name: "Renata", 
-      products: [
-        { name: "Metformin"},
-        { name: "Amlodipine"},
-        { name: "Losartan"}
-      ] 
-    },
-  ];
-
+  const [suppliers, setSuppliers] = useState([]);
+  const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [formData, setFormData] = useState({
     supplierId: "",
-    products: [{ name: "", quantity: 1 }],
+    products: [{ productName: "", quantity: 1, unitPrice: 0 }],
     orderDate: "",
-    expectedDelivery: "",
-    notes: ""
+    deliveryAddress: "",
+    totalAmount: 0,
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const [selectedSupplier, setSelectedSupplier] = useState(null);
+  // Fetch suppliers from backend
+  const fetchSuppliers = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get("/suppliers");
+      setSuppliers(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to fetch suppliers.");
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSuppliers();
+  }, []);
 
   const handleSupplierChange = (e) => {
     const supplierId = e.target.value;
-    const supplier = suppliers.find(s => s.id === supplierId);
+    const supplier = suppliers.find((s) => s._id === supplierId);
     setSelectedSupplier(supplier);
-    setFormData({ ...formData, supplierId, products: [{ name: "", quantity: 1 }] });
+    setFormData({
+      ...formData,
+      supplierId,
+      products: supplier?.products.map((p) => ({ productName: p.name, quantity: 1, unitPrice: p.unitPrice || 0 })) || [{ productName: "", quantity: 1, unitPrice: 0 }],
+    });
   };
 
   const handleProductChange = (index, field, value) => {
     const updatedProducts = [...formData.products];
-    updatedProducts[index] = { ...updatedProducts[index], [field]: value };
+    updatedProducts[index] = { ...updatedProducts[index], [field]: field === "quantity" || field === "unitPrice" ? Number(value) : value };
     setFormData({ ...formData, products: updatedProducts });
+    // Update total amount
+    const total = updatedProducts.reduce((sum, p) => sum + p.quantity * p.unitPrice, 0);
+    setFormData((prev) => ({ ...prev, totalAmount: total }));
   };
 
   const addProductField = () => {
-    setFormData({ ...formData, products: [...formData.products, { name: "", quantity: 1 }] });
+    setFormData({
+      ...formData,
+      products: [...formData.products, { productName: "", quantity: 1, unitPrice: 0 }],
+    });
   };
 
   const removeProductField = (index) => {
     const updatedProducts = formData.products.filter((_, i) => i !== index);
     setFormData({ ...formData, products: updatedProducts });
+    const total = updatedProducts.reduce((sum, p) => sum + p.quantity * p.unitPrice, 0);
+    setFormData((prev) => ({ ...prev, totalAmount: total }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add logic to handle form submission (e.g., API call)
-    console.log("Order Data:", formData);
-    // Reset form after submission
-    setFormData({
-      supplierId: "",
-      products: [{ name: "", quantity: 1 }],
-      orderDate: "",
-      expectedDelivery: "",
-      notes: ""
-    });
-    setSelectedSupplier(null);
+    try {
+      await api.post("/supplier-orders", {
+        supplierId: formData.supplierId,
+        supplierName: selectedSupplier.name,
+        products: formData.products,
+        totalAmount: formData.totalAmount,
+        deliveryAddress: formData.deliveryAddress,
+        orderDate: formData.orderDate,
+      });
+      alert("Order placed successfully!");
+      setFormData({
+        supplierId: "",
+        products: [{ productName: "", quantity: 1, unitPrice: 0 }],
+        orderDate: "",
+        deliveryAddress: "",
+        totalAmount: 0,
+      });
+      setSelectedSupplier(null);
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || "Failed to place order");
+    }
   };
 
   return (
-    <div
-      className={`p-6 space-y-6 transition-colors duration-300 mt-16 ml-64 ${
-        darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
-      }`}
-    >
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Add New Supplier Order</h2>
-          <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
-            Create a new order for a supplier.
-          </p>
-        </div>
-      </div>
-
-      <div
-        className={`p-6 shadow rounded-md transition-colors duration-300 ${
-          darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
-        }`}
-      >
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className={`p-6 space-y-6 mt-16 ml-64 ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"}`}>
+      <h2 className="text-2xl font-bold mb-2">Add New Supplier Order</h2>
+      {loading ? (
+        <p>Loading suppliers...</p>
+      ) : (
+        <div className={`p-6 shadow rounded-md ${darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"}`}>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Supplier</label>
+              <label>Supplier</label>
               <select
                 value={formData.supplierId}
                 onChange={handleSupplierChange}
-                className={`w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                  darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100"
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}
+                className={`w-full p-2 rounded-lg border ${darkMode ? "bg-gray-600 border-gray-500 text-gray-100" : "bg-white border-gray-300 text-gray-900"}`}
                 required
               >
                 <option value="">Select Supplier</option>
-                {suppliers.map((supplier) => (
-                  <option key={supplier.id} value={supplier.id}>
-                    {supplier.name} ({supplier.id})
+                {suppliers.map((s) => (
+                  <option key={s._id} value={s._id}>
+                    {s.name}
                   </option>
                 ))}
               </select>
             </div>
+
             <div>
-              <label className="block text-sm font-medium mb-1">Order Date</label>
+              <label>Order Date</label>
               <input
                 type="date"
                 value={formData.orderDate}
                 onChange={(e) => setFormData({ ...formData, orderDate: e.target.value })}
-                className={`w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                  darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100"
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}
+                className={`w-full p-2 rounded-lg border ${darkMode ? "bg-gray-600 border-gray-500 text-gray-100" : "bg-white border-gray-300 text-gray-900"}`}
                 required
               />
             </div>
-            {/* <div>
-              <label className="block text-sm font-medium mb-1">Expected Delivery</label>
+
+            <div>
+              <label>Delivery Address</label>
               <input
-                type="date"
-                value={formData.expectedDelivery}
-                onChange={(e) => setFormData({ ...formData, expectedDelivery: e.target.value })}
-                className={`w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                  darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100"
-                    : "bg-white border-gray-300 text-gray-900"
-                }`}
+                type="text"
+                value={formData.deliveryAddress}
+                onChange={(e) => setFormData({ ...formData, deliveryAddress: e.target.value })}
+                className={`w-full p-2 rounded-lg border ${darkMode ? "bg-gray-600 border-gray-500 text-gray-100" : "bg-white border-gray-300 text-gray-900"}`}
                 required
               />
-            </div> */}
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm font-medium">Products</label>
-              <button
-                type="button"
-                onClick={addProductField}
-                className={`flex items-center gap-1 px-3 py-1 rounded-lg transition ${
-                  darkMode
-                    ? "bg-blue-600 text-white hover:bg-blue-700"
-                    : "bg-blue-600 text-white hover:bg-blue-700"
-                }`}
-              >
-                <Plus size={16} />
-                Add Product
-              </button>
             </div>
-            {formData.products.map((product, index) => (
-              <div key={index} className="flex items-center gap-4 mb-2">
-                <select
-                  value={product.name}
-                  onChange={(e) => handleProductChange(index, "name", e.target.value)}
-                  className={`w-2/3 p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                    darkMode
-                      ? "bg-gray-600 border-gray-500 text-gray-100"
-                      : "bg-white border-gray-300 text-gray-900"
-                  }`}
-                  disabled={!selectedSupplier}
-                  required
-                >
-                  <option value="">Select Product</option>
-                  {selectedSupplier?.products.map((p) => (
-                    <option key={p.name} value={p.name}>
-                      {p.name}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="number"
-                  value={product.quantity}
-                  onChange={(e) => handleProductChange(index, "quantity", e.target.value)}
-                  min="1"
-                  className={`w-1/3 p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                    darkMode
-                      ? "bg-gray-600 border-gray-500 text-gray-100"
-                      : "bg-white border-gray-300 text-gray-900"
-                  }`}
-                  required
-                />
-                {formData.products.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeProductField(index)}
-                    className={`p-2 rounded transition ${
-                      darkMode
-                        ? "bg-orange-600 text-white hover:bg-orange-700"
-                        : "bg-orange-500 text-white hover:bg-orange-600"
-                    }`}
-                  >
-                    <X size={16} />
-                  </button>
-                )}
+
+            <div>
+              <div className="flex justify-between mb-2">
+                <label>Products</label>
+                <button type="button" onClick={addProductField} className="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded-lg">
+                  <Plus size={16} /> Add Product
+                </button>
               </div>
-            ))}
-          </div>
+              {formData.products.map((p, idx) => (
+                <div key={idx} className="flex gap-2 mb-2">
+                  <select
+                    value={p.productName}
+                    onChange={(e) => handleProductChange(idx, "productName", e.target.value)}
+                    disabled={!selectedSupplier}
+                    className="w-2/5 p-2 border rounded-lg"
+                    required
+                  >
+                    <option value="">Select Product</option>
+                    {selectedSupplier?.products.map((prod) => (
+                      <option key={prod.name} value={prod.name}>
+                        {prod.name}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="number"
+                    value={p.quantity}
+                    onChange={(e) => handleProductChange(idx, "quantity", e.target.value)}
+                    min="1"
+                    className="w-1/5 p-2 border rounded-lg"
+                    required
+                  />
+                  <input
+                    type="number"
+                    value={p.unitPrice}
+                    onChange={(e) => handleProductChange(idx, "unitPrice", e.target.value)}
+                    min="0"
+                    className="w-1/5 p-2 border rounded-lg"
+                    required
+                  />
+                  {formData.products.length > 1 && (
+                    <button type="button" onClick={() => removeProductField(idx)} className="p-2 bg-orange-500 text-white rounded-lg">
+                      <X size={16} />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Notes</label>
-            <textarea
-              value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              className={`w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                darkMode
-                  ? "bg-gray-600 border-gray-500 text-gray-100"
-                  : "bg-white border-gray-300 text-gray-900"
-              }`}
-              rows="4"
-              placeholder="Additional order notes..."
-            />
-          </div>
+            <div>Total Amount: ${formData.totalAmount.toFixed(2)}</div>
 
-          <div className="flex justify-end gap-4">
-            <button
-              type="button"
-              className={`px-4 py-2 rounded-lg transition ${
-                darkMode
-                  ? "bg-gray-600 text-white hover:bg-gray-500"
-                  : "bg-gray-200 text-gray-900 hover:bg-gray-300"
-              }`}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className={`px-4 py-2 rounded-lg transition ${
-                darkMode
-                  ? "bg-blue-600 text-white hover:bg-blue-700"
-                  : "bg-blue-600 text-white hover:bg-blue-700"
-              }`}
-            >
-              Place Order
-            </button>
-          </div>
-        </form>
-      </div>
+            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg">Place Order</button>
+          </form>
+        </div>
+      )}
+      {error && <p className="text-red-500">{error}</p>}
     </div>
   );
 }

@@ -42,8 +42,8 @@ const SupplierOrderSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
-    enum: ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'],
-    default: 'Pending'
+    enum: ['Order Placed', 'Order Received', 'Order Cancelled'],
+    default: 'Order Placed'
   },
   deliveryAddress: {
     type: String,
@@ -58,6 +58,15 @@ const SupplierOrderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+});
+
+// Generate supplierId before save
+SupplierOrderSchema.pre("save", async function (next) {
+  if (!this.supplierId) {
+    const count = await mongoose.model("Supplier").countDocuments();
+    this.supplierId = `SUP-ORD${String(count + 1).padStart(3, "0")}`;
+  }
+  next();
 });
 
 // Update timestamp on save

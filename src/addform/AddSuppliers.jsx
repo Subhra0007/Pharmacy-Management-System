@@ -112,7 +112,7 @@ export default function AddSupplier() {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                placeholder="e.g., ABC Pharma"
+                placeholder="Enter Supplier Name"
                 className={`w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                   darkMode ? "bg-gray-600 border-gray-500 text-gray-100" : "bg-white border-gray-300 text-gray-900"
                 }`}
@@ -126,7 +126,7 @@ export default function AddSupplier() {
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                placeholder="e.g., 01893531212"
+                placeholder="Enter Mobile number"
                 className={`w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                   darkMode ? "bg-gray-600 border-gray-500 text-gray-100" : "bg-white border-gray-300 text-gray-900"
                 }`}
@@ -140,7 +140,7 @@ export default function AddSupplier() {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="e.g., abc@example.com"
+                placeholder="Enter Email Id"
                 className={`w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                   darkMode ? "bg-gray-600 border-gray-500 text-gray-100" : "bg-white border-gray-300 text-gray-900"
                 }`}
@@ -154,7 +154,7 @@ export default function AddSupplier() {
                 name="address"
                 value={formData.address}
                 onChange={handleInputChange}
-                placeholder="e.g., Mumbai"
+                placeholder="Enter Address"
                 className={`w-full p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                   darkMode ? "bg-gray-600 border-gray-500 text-gray-100" : "bg-white border-gray-300 text-gray-900"
                 }`}
@@ -182,7 +182,7 @@ export default function AddSupplier() {
                   type="text"
                   value={product.name}
                   onChange={(e) => handleProductChange(index, e.target.value)}
-                  placeholder="e.g., Paracetamol"
+                  placeholder="Enter Product Name"
                   className={`w-2/3 p-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
                     darkMode ? "bg-gray-600 border-gray-500 text-gray-100" : "bg-white border-gray-300 text-gray-900"
                   }`}

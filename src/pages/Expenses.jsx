@@ -1,601 +1,325 @@
 import { useState } from "react";
-import { Eye, Edit, Trash2, Search, Filter, Plus } from "lucide-react";
 import { useOutletContext, useNavigate } from "react-router-dom";
-import { IoIosArrowDown } from "react-icons/io";
+import {
+  DollarSign,
+  CreditCard,
+  TrendingUp,
+  AlertCircle,
+  Plus,
+  Search,
+  Filter,
+  Eye,
+  Edit,
+  Trash2,
+  Download,
+  FileText
+} from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
+import { expensesData } from "../data/expensesData";
 
 export default function Expenses() {
   const { darkMode } = useOutletContext();
   const navigate = useNavigate();
-  const [expenses, setExpenses] = useState([
-    { category: "E-Bill", amount: 5000, paid: 3000, due: 2000, date: "24.08.2025" },
-    { category: "Staff Salaries", amount: 2500, paid: 3000, due: 2000, date: "25.08.2025" },
-    { category: "Maintenance", amount: 300, paid: 3000, due: 2000, date: "26.08.2025" },
-  ]);
+  const { metrics, expenseRecords, employeeSalaries, supplierOrders } = expensesData;
 
-  const [employees, setEmployees] = useState([
-    { id: 1, name: "John Doe", phone: "145697890", address: "123 Main St, Kolkata", role: "Employee", salary: 5000 },
-    { id: 2, name: "Jane Smith", phone: "2345678901", address: "456 Oak Ave, Mumbai", role: "Technician", salary: 4500 },
-    { id: 3, name: "Bob Johnson", phone: "3456789012", address: "789 MG Rd, Kolkata", role: "Staff", salary: 4800 },
-  ]);
-
-  const [supplierOrders, setSupplierOrders] = useState([
-    { 
-      id: "#INV001", 
-      supplier: "A Khan", 
-      total: 1234, 
-      paid: 123, 
-      due: 125, 
-      status: "Order Placed",
-      products: [
-        { name: "Paracetamol", quantity: 100, price: 5 },
-        { name: "Ibuprofen", quantity: 50, price: 8 }
-      ]
-    },
-    { 
-      id: "#INV002", 
-      supplier: "B Smith", 
-      total: 5678, 
-      paid: 163, 
-      due: 155, 
-      status: "Order Received",
-      products: [
-        { name: "Amoxicillin", quantity: 30, price: 15 },
-        { name: "Ciprofloxacin", quantity: 20, price: 20 }
-      ]
-    },
-  ]);
-
+  const [activeTab, setActiveTab] = useState("expenses");
   const [showModal, setShowModal] = useState(false);
-  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
-  // Navigation handlers
-  const handleAddExpense = () => {
-    navigate("/add-expense");
-  };
-
-  const handleAddEmployee = () => {
-    navigate("/add-new-employee");
-  };
-
-  const handleAddSupplierOrder = () => {
-    navigate("/add-supplier-order");
-  };
-
-  const handleViewProducts = (products) => {
-    setSelectedProducts(products);
+  const handleViewOrder = (order) => {
+    setSelectedOrder(order);
     setShowModal(true);
   };
 
-  const getStatusBgColor = (status) => {
-    switch (status) {
-      case "Order Placed":
-        return darkMode ? "bg-yellow-600" : "bg-yellow-200";
-      case "Order Received":
-        return darkMode ? "bg-green-600" : "bg-green-200";
-      case "Order Cancelled":
-        return darkMode ? "bg-red-600" : "bg-red-200";
-      default:
-        return "";
-    }
-  };
-
   return (
-    <div
-      className={`p-6 space-y-6 transition-colors duration-300 mt-16 ml-64 ${
-        darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
-      }`}
-    >
-      {/* Header Section */}
-      <div className="flex items-center justify-between">
+    <div className={`p-6 ml-64 mt-16 min-h-screen transition-colors duration-300 ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900"}`}>
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
-          <h2 className="text-2xl font-bold">Expenses & Salaries</h2>
-          {/* <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
-            Track and manage pharmacy expenses, employee salaries, and supplier orders.
-          </p> */}
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            <DollarSign className="text-blue-500" /> Financial Management
+          </h1>
+          <p className={`mt-1 text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+            Track expenses, manage salaries, and monitor supplier payments.
+          </p>
         </div>
-        <div className="flex gap-4">
-          <button
-            onClick={handleAddExpense}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
-              darkMode
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
-          >
-            <Plus size={18} />
-            Add New Expense
+        <div className="flex gap-2">
+          <button className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700 text-gray-200" : "bg-white hover:bg-gray-50 text-gray-700 border border-gray-200"
+            }`}>
+            <Download size={16} /> Export
           </button>
-          <button
-            onClick={handleAddEmployee}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
-              darkMode
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
-          >
-            <Plus size={18} />
-            Add New Employee
-          </button>
-          <button
-            onClick={handleAddSupplierOrder}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
-              darkMode
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
-          >
-            <Plus size={18} />
-            Add New Supplier Order
+          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+            <Plus size={18} /> Add Transaction
           </button>
         </div>
       </div>
 
-      {/* Expenses Table */}
-      <div
-        className={`p-4 shadow rounded-md transition-colors duration-300 ${
-          darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
-        }`}
-      >
-        <h3 className="text-lg font-semibold mb-4">Expenses</h3>
-        <div className="flex items-center justify-between mb-4">
-          <div className="relative">
-            <Search
-              className={`absolute left-3 top-2.5 ${
-                darkMode ? "text-gray-400" : "text-gray-400"
-              }`}
-              size={18}
-            />
-            <input
-              type="text"
-              placeholder="Search expenses..."
-              className={`pl-10 pr-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                darkMode
-                  ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
-                  : "bg-white border-gray-300 text-gray-900"
-              }`}
-            />
-          </div>
-        </div>
+      {/* Metrics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <StatCard
+          title="Total Expenses"
+          value={`$${metrics.totalExpenses.toLocaleString()}`}
+          icon={<DollarSign size={24} className="text-red-500" />}
+          trend="-2.5%"
+          trendUp={false}
+          darkMode={darkMode}
+        />
+        <StatCard
+          title="Monthly Budget"
+          value={`$${metrics.monthlyBudget.toLocaleString()}`}
+          icon={<CreditCard size={24} className="text-blue-500" />}
+          darkMode={darkMode}
+        />
+        <StatCard
+          title="Remaining Budget"
+          value={`$${metrics.remainingBudget.toLocaleString()}`}
+          icon={<TrendingUp size={24} className="text-green-500" />}
+          darkMode={darkMode}
+        />
+        <StatCard
+          title="Pending Payments"
+          value={metrics.pendingPayments}
+          icon={<AlertCircle size={24} className="text-orange-500" />}
+          darkMode={darkMode}
+        />
+      </div>
 
-        <div className="overflow-x-auto">
-          <table
-            className={`min-w-[1200px] border rounded-lg  text-center ${
-              darkMode ? "border-gray-600" : "border-gray-200"
-            }`}
-          >
-            <thead
-              className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
-            >
-              <tr>
-                <th className="p-3">Category</th>
-                <th className="p-3">Amount</th>
-                <th className="p-3">Paid Amount</th>
-                <th className="p-3">Due</th>
-                <th className="p-3">Due Date</th>
-                <th className="p-3">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {expenses.map((expense, index) => (
-                <tr
-                  key={index}
-                  className={`border-t transition-colors duration-300 text-center ${
-                    darkMode
-                      ? "border-gray-600 hover:bg-gray-600"
-                      : "border-gray-200 hover:bg-gray-50"
+      {/* Tabs & Filters */}
+      <div className={`rounded-xl shadow-sm mb-6 ${darkMode ? "bg-gray-800" : "bg-white"}`}>
+        <div className="p-4 border-b dark:border-gray-700 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
+            {['expenses', 'salaries', 'suppliers'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${activeTab === tab
+                    ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+                    : darkMode ? "text-gray-400 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"
                   }`}
-                >
-                  <td className="p-3">{expense.category}</td>
-                  <td className="p-3">${expense.amount.toLocaleString()}</td>
-                  <td className="p-3">${expense.paid.toLocaleString()}</td>
-                  <td className="p-3">${expense.due.toLocaleString()}</td>
-                  <td className="p-3">{expense.date}</td>
-                  <td className="p-3 flex gap-2 justify-center">
-                    <button
-                      className={`p-2 rounded transition ${
-                        darkMode
-                          ? "bg-blue-600 text-white hover:bg-blue-700"
-                          : "bg-blue-500 text-white hover:bg-blue-600"
-                      }`}
-                    >
-                      <Edit size={16} />
-                    </button>
-                    <button
-                      className={`p-2 rounded transition ${
-                        darkMode
-                          ? "bg-orange-600 text-white hover:bg-orange-700"
-                          : "bg-orange-500 text-white hover:bg-orange-600"
-                      }`}
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex gap-2 w-full md:w-auto">
+            <div className="relative flex-1 md:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+              <input
+                type="text"
+                placeholder={`Search ${activeTab}...`}
+                className={`w-full pl-9 pr-4 py-2 rounded-lg text-sm border focus:ring-2 focus:ring-blue-500 outline-none transition-colors ${darkMode
+                    ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-500"
+                    : "bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400"
+                  }`}
+              />
+            </div>
+            <button className={`p-2 rounded-lg border ${darkMode ? "border-gray-600 hover:bg-gray-700 text-gray-400" : "border-gray-200 hover:bg-gray-50 text-gray-600"
+              }`}>
+              <Filter size={18} />
+            </button>
+          </div>
         </div>
 
-        <div
-          className={`flex items-center justify-between mt-4 text-sm ${
-            darkMode ? "text-gray-400" : "text-gray-600"
-          }`}
-        >
-          <span>Showing 1 to {expenses.length} of {expenses.length} entries</span>
-          <div className="flex items-center gap-2">
-            <button
-              className={`px-2 py-1 border rounded ${
-                darkMode ? "border-gray-500 hover:bg-gray-600" : "border-gray-300 hover:bg-gray-100"
-              }`}
-            >
-              &lt;
-            </button>
-            <button
-              className={`px-3 py-1 border rounded ${
-                darkMode
-                  ? "bg-blue-600 text-white border-gray-500"
-                  : "bg-blue-600 text-white border-gray-300"
-              }`}
-            >
-              1
-            </button>
-            <button
-              className={`px-2 py-1 border rounded ${
-                darkMode ? "border-gray-500 hover:bg-gray-600" : "border-gray-300 hover:bg-gray-100"
-              }`}
-            >
-              &gt;
-            </button>
-          </div>
-          <div>
-            <select
-              className={`border rounded px-2 py-1 ${
-                darkMode
-                  ? "bg-gray-600 border-gray-500 text-gray-100"
-                  : "bg-white border-gray-300 text-gray-900"
-              }`}
-            >
-              <option>Show 8</option>
-              <option>Show 10</option>
-              <option>Show 20</option>
-            </select>
-          </div>
+        {/* Content */}
+        <div className="overflow-x-auto">
+          {activeTab === 'expenses' && (
+            <table className="w-full text-left text-sm">
+              <thead className={`border-b ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-100 bg-gray-50"}`}>
+                <tr>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Category</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Description</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Date</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Amount</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Status</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y dark:divide-gray-700">
+                {expenseRecords.map((record) => (
+                  <tr key={record.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                    <td className="p-4 font-medium">{record.category}</td>
+                    <td className="p-4">
+                      <div className="flex flex-col">
+                        <span>{record.description}</span>
+                        <span className={`text-xs ${darkMode ? "text-gray-500" : "text-gray-400"}`}>{record.vendor}</span>
+                      </div>
+                    </td>
+                    <td className="p-4 text-gray-500 dark:text-gray-400">{record.date}</td>
+                    <td className="p-4 font-semibold">${record.amount.toLocaleString()}</td>
+                    <td className="p-4">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${record.status === 'Paid' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' :
+                          record.status === 'Pending' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300' :
+                            'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300'
+                        }`}>
+                        {record.status}
+                      </span>
+                    </td>
+                    <td className="p-4 text-right">
+                      <div className="flex justify-end gap-2">
+                        <button className="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors"><Edit size={16} /></button>
+                        <button className="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors"><Trash2 size={16} /></button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          {activeTab === 'salaries' && (
+            <table className="w-full text-left text-sm">
+              <thead className={`border-b ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-100 bg-gray-50"}`}>
+                <tr>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Employee</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Role</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Payment Date</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Salary</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Status</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y dark:divide-gray-700">
+                {employeeSalaries.map((emp) => (
+                  <tr key={emp.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                    <td className="p-4 font-medium">{emp.name}</td>
+                    <td className="p-4 text-gray-500 dark:text-gray-400">{emp.role}</td>
+                    <td className="p-4 text-gray-500 dark:text-gray-400">{emp.paymentDate}</td>
+                    <td className="p-4 font-semibold">${emp.salary.toLocaleString()}</td>
+                    <td className="p-4">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${emp.status === 'Paid' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' :
+                          'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300'
+                        }`}>
+                        {emp.status}
+                      </span>
+                    </td>
+                    <td className="p-4 text-right">
+                      <div className="flex justify-end gap-2">
+                        <button className="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors" title="View Slip"><FileText size={16} /></button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          {activeTab === 'suppliers' && (
+            <table className="w-full text-left text-sm">
+              <thead className={`border-b ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-100 bg-gray-50"}`}>
+                <tr>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Supplier</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Order ID</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Total</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Due</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400">Status</th>
+                  <th className="p-4 font-medium text-gray-500 dark:text-gray-400 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y dark:divide-gray-700">
+                {supplierOrders.map((order) => (
+                  <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                    <td className="p-4 font-medium">{order.supplier}</td>
+                    <td className="p-4 text-gray-500 dark:text-gray-400">{order.id}</td>
+                    <td className="p-4 font-semibold">${order.totalAmount.toLocaleString()}</td>
+                    <td className="p-4 text-red-500">${order.dueAmount.toLocaleString()}</td>
+                    <td className="p-4">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${order.status === 'Received' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' :
+                          'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                        }`}>
+                        {order.status}
+                      </span>
+                    </td>
+                    <td className="p-4 text-right">
+                      <div className="flex justify-end gap-2">
+                        <button
+                          onClick={() => handleViewOrder(order)}
+                          className="p-1.5 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 rounded transition-colors"
+                        >
+                          <Eye size={16} />
+                        </button>
+                        <button className="p-1.5 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 rounded transition-colors">
+                          <FaWhatsapp size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
 
-      {/* Employee Salaries Table */}
-      <div
-        className={`p-4 shadow rounded-md transition-colors duration-300 ${
-          darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
-        }`}
-      >
-        <h3 className="text-lg font-semibold mb-4">Employee Salaries</h3>
-        <div className="flex items-center justify-between mb-4">
-          <div className="relative">
-            <Search
-              className={`absolute left-3 top-2.5 ${
-                darkMode ? "text-gray-400" : "text-gray-400"
-              }`}
-              size={18}
-            />
-            <input
-              type="text"
-              placeholder="Search employees..."
-              className={`pl-10 pr-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                darkMode
-                  ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
-                  : "bg-white border-gray-300 text-gray-900"
-              }`}
-            />
-          </div>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table
-            className={`min-w-[1200px] border rounded-lg  text-center ${
-              darkMode ? "border-gray-600" : "border-gray-200"
-            }`}
-          >
-            <thead
-              className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
-            >
-              <tr>
-                <th className="p-3">Name</th>
-                <th className="p-3">Phone Number</th>
-                <th className="p-3">Address</th>
-                <th className="p-3">Role</th>
-                <th className="p-3">Salary</th>
-                <th className="p-3">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {employees.map((employee) => (
-                <tr
-                  key={employee.id}
-                  className={`border-t transition-colors duration-300 ${
-                    darkMode
-                      ? "border-gray-600 hover:bg-gray-600"
-                      : "border-gray-200 hover:bg-gray-50"
-                  }`}
-                >
-                  <td className="p-3">{employee.name}</td>
-                  <td className="p-3">{employee.phone}</td>
-                  <td className="p-3">{employee.address}</td>
-                  <td className="p-3">{employee.role}</td>
-                  <td className="p-3">${employee.salary.toLocaleString()}</td>
-                  <td className="p-3 flex gap-2 justify-center">
-                    <button
-                      className={`p-2 rounded transition ${
-                        darkMode
-                          ? "bg-blue-600 text-white hover:bg-blue-700"
-                          : "bg-blue-500 text-white hover:bg-blue-600"
-                      }`}
-                    >
-                      <Edit size={16} />
-                    </button>
-                    <button
-                      className={`p-2 rounded transition ${
-                        darkMode
-                          ? "bg-orange-600 text-white hover:bg-orange-700"
-                          : "bg-orange-500 text-white hover:bg-orange-600"
-                      }`}
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div
-          className={`flex items-center justify-between mt-4 text-sm ${
-            darkMode ? "text-gray-400" : "text-gray-600"
-          }`}
-        >
-          <span>Showing 1 to {employees.length} of {employees.length} entries</span>
-          <div className="flex items-center gap-2">
-            <button
-              className={`px-2 py-1 border rounded ${
-                darkMode ? "border-gray-500 hover:bg-gray-600" : "border-gray-300 hover:bg-gray-100"
-              }`}
-            >
-              &lt;
-            </button>
-            <button
-              className={`px-3 py-1 border rounded ${
-                darkMode
-                  ? "bg-blue-600 text-white border-gray-500"
-                  : "bg-blue-600 text-white border-gray-300"
-              }`}
-            >
-              1
-            </button>
-            <button
-              className={`px-2 py-1 border rounded ${
-                darkMode ? "border-gray-500 hover:bg-gray-600" : "border-gray-300 hover:bg-gray-100"
-              }`}
-            >
-              &gt;
-            </button>
-          </div>
-          <div>
-            <select
-              className={`border rounded px-2 py-1 ${
-                darkMode
-                  ? "bg-gray-600 border-gray-500 text-gray-100"
-                  : "bg-white border-gray-300 text-gray-900"
-              }`}
-            >
-              <option>Show 8</option>
-              <option>Show 10</option>
-              <option>Show 20</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Supplier Orders Table */}
-      <div
-        className={`p-4 shadow rounded-md transition-colors duration-300 ${
-          darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
-        }`}
-      >
-        <h3 className="text-lg font-semibold mb-4">Supplier Orders</h3>
-        <div className="flex items-center justify-between mb-4">
-          <div className="relative">
-            <Search
-              className={`absolute left-3 top-2.5 ${
-                darkMode ? "text-gray-400" : "text-gray-400"
-              }`}
-              size={18}
-            />
-            <input
-              type="text"
-              placeholder="Search supplier orders..."
-              className={`pl-10 pr-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 transition-colors duration-300 ${
-                darkMode
-                  ? "bg-gray-600 border-gray-500 text-gray-100 placeholder-gray-400"
-                  : "bg-white border-gray-300 text-gray-900"
-              }`}
-            />
-          </div>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table
-            className={`min-w-[1200px] border rounded-lg  text-center ${
-              darkMode ? "border-gray-600" : "border-gray-200"
-            }`}
-          >
-            <thead
-              className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
-            >
-              <tr>
-                <th className="p-3">Suppliers</th>
-                <th className="p-3">Total Amount</th>
-                <th className="p-3">Paid Amount</th>
-                <th className="p-3">Due</th>
-                <th className="p-3">Products</th>
-                <th className="p-3">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {supplierOrders.map((order, index) => (
-                <tr
-                  key={index}
-                  className={`border-t transition-colors duration-300 ${
-                    darkMode
-                      ? "border-gray-600 hover:bg-gray-600"
-                      : "border-gray-200 hover:bg-gray-50"
-                  }`}
-                >
-                  <td className="p-3">{order.supplier}</td>
-                  <td className="p-3">${order.total.toLocaleString()}</td>
-                  <td className="p-3">${order.paid.toLocaleString()}</td>
-                  <td className="p-3">${order.due.toLocaleString()}</td>
-                  <td className="p-2">
-                    <button onClick={() => handleViewProducts(order.products)}>
-                      <Eye size={16} />
-                    </button>
-                  </td>
-                  <td className="p-3 flex gap-2 justify-center">
-                    <button
-                      className={`p-2 rounded transition ${
-                        darkMode
-                          ? "bg-green-600 text-white hover:bg-green-700"
-                          : "bg-green-500 text-white hover:bg-green-600"
-                      }`}
-                    >
-                      <FaWhatsapp size={16} />
-                    </button>
-                    <button
-                      className={`p-2 rounded transition ${
-                        darkMode
-                          ? "bg-blue-600 text-white hover:bg-blue-700"
-                          : "bg-blue-500 text-white hover:bg-blue-600"
-                      }`}
-                    >
-                      <Edit size={16} />
-                    </button>
-                    <button
-                      className={`p-2 rounded transition ${
-                        darkMode
-                          ? "bg-orange-600 text-white hover:bg-orange-700"
-                          : "bg-orange-500 text-white hover:bg-orange-600"
-                      }`}
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div
-          className={`flex items-center justify-between mt-4 text-sm ${
-            darkMode ? "text-gray-400" : "text-gray-600"
-          }`}
-        >
-          <span>Showing 1 to {supplierOrders.length} of {supplierOrders.length} entries</span>
-          <div className="flex items-center gap-2">
-            <button
-              className={`px-2 py-1 border rounded ${
-                darkMode ? "border-gray-500 hover:bg-gray-600" : "border-gray-300 hover:bg-gray-100"
-              }`}
-            >
-              &lt;
-            </button>
-            <button
-              className={`px-3 py-1 border rounded ${
-                darkMode
-                  ? "bg-blue-600 text-white border-gray-500"
-                  : "bg-blue-600 text-white border-gray-300"
-              }`}
-            >
-              1
-            </button>
-            <button
-              className={`px-2 py-1 border rounded ${
-                darkMode ? "border-gray-500 hover:bg-gray-600" : "border-gray-300 hover:bg-gray-100"
-              }`}
-            >
-              &gt;
-            </button>
-          </div>
-          <div>
-            <select
-              className={`border rounded px-2 py-1 ${
-                darkMode
-                  ? "bg-gray-600 border-gray-500 text-gray-100"
-                  : "bg-white border-gray-300 text-gray-900"
-              }`}
-            >
-              <option>Show 8</option>
-              <option>Show 10</option>
-              <option>Show 20</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Products Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-opacity-100 backdrop-blur-sm flex items-center justify-center z-50">
-          <div
-            className={`rounded-lg p-6 max-w-lg w-full ${
-              darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
-            }`}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold">Products Ordered</h3>
+      {/* Order Modal */}
+      {showModal && selectedOrder && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className={`w-full max-w-lg rounded-xl shadow-lg ${darkMode ? "bg-gray-800" : "bg-white"}`}>
+            <div className="p-6 border-b dark:border-gray-700 flex justify-between items-center">
+              <h3 className="text-lg font-bold">Order Details: {selectedOrder.id}</h3>
+              <button onClick={() => setShowModal(false)} className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                <AlertCircle className="rotate-45" size={24} />
+              </button>
+            </div>
+            <div className="p-6">
+              <div className="space-y-4">
+                <div className="flex justify-between">
+                  <span className={darkMode ? "text-gray-400" : "text-gray-500"}>Supplier:</span>
+                  <span className="font-medium">{selectedOrder.supplier}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className={darkMode ? "text-gray-400" : "text-gray-500"}>Date:</span>
+                  <span className="font-medium">{selectedOrder.date}</span>
+                </div>
+                <div className="mt-4">
+                  <h4 className="font-medium mb-2 text-sm uppercase text-gray-500">Items</h4>
+                  <div className={`rounded-lg border ${darkMode ? "border-gray-700" : "border-gray-200"} divide-y dark:divide-gray-700`}>
+                    {selectedOrder.items.map((item, idx) => (
+                      <div key={idx} className="p-3 flex justify-between text-sm">
+                        <span>{item.name} (x{item.quantity})</span>
+                        <span>${(item.price * item.quantity).toLocaleString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="p-6 border-t dark:border-gray-700 flex justify-end">
               <button
                 onClick={() => setShowModal(false)}
-                className={`p-2 rounded ${
-                  darkMode
-                    ? "bg-gray-600 text-white hover:bg-gray-500"
-                    : "bg-gray-200 text-gray-900 hover:bg-gray-300"
-                }`}
+                className={`px-4 py-2 rounded-lg text-sm font-medium ${darkMode ? "bg-gray-700 hover:bg-gray-600" : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                  }`}
               >
                 Close
               </button>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead
-                  className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
-                >
-                  <tr>
-                    <th className="p-3 text-left">Product Name</th>
-                    <th className="p-3 text-left">Quantity</th>
-                    <th className="p-3 text-left">Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedProducts.map((product, index) => (
-                    <tr
-                      key={index}
-                      className={`border-t ${
-                        darkMode
-                          ? "border-gray-600 hover:bg-gray-600"
-                          : "border-gray-200 hover:bg-gray-50"
-                      }`}
-                    >
-                      <td className="p-3">{product.name}</td>
-                      <td className="p-3">{product.quantity}</td>
-                      <td className="p-3">${product.price}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function StatCard({ title, value, icon, trend, trendUp, darkMode }) {
+  return (
+    <div className={`p-4 rounded-xl shadow-sm ${darkMode ? "bg-gray-800" : "bg-white"}`}>
+      <div className="flex justify-between items-start mb-2">
+        <div className={`p-3 rounded-full ${darkMode ? "bg-gray-700" : "bg-gray-100"}`}>
+          {icon}
+        </div>
+        {trend && (
+          <span className={`text-xs font-medium px-2 py-1 rounded-full ${trendUp
+              ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+              : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+            }`}>
+            {trend}
+          </span>
+        )}
+      </div>
+      <div>
+        <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>{title}</p>
+        <h3 className="text-2xl font-bold mt-1">{value}</h3>
+      </div>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+//controllers/CustomerOrder.js
 const CustomerOrder = require('../models/CustomerOrder');
 
 exports.getAllOrders = async (req, res) => {

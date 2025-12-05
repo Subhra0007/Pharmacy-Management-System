@@ -1,4 +1,5 @@
-const SupplierOrder = require('../models/SupplierOrder');
+//controllers/supplierOrderController.js
+const SupplierOrder = require('../models/SupplierOrder.js');
 
 exports.getAllOrders = async (req, res) => {
   try {

@@ -1,27 +1,39 @@
+// addform/AddNote.jsx
 import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
+import api from "../components/axios"; // import axios instance
 import { Plus, X } from "lucide-react";
 
 export default function AddNewNote() {
   const { darkMode } = useOutletContext();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     note: ""
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add logic to handle form submission (e.g., API call)
-    console.log("Note Data:", formData);
-    // Reset form after submission
-    setFormData({
-      note: ""
-    });
+    try {
+      setLoading(true);
+      // Send to backend
+      await api.post("/notes", { content: formData.note });
+
+      // After success, go back to Notes page
+      navigate("/notes");
+    } catch (error) {
+      console.error("Error adding note:", error.response?.data || error.message);
+      alert("Failed to add note!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -65,6 +77,7 @@ export default function AddNewNote() {
           <div className="flex justify-end gap-4">
             <button
               type="button"
+              onClick={() => navigate("/notes")}
               className={`px-4 py-2 rounded-lg transition ${
                 darkMode
                   ? "bg-gray-600 text-white hover:bg-gray-500"
@@ -75,13 +88,14 @@ export default function AddNewNote() {
             </button>
             <button
               type="submit"
+              disabled={loading}
               className={`px-4 py-2 rounded-lg transition ${
                 darkMode
                   ? "bg-blue-600 text-white hover:bg-blue-700"
                   : "bg-blue-600 text-white hover:bg-blue-700"
               }`}
             >
-              Add Note
+              {loading ? "Saving..." : "Add Note"}
             </button>
           </div>
         </form>
