@@ -5,7 +5,6 @@ import RevenueExpense from "../components/dashboard/RevenueExpense";
 import AddNew from "../components/dashboard/AddNew";
 import PurchaseTable from "../components/dashboard/PurchaseTable";
 import ClipboardList from "../components/dashboard/CustomerList";
-
 import EventPieChart from "../components/dashboard/EventPieChart";
 
 const revenueData = [
@@ -28,46 +27,49 @@ export default function Dashboard() {
 
   return (
     <div
-      className={`space-y-6 p-6 ml-64 mt-16 transition-colors duration-300 ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
-        }`}
+      className={`space-y-6 p-6 ml-64 mt-16 transition-colors duration-300 ${
+        darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
+      }`}
     >
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        {/* Stats */}
+        {/* Stat Cards */}
         <div className="col-span-1 md:col-span-4 grid grid-cols-2 gap-4">
+          {/* Employees */}
           <StatCard
-            icon={<Package className="text-cyan-400" />}
+            icon={<Users className="text-cyan-400" />}
             title="Total Employees"
             value="120"
             change="+32%"
-            color="blue"
             darkMode={darkMode}
           />
+
+          {/* Total Asset */}
           <StatCard
-            icon={<Users className="text-green-500" />}
+            icon={<Package className="text-cyan-400" />}
             title="Total Asset"
             value="324"
             change="-12%"
-            color="green"
             darkMode={darkMode}
           />
-          <div className="col-span-2 ">
+
+          <div className="col-span-2">
+            {/* Total Expenses */}
             <StatCard
-              icon={<DollarSign className="text-red-500" />}
+              icon={<DollarSign className="text-cyan-400" />}
               title="Total Expenses"
               value="$45,000"
               change="-2.5%"
-              color="purple"
               darkMode={darkMode}
             />
           </div>
         </div>
 
-        {/* Event Pie Chart */}
+        {/* Event Chart */}
         <div className="col-span-1 md:col-span-4">
           <EventPieChart darkMode={darkMode} />
         </div>
 
-        {/* Actions */}
+        {/* Add New */}
         <div className="col-span-1 md:col-span-4 flex justify-center md:justify-start w-full">
           <div className="w-full">
             <AddNew darkMode={darkMode} />
@@ -75,14 +77,14 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Graphs */}
+      {/* Revenue Graph */}
       <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-3"> {/* Changed from col-span-2 to col-span-3 to fill row since StackedReport is removed */}
+        <div className="col-span-3">
           <RevenueExpense data={revenueData} darkMode={darkMode} />
         </div>
       </div>
 
-      {/* Table */}
+      {/* Table Sections */}
       <div className="overflow-x-auto">
         <PurchaseTable darkMode={darkMode} />
       </div>

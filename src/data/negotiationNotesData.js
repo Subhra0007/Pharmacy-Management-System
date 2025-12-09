@@ -18,6 +18,10 @@ export const negotiationNotesData = {
                   negotiationDate: "2024-11-28",
                   approvedBy: "Sarah Johnson",
                   approvalDate: "2024-11-30",
+                  documents: [
+                        { name: "Offer Letter - Final", url: "#" },
+                        { name: "Counter Offer Summary", url: "#" }
+                  ],
                   notes: [
                         {
                               date: "2024-11-28",
@@ -49,6 +53,9 @@ export const negotiationNotesData = {
                   negotiationDate: "2024-12-01",
                   approvedBy: null,
                   approvalDate: null,
+                  documents: [
+                        { name: "Revised Offer Draft", url: "#" }
+                  ],
                   notes: [
                         {
                               date: "2024-12-01",
@@ -75,6 +82,9 @@ export const negotiationNotesData = {
                   negotiationDate: "2024-11-25",
                   approvedBy: "John Davis",
                   approvalDate: "2024-11-27",
+                  documents: [
+                        { name: "Remote Work Addendum", url: "#" }
+                  ],
                   notes: [
                         {
                               date: "2024-11-25",
@@ -106,6 +116,10 @@ export const negotiationNotesData = {
                   negotiationDate: "2024-11-22",
                   approvedBy: "Lisa Anderson",
                   approvalDate: "2024-11-24",
+                  documents: [
+                        { name: "Relocation Package Details", url: "#" },
+                        { name: "Approval Memo", url: "#" }
+                  ],
                   notes: [
                         {
                               date: "2024-11-22",
@@ -132,6 +146,7 @@ export const negotiationNotesData = {
                   negotiationDate: "2024-11-20",
                   approvedBy: "Sarah Johnson",
                   approvalDate: "2024-11-21",
+                  documents: [],
                   notes: [
                         {
                               date: "2024-11-20",
@@ -158,6 +173,7 @@ export const negotiationNotesData = {
                   negotiationDate: "2024-12-03",
                   approvedBy: null,
                   approvalDate: null,
+                  documents: [],
                   notes: [
                         {
                               date: "2024-12-03",

@@ -1,10 +1,35 @@
+import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { MessageCircle, CheckCircle, Clock, XCircle, Calendar, Plus, DollarSign, User } from "lucide-react";
+import { MessageCircle, CheckCircle, Clock, XCircle, Calendar, Plus, DollarSign, User, Paperclip } from "lucide-react";
 import { negotiationNotesData } from "../data/negotiationNotesData";
 
 export default function NegotiationNotes() {
       const { darkMode } = useOutletContext();
-      const { metrics, negotiations } = negotiationNotesData;
+      const { metrics, negotiations: negotiationData } = negotiationNotesData;
+      const [negotiations, setNegotiations] = useState(negotiationData);
+      const [docInputs, setDocInputs] = useState({});
+
+      const handleDocInputChange = (id, field, value) => {
+            setDocInputs((prev) => ({
+                  ...prev,
+                  [id]: { name: "", url: "", ...(prev[id] || {}), [field]: value }
+            }));
+      };
+
+      const handleAddDocument = (id) => {
+            const input = docInputs[id] || {};
+            if (!input.name || !input.url) return;
+
+            setNegotiations((prev) =>
+                  prev.map((neg) =>
+                        neg.id === id
+                              ? { ...neg, documents: [...(neg.documents || []), { name: input.name, url: input.url }] }
+                              : neg
+                  )
+            );
+
+            setDocInputs((prev) => ({ ...prev, [id]: { name: "", url: "" } }));
+      };
 
       return (
             <div
@@ -64,7 +89,10 @@ export default function NegotiationNotes() {
 
                         <div className="divide-y dark:divide-gray-700">
                               {negotiations.map((negotiation) => (
-                                    <div key={negotiation.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                                    <div
+                                          key={negotiation.id}
+                                          className={`p-4 transition-colors ${darkMode ? "hover:bg-gray-700" : "bg-white hover:bg-gray-100"}`}
+                                    >
                                           <div className="flex flex-col gap-4">
                                                 {/* Header */}
                                                 <div className="flex items-start justify-between">
@@ -160,6 +188,55 @@ export default function NegotiationNotes() {
                                                                         </p>
                                                                   </div>
                                                             ))}
+                                                      </div>
+                                                </div>
+
+                                                {/* Documents */}
+                                                <div>
+                                                      <p className={`text-xs font-medium mb-2 flex items-center gap-2 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                                                            <Paperclip size={14} /> Documents
+                                                      </p>
+                                                      <div className="space-y-2 mb-3">
+                                                            {(negotiation.documents || []).length === 0 && (
+                                                                  <p className={`text-sm ${darkMode ? "text-gray-500" : "text-gray-500"}`}>
+                                                                        No documents attached yet.
+                                                                  </p>
+                                                            )}
+                                                            {(negotiation.documents || []).map((doc, idx) => (
+                                                                  <a
+                                                                        key={idx}
+                                                                        href={doc.url}
+                                                                        target="_blank"
+                                                                        rel="noreferrer"
+                                                                        className={`flex items-center gap-2 text-sm underline ${darkMode ? "text-blue-200" : "text-blue-700"}`}
+                                                                  >
+                                                                        <Paperclip size={14} />
+                                                                        {doc.name}
+                                                                  </a>
+                                                            ))}
+                                                      </div>
+
+                                                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                                            <input
+                                                                  type="text"
+                                                                  placeholder="Document name"
+                                                                  value={(docInputs[negotiation.id]?.name) || ""}
+                                                                  onChange={(e) => handleDocInputChange(negotiation.id, "name", e.target.value)}
+                                                                  className={`text-sm rounded-md px-3 py-2 border w-full ${darkMode ? "bg-gray-700 border-gray-600 text-gray-100" : "bg-white border-gray-200"}`}
+                                                            />
+                                                            <input
+                                                                  type="text"
+                                                                  placeholder="Link or path"
+                                                                  value={(docInputs[negotiation.id]?.url) || ""}
+                                                                  onChange={(e) => handleDocInputChange(negotiation.id, "url", e.target.value)}
+                                                                  className={`text-sm rounded-md px-3 py-2 border w-full ${darkMode ? "bg-gray-700 border-gray-600 text-gray-100" : "bg-white border-gray-200"}`}
+                                                            />
+                                                            <button
+                                                                  onClick={() => handleAddDocument(negotiation.id)}
+                                                                  className="flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white"
+                                                            >
+                                                                  <Plus size={16} /> Add Document
+                                                            </button>
                                                       </div>
                                                 </div>
 

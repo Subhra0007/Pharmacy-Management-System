@@ -70,7 +70,10 @@ export default function Progress() {
 
                         <div className="divide-y dark:divide-gray-700">
                               {employees.map((employee) => (
-                                    <div key={employee.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                                    <div
+                                          key={employee.id}
+                                          className={`p-4 transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-white hover:bg-gray-100"}`}
+                                    >
                                           <div className="flex flex-col gap-4">
                                                 {/* Employee Header */}
                                                 <div className="flex items-start justify-between">

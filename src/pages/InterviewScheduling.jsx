@@ -71,7 +71,10 @@ export default function InterviewScheduling() {
 
                         <div className="divide-y dark:divide-gray-700">
                               {interviews.map((interview) => (
-                                    <div key={interview.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                                    <div
+                                          key={interview.id}
+                                          className={`p-4 transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-white hover:bg-gray-100"}`}
+                                    >
                                           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                                                 <div className="flex gap-4 items-start flex-1">
                                                       {/* Candidate Info */}

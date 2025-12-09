@@ -71,7 +71,10 @@ export default function OfferManagement() {
 
                         <div className="divide-y dark:divide-gray-700">
                               {offers.map((offer) => (
-                                    <div key={offer.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                                    <div
+                                          key={offer.id}
+                                          className={`p-4 transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-white hover:bg-gray-100"}`}
+                                    >
                                           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                                                 <div className="flex gap-4 items-start flex-1">
                                                       <img src={offer.candidateAvatar} alt={offer.candidateName} className="w-12 h-12 rounded-full object-cover" />

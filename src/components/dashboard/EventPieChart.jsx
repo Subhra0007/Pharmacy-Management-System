@@ -12,7 +12,7 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 export default function EventPieChart({ darkMode }) {
       return (
             <div
-                  className={`p-4 shadow rounded-md transition-colors duration-300 flex flex-col items-center justify-center ${darkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"
+                  className={`p-4 shadow rounded-xl transition-colors duration-300 flex flex-col items-center justify-center ${darkMode ?  "bg-gray-700 text-gray-100" : "bg-white text-gray-900 "
                         }`}
                   style={{ height: "100%" }}
             >

@@ -85,7 +85,10 @@ export default function Compliance() {
 
                         <div className="divide-y dark:divide-gray-700">
                               {requirements.map((req) => (
-                                    <div key={req.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                                    <div
+                                          key={req.id}
+                                          className={`p-4 transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-white hover:bg-gray-100"}`}
+                                    >
                                           <div className="flex flex-col gap-4">
                                                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                                                       <div className="flex-1">

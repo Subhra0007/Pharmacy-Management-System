@@ -85,14 +85,14 @@ export default function AssetList({ darkMode }) {
               <td className="p-2">{asset.assignedTo}</td>
               <td className="p-2">${asset.value}</td>
               <td className="p-2 flex gap-2 justify-center">
-                <button
+                {/* <button
                   className={`p-1 rounded transition ${darkMode
                       ? "bg-blue-600 text-white hover:bg-blue-700"
                       : "bg-blue-500 text-white hover:bg-blue-600"
                     }`}
                 >
                   <Printer size={16} />
-                </button>
+                </button> */}
                 <button
                   className={`p-1 rounded transition ${darkMode
                       ? "bg-green-600 text-white hover:bg-green-700"

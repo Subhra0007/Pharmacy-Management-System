@@ -20,10 +20,11 @@ export default function AddNew({ darkMode }) {
     <div
       className={`rounded-xl shadow p-4 flex flex-col gap-3 w-full space-y-4 transition-colors duration-300 ${darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
         }`}
+        style={{ height: "100%" }}
     >
       <button
         onClick={handleAddOrder}
-        className={`flex items-center gap-2 px-4 py-4 rounded-lg transition ${darkMode
+        className={`mt-5 flex items-center gap-2 px-4 py-4 rounded-lg transition ${darkMode
           ? "bg-blue-600 text-white hover:bg-blue-700"
           : "bg-blue-600 text-white hover:bg-blue-700"
           }`}
