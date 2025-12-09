@@ -19,6 +19,7 @@ import JobPostings from "./pages/JobPostings";
 import CandidatePipeline from "./pages/CandidatePipeline";
 import InterviewScheduling from "./pages/InterviewScheduling";
 import OfferManagement from "./pages/OfferManagement";
+import Login from "./pages/Login";
 import NegotiationNotes from "./pages/NegotiationNotes";
 import TimeSheet from "./pages/TimeSheet";
 import PTOList from "./pages/PTOList";
@@ -42,6 +43,7 @@ import Expenses from "./pages/Expenses";
 import Employee from "./pages/Employees";
 import ReturnProduct from "./pages/ReturnProduct";
 import Branch from "./pages/Branch";
+import AiAssistant from "./pages/AiAssistant";
 
 // Add Forms
 import AddCustomer from "./addform/AddCustomer";
@@ -62,6 +64,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route element={<Layout />}>
           {/* Pages */}
           <Route path="/" element={<Dashboard />} />
@@ -77,6 +80,7 @@ function App() {
           <Route path="/workflow" element={<Workflow />} />
           <Route path="/event-tracker" element={<MeetingTracker />} />
           <Route path="/task-management" element={<TaskManagement />} />
+          <Route path="/ai-assistant" element={<AiAssistant />} />
           <Route path="/job-postings" element={<JobPostings />} />
           <Route path="/candidate-pipeline" element={<CandidatePipeline />} />
           <Route path="/interview-scheduling" element={<InterviewScheduling />} />
