@@ -56,7 +56,7 @@ const Sidebar = ({ darkMode }) => {
 
   return (
     <div
-      className={`w-64 h-screen fixed top-0 left-0 shadow-xl flex flex-col transition-colors duration-300 z-50 border-r ${
+      className={`w-64 h-screen fixed top-0 left-0 shadow-xl flex flex-col transition-colors duration-300 z-50  ${
         darkMode
           ? "bg-gray-800 text-gray-100 border-gray-700"
           : "bg-white text-gray-900 border-gray-100"

@@ -6,7 +6,7 @@ export const employeeProfilesData = {
       location: "New York, USA",
       email: "alice.johnson@example.com",
       phone: "+1 (555) 123-4567",
-      avatar: "https://i.pravatar.cc/150?u=alice",
+      avatar: "https://i.pravatar.cc/150?u=charlie",
       coverImage: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
       joinedDate: "Mar 15, 2021",
       manager: "Marcus Thorne",
