@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Bell, Sun, Moon, ScrollText } from "lucide-react";
-import { IoChatboxEllipsesOutline } from "react-icons/io5";
+import { IoChatboxEllipsesOutline, IoSparklesOutline } from "react-icons/io5"; // Import IoSparklesOutline
 import navbar from "../assets/navbar.jpg";
 
 const Navbar = ({ darkMode, setDarkMode }) => {
@@ -29,6 +29,12 @@ const Navbar = ({ darkMode, setDarkMode }) => {
     }
   };
 
+  // Add a handler for the AI button
+  const handleAIAssistant = () => {
+    console.log("AI Assistant button clicked!");
+    // You can add navigation or state logic here for the AI feature
+  };
+
   return (
     <>
       <div
@@ -47,8 +53,10 @@ const Navbar = ({ darkMode, setDarkMode }) => {
             {darkMode ? <Sun size={18} /> : <Moon size={18} />}
           </button>
         </div>
-        <div className="flex-1 max-w-lg">
-          <div className="relative">
+        
+        {/* MODIFIED SEARCH AND AI ICON SECTION */}
+        <div className="flex items-center flex-1 max-w-lg space-x-2"> 
+          <div className="relative flex-1">
             <Search
               className={`absolute left-3 top-2.5 ${
                 darkMode ? "text-gray-300" : "text-gray-400"
@@ -65,7 +73,18 @@ const Navbar = ({ darkMode, setDarkMode }) => {
               }`}
             />
           </div>
+          {/* AI ICON BUTTON */}
+          <button
+            onClick={handleAIAssistant}
+            className={`p-2 rounded-lg transition-colors duration-300 cursor-pointer ${ // Added text-blue-500 for distinction
+              darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
+            }`}
+            title="AI Assistant"
+          >
+            <IoSparklesOutline size={16} />
+          </button>
         </div>
+        
         <div className="flex items-center gap-2 mx-2">
           <button
             onClick={() => setShowMessagesPopup(true)}

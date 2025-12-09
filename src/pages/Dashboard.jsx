@@ -35,7 +35,7 @@ export default function Dashboard() {
         {/* Stats */}
         <div className="col-span-1 md:col-span-4 grid grid-cols-2 gap-4">
           <StatCard
-            icon={<Package className="text-blue-500" />}
+            icon={<Package className="text-cyan-400" />}
             title="Total Employees"
             value="120"
             change="+32%"
@@ -50,7 +50,7 @@ export default function Dashboard() {
             color="green"
             darkMode={darkMode}
           />
-          <div className="col-span-2">
+          <div className="col-span-2 ">
             <StatCard
               icon={<DollarSign className="text-red-500" />}
               title="Total Expenses"
