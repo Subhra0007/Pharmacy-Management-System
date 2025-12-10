@@ -1,11 +1,43 @@
 import { useOutletContext } from "react-router-dom";
-import { Bot, ChevronDown, ArrowUpRight, Lightbulb, Send, Info } from "lucide-react";
+import { 
+    Bot, 
+    ChevronDown, 
+    ArrowUpRight, 
+    Lightbulb, 
+    Send, 
+    Plus, // New icon for the attachment button
+    Image, // New icon for Image upload option
+    Video, // New icon for Video upload option
+    File,  // New icon for File upload option
+    Info 
+} from "lucide-react";
 import { useState } from "react";
+
+// Component for the new upload dropdown items
+const UploadOption = ({ icon: Icon, label, darkMode }) => (
+    <button
+        // Using a functional approach for demonstration, replace with actual upload handlers
+        onClick={() => alert(`Simulating ${label} upload...`)} 
+        className={`
+            w-full flex items-center gap-3 p-3 rounded-lg text-left transition-colors duration-200
+            ${darkMode 
+                ? "hover:bg-gray-700 text-gray-200" 
+                : "hover:bg-gray-100 text-gray-700"
+            }
+        `}
+    >
+        <Icon size={20} className="flex-shrink-0 text-fuchsia-500 dark:text-cyan-400" />
+        <span className="text-sm font-medium">{label}</span>
+    </button>
+);
+
 
 export default function AiAssistant() {
     // Assuming useOutletContext provides a 'darkMode' boolean
     const { darkMode } = useOutletContext(); 
     const [query, setQuery] = useState(""); 
+    // State to manage the visibility of the upload dropdown
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
 
     const segments = [
         "Disaster Prone Homeowners: Assess risk factors and policy gaps.",
@@ -14,7 +46,8 @@ export default function AiAssistant() {
         "Researcher Walk Through: Summarize competitive landscape for new product.",
     ];
 
-    // Card component for cleaner rendering
+    // Card component for cleaner rendering (omitted for brevity, assume it remains the same)
+    // ... SegmentCard component definition here ...
     const SegmentCard = ({ title, isHighlighted }) => {
         const primaryTitle = title.split(":")[0].trim();
         const description = title.split(":")[1]?.trim();
@@ -66,6 +99,7 @@ export default function AiAssistant() {
         );
     };
 
+
     return (
         <div
             className={`min-h-screen ml-64 mt-16 px-6 py-10 transition-colors duration-300 ${
@@ -74,7 +108,7 @@ export default function AiAssistant() {
         >
             <div className="max-w-5xl mx-auto space-y-10">
                 
-                {/* Header & Title Section */}
+                {/* Header & Title Section (omitted for brevity, assume it remains the same) */}
                 <div className="flex flex-col items-center text-center gap-2">
                     {/* Bot Title with Gradient/Accent Color */}
                     <div className="flex items-center gap-2 text-fuchsia-600 dark:text-cyan-400 font-semibold">
@@ -100,6 +134,7 @@ export default function AiAssistant() {
                     </div>
                 </div>
 
+
                 {/* AI Interaction Area (The main card container) */}
                 <div
                     className={`rounded-3xl shadow-2xl p-6 sm:p-10 border transition-colors duration-300 ${
@@ -109,14 +144,49 @@ export default function AiAssistant() {
                     }`}
                 >
                     
-                    {/* Elevated Input Field */}
+                    {/* Elevated Input Field with Attachment Dropdown */}
                     <div className="relative mb-10">
+                        
+                        {/* Attachment/Plus Button */}
+                        <button
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                            className={`absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full transition-colors duration-200 z-10
+                                ${darkMode 
+                                    ? "text-gray-400 hover:bg-gray-600" 
+                                    : "text-gray-500 hover:bg-gray-200"
+                                }
+                            `}
+                            aria-label="Attach File"
+                        >
+                            <Plus size={22} className={`
+                                transition-transform duration-300 
+                                ${isDropdownOpen ? "rotate-45" : "rotate-0"}
+                            `} />
+                        </button>
+
+                        {/* Dropdown Menu for Upload Options */}
+                        {isDropdownOpen && (
+                            <div
+                                className={`absolute left-0 bottom-[calc(100%+10px)] w-56 rounded-xl shadow-2xl p-2 z-20 
+                                    ${darkMode 
+                                        ? "bg-gray-700 border border-gray-600" 
+                                        : "bg-white border border-gray-200"
+                                    }
+                                `}
+                            >
+                                <UploadOption icon={Image} label="Upload Image" darkMode={darkMode} />
+                                <UploadOption icon={Video} label="Upload Video" darkMode={darkMode} />
+                                <UploadOption icon={File} label="Upload Document" darkMode={darkMode} />
+                            </div>
+                        )}
+
                         <input
                             type="text"
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
+                            // Increased left padding to accommodate the attachment button and its area
                             placeholder="Type your question or choose a starting prompt below..."
-                            className={`w-full py-4 pl-6 pr-24 rounded-2xl border-2 text-lg font-medium transition-colors duration-300 shadow-lg ${
+                            className={`w-full py-4 pl-14 pr-24 rounded-2xl border-2 text-lg font-medium transition-colors duration-300 shadow-lg ${
                                 darkMode
                                     ? "bg-gray-700 border-gray-600 text-gray-100 placeholder:text-gray-400 focus:border-cyan-400"
                                     : "bg-gray-50 border-gray-200 text-gray-900 placeholder:text-gray-500 focus:border-fuchsia-700"
@@ -137,25 +207,22 @@ export default function AiAssistant() {
                     </div>
 
                     {/* Quick Start Prompts (Segments) */}
-                    <div className="space-y-4">
+                    {/* <div className="space-y-4">
                         <div className="flex items-center gap-2">
                             <Info size={18} className="text-gray-500" />
                             <p className="text-sm font-semibold tracking-wider uppercase text-gray-500 dark:text-gray-400">
                                 Quick Start Prompts
                             </p>
                         </div>
-
                         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                             {segments.map((segment, index) => (
                                 <SegmentCard 
                                     key={index} 
                                     title={segment} 
-                                    // Highlight only the first card as default/example
-                                    // isHighlighted={index === 0}
                                 />
                             ))}
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

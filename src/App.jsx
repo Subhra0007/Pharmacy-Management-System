@@ -95,7 +95,7 @@ function App() {
           <Route path="/progress" element={<Progress />} />
           <Route path="/compliance" element={<Compliance />} />
           <Route path="/customer" element={<Customer />} />
-          <Route path="/analytics" element={<Analytics />} />
+          {/* <Route path="/analytics" element={<Analytics />} /> */}
           <Route path="/suppliers" element={<Suppliers />} />
           <Route path="/products" element={<Product />} />
           <Route path="/doctor" element={<Doctor />} />

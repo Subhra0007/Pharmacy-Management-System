@@ -1,18 +1,29 @@
 // addform/AddNote.jsx
-import { useState } from "react";
-import { useOutletContext, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import api from "../components/axios"; // import axios instance
 import { Plus, X } from "lucide-react";
 
 export default function AddNewNote() {
   const { darkMode } = useOutletContext();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check if we are in edit mode
+  const { editing, note } = location.state || {}; // Retrieve passed state
 
   const [formData, setFormData] = useState({
     note: ""
   });
 
   const [loading, setLoading] = useState(false);
+
+  // Pre-fill data if editing
+  useEffect(() => {
+    if (editing && note) {
+      setFormData({ note: note.content });
+    }
+  }, [editing, note]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,14 +34,20 @@ export default function AddNewNote() {
     e.preventDefault();
     try {
       setLoading(true);
-      // Send to backend
-      await api.post("/notes", { content: formData.note });
+      
+      if (editing && note?._id) {
+        // Update existing note
+        await api.put(`/notes/${note._id}`, { content: formData.note });
+      } else {
+        // Create new note
+        await api.post("/notes", { content: formData.note });
+      }
 
       // After success, go back to Notes page
       navigate("/notes");
     } catch (error) {
-      console.error("Error adding note:", error.response?.data || error.message);
-      alert("Failed to add note!");
+      console.error("Error saving note:", error.response?.data || error.message);
+      alert("Failed to save note!");
     } finally {
       setLoading(false);
     }
@@ -44,9 +61,9 @@ export default function AddNewNote() {
     >
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Add New Note</h2>
+          <h2 className="text-2xl font-bold">{editing ? "Edit Note" : "Add New Note"}</h2>
           <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
-            Create a new note for pharmacy operations or reminders.
+            {editing ? "Update your note details below." : "Create a new note for pharmacy operations or reminders."}
           </p>
         </div>
       </div>
@@ -95,7 +112,7 @@ export default function AddNewNote() {
                   : "bg-blue-600 text-white hover:bg-blue-700"
               }`}
             >
-              {loading ? "Saving..." : "Add Note"}
+              {loading ? "Saving..." : (editing ? "Update Note" : "Add Note")}
             </button>
           </div>
         </form>

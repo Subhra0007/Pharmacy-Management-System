@@ -101,21 +101,21 @@ export default function Employee() {
 
   // Handle Add New Employee
   const handleAddEmployee = () => {
-     navigate("/add-new-employee");
+    navigate("/add-new-employee");
   };
 
   // Handle View action
   const handleView = (employee) => {
     console.log("View Employee:", employee);
     alert(`Viewing ${employee.name}'s details:\n` +
-          `ID: ${employee.id}\n` +
-          `Mobile: ${employee.mobile}\n` +
-          `Email: ${employee.email}\n` +
-          `Aadhaar: ${employee.aadhaar}\n` +
-          `Address: ${employee.address}\n` +
-          `Role: ${employee.role}\n` +
-          `Salary: ${employee.salary}`
-        );
+      `ID: ${employee.id}\n` +
+      `Mobile: ${employee.mobile}\n` +
+      `Email: ${employee.email}\n` +
+      `Aadhaar: ${employee.aadhaar}\n` +
+      `Address: ${employee.address}\n` +
+      `Role: ${employee.role}\n` +
+      `Salary: ${employee.salary}`
+    );
   };
 
   // Handle Edit action
@@ -255,9 +255,8 @@ export default function Employee() {
 
   return (
     <div
-      className={`p-6 space-y-6 transition-colors duration-300 mt-16 ml-64 ${
-        darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
-      }`}
+      className={`p-6 space-y-6 transition-colors duration-300 mt-16 pl-64 ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
+        }`}
     >
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -269,11 +268,10 @@ export default function Employee() {
         </div>
         <button
           onClick={handleAddEmployee}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
-            darkMode
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${darkMode
               ? "bg-blue-600 text-white hover:bg-blue-700"
               : "bg-blue-600 text-white hover:bg-blue-700"
-          }`}
+            }`}
         >
           <Plus size={18} />
           Add New Employee
@@ -282,16 +280,14 @@ export default function Employee() {
 
       {/* Employee List */}
       <div
-        className={`p-4 shadow rounded-md transition-colors duration-300 ${
-          darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
-        }`}
+        className={`p-4 shadow rounded-md transition-colors duration-300 ${darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
+          }`}
       >
         <h3 className="text-lg font-semibold mb-4">Employee List</h3>
         <div className="overflow-x-auto">
           <table
-            className={`min-w-[1200px] border rounded-lg text-center  ${
-              darkMode ? "border-gray-600" : "border-gray-200"
-            }`}
+            className={`min-w-[1200px] border rounded-lg text-center  ${darkMode ? "border-gray-600" : "border-gray-200"
+              }`}
           >
             <thead
               className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
@@ -319,11 +315,10 @@ export default function Employee() {
                 employees.map((emp, index) => (
                   <tr
                     key={index}
-                    className={`border-t transition-colors duration-300 ${
-                      darkMode
+                    className={`border-t transition-colors duration-300 ${darkMode
                         ? "border-gray-600 hover:bg-gray-600"
                         : "border-gray-200 hover:bg-gray-50"
-                    }`}
+                      }`}
                   >
                     <td className="p-3">{emp.id}</td>
                     <td className="p-3">{emp.name}</td>
@@ -336,33 +331,30 @@ export default function Employee() {
                     <td className="p-3 flex gap-2 justify-center">
                       <button
                         onClick={() => handleView(emp)}
-                        className={`p-2 rounded transition ${
-                          darkMode
+                        className={`p-2 rounded transition ${darkMode
                             ? "bg-green-600 text-white hover:bg-green-700"
                             : "bg-green-500 text-white hover:bg-green-600"
-                        }`}
+                          }`}
                         title="View"
                       >
                         <Eye size={16} />
                       </button>
                       <button
                         onClick={() => handleEdit(emp)}
-                        className={`p-2 rounded transition ${
-                          darkMode
+                        className={`p-2 rounded transition ${darkMode
                             ? "bg-blue-600 text-white hover:bg-blue-700"
                             : "bg-blue-500 text-white hover:bg-blue-600"
-                        }`}
+                          }`}
                         title="Edit"
                       >
                         <Edit size={16} />
                       </button>
                       <button
                         onClick={() => handleDelete(index)}
-                        className={`p-2 rounded transition ${
-                          darkMode
+                        className={`p-2 rounded transition ${darkMode
                             ? "bg-orange-600 text-white hover:bg-orange-700"
                             : "bg-orange-500 text-white hover:bg-orange-600"
-                        }`}
+                          }`}
                         title="Delete"
                       >
                         <Trash2 size={16} />
@@ -378,20 +370,18 @@ export default function Employee() {
 
       {/* Graph Section */}
       <div
-        className={`p-4 shadow rounded-md transition-colors duration-300 ${
-          darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
-        }`}
+        className={`p-4 shadow rounded-md transition-colors duration-300 ${darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
+          }`}
       >
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold">Employee Hours Worked</h3>
           <select
             value={filterMode}
             onChange={handleFilterChange}
-            className={`border text-xs px-2 py-1 rounded-md transition appearance-none ${
-              darkMode
+            className={`border text-xs px-2 py-1 rounded-md transition appearance-none ${darkMode
                 ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500 focus:bg-gray-500"
                 : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200 focus:bg-gray-200"
-            }`}
+              }`}
           >
             <option value="week">This Week</option>
             <option value="month">This Month</option>

@@ -215,10 +215,10 @@ const Sidebar = ({ darkMode }) => {
                                 <ActiveIndicator path="/compliance" /> {/* ADDED */}
                                 <ShieldCheck size={18} /> <span>Compliance</span>
                             </Link>
-                            <Link to="/analytics" className={linkClass("/analytics")}>
+                            {/* <Link to="/analytics" className={linkClass("/analytics")}>
                                 <ActiveIndicator path="/analytics" />
                                 <BarChart size={18} /> <span>Analytics</span>
-                            </Link>
+                            </Link> */}
                         </div>
                     </div>
 
