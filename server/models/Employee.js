@@ -8,6 +8,18 @@ const EmployeeSchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    lowercase: true
+  },
+  password: {
+    type: String,
+    required: true,
+    trim: true
+  },
   name: {
     type: String,
     required: true,
@@ -39,6 +51,10 @@ const EmployeeSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true
+  },
+  branch: {
+    type: String,
+    default: ""
   },
   salary: {
     type: Number,

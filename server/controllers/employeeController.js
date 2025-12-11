@@ -1,8 +1,33 @@
 const Employee = require('../models/Employee');
 
+const generateEmployeeId = async () => {
+  const count = await Employee.countDocuments();
+  return `EMP${String(count + 1).padStart(4, '0')}`;
+};
+
+const generateUsername = async (name) => {
+  const base = name.toLowerCase().replace(/\s+/g, '.');
+  let candidate = `${base}.${Math.floor(1000 + Math.random() * 9000)}`;
+  // Ensure uniqueness
+  // Loop is acceptable because we expect few collisions.
+  while (await Employee.exists({ username: candidate })) {
+    candidate = `${base}.${Math.floor(1000 + Math.random() * 9000)}`;
+  }
+  return candidate;
+};
+
+const generatePassword = () => {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789!@#$%';
+  let pwd = '';
+  for (let i = 0; i < 10; i += 1) {
+    pwd += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return pwd;
+};
+
 exports.getAllEmployees = async (req, res) => {
   try {
-    const employees = await Employee.find();
+    const employees = await Employee.find().sort({ createdAt: -1 });
     res.status(200).json(employees);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching employees', error: error.message });
@@ -23,11 +48,19 @@ exports.getEmployeeById = async (req, res) => {
 
 exports.createEmployee = async (req, res) => {
   try {
-    const { employeeId, name, mobile, email, aadhaar, address, role, salary, hoursWorked } = req.body;
+    const { name, mobile, email, aadhaar, address, role, salary, hoursWorked, branch } = req.body;
 
     // Validate required fields
-    if (!employeeId || !name || !mobile || !email || !aadhaar || !address || !role || !salary) {
+    if (!name || !mobile || !email || !aadhaar || !address || !role || !salary) {
       return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    if (await Employee.exists({ email })) {
+      return res.status(409).json({ message: 'Employee with this email already exists' });
+    }
+
+    if (await Employee.exists({ aadhaar })) {
+      return res.status(409).json({ message: 'Employee with this Aadhaar already exists' });
     }
 
     // Validate hoursWorked array if provided
@@ -35,14 +68,21 @@ exports.createEmployee = async (req, res) => {
       return res.status(400).json({ message: 'Invalid hoursWorked data' });
     }
 
+    const employeeId = await generateEmployeeId();
+    const username = await generateUsername(name);
+    const password = generatePassword();
+
     const employee = new Employee({
       employeeId,
+      username,
+      password,
       name,
       mobile,
       email,
       aadhaar,
       address,
       role,
+      branch: branch || '',
       salary,
       hoursWorked: hoursWorked || []
     });
@@ -56,7 +96,7 @@ exports.createEmployee = async (req, res) => {
 
 exports.updateEmployee = async (req, res) => {
   try {
-    const { name, mobile, email, aadhaar, address, role, salary, hoursWorked } = req.body;
+    const { name, mobile, email, aadhaar, address, role, salary, hoursWorked, branch, username, password } = req.body;
 
     const updateData = {};
     if (name) updateData.name = name;
@@ -65,6 +105,9 @@ exports.updateEmployee = async (req, res) => {
     if (aadhaar) updateData.aadhaar = aadhaar;
     if (address) updateData.address = address;
     if (role) updateData.role = role;
+    if (branch !== undefined) updateData.branch = branch;
+    if (username) updateData.username = username;
+    if (password) updateData.password = password;
     if (salary) updateData.salary = salary;
     if (hoursWorked) {
       if (!Array.isArray(hoursWorked) || hoursWorked.some(h => !h.month || h.hours === undefined)) {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import {
   DollarSign,
@@ -15,20 +15,93 @@ import {
   FileText
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
-import { expensesData } from "../data/expensesData";
+import { fetchExpenses, deleteExpense } from "../api/expenseService";
+import { fetchEmployees } from "../api/employeeService";
 
 export default function Expenses() {
   const { darkMode } = useOutletContext();
   const navigate = useNavigate();
-  const { metrics, expenseRecords, employeeSalaries, supplierOrders } = expensesData;
-
+  const [expenses, setExpenses] = useState([]);
+  const [salaries, setSalaries] = useState([]);
   const [activeTab, setActiveTab] = useState("expenses");
   const [showModal, setShowModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    Promise.all([fetchExpenses(), fetchEmployees()])
+      .then(([expensesData, employeesData]) => {
+        setExpenses(expensesData);
+        setSalaries(employeesData);
+        setError(null);
+      })
+      .catch((err) => setError(err.message || "Failed to load data"));
+  }, []);
+
+  const metrics = useMemo(() => {
+    const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+    const monthlyBudget = 0;
+    const remainingBudget = monthlyBudget ? Math.max(monthlyBudget - totalExpenses, 0) : 0;
+    const pendingPayments = expenses.filter((e) => e.status !== "Paid").length;
+    return { totalExpenses, monthlyBudget, remainingBudget, pendingPayments };
+  }, [expenses]);
 
   const handleViewOrder = (order) => {
     setSelectedOrder(order);
     setShowModal(true);
+  };
+
+  const handleEdit = (expenseId) => {
+    navigate(`/edit-expense/${expenseId}`);
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this expense?")) return;
+    try {
+      await deleteExpense(id);
+      setExpenses((prev) => prev.filter((e) => e.expenseId !== id));
+    } catch (err) {
+      alert(err.message || "Failed to delete expense");
+    }
+  };
+
+  const filteredExpenses = useMemo(() => {
+    if (!searchQuery.trim()) return expenses;
+    const query = searchQuery.toLowerCase();
+    return expenses.filter(
+      (exp) =>
+        (exp.category || "").toLowerCase().includes(query) ||
+        (exp.description || "").toLowerCase().includes(query) ||
+        (exp.vendor || "").toLowerCase().includes(query) ||
+        (exp.status || "").toLowerCase().includes(query)
+    );
+  }, [expenses, searchQuery]);
+
+  const handleExport = () => {
+    const headers = ["Category", "Description", "Vendor", "Date", "Amount", "Status"];
+    const csvContent = [
+      headers.join(","),
+      ...filteredExpenses.map((exp) =>
+        [
+          exp.category,
+          `"${exp.description}"`, // Quote description to handle commas
+          exp.vendor,
+          exp.date,
+          exp.amount,
+          exp.status,
+        ].join(",")
+      ),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "expenses.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -44,12 +117,17 @@ export default function Expenses() {
           </p>
         </div>
         <div className="flex gap-2">
-          <button className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700 text-gray-200" : "bg-white hover:bg-gray-50 text-gray-700 border border-gray-200"
-            }`}>
+          <button
+            onClick={handleExport}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700 text-gray-200" : "bg-white hover:bg-gray-50 text-gray-700 border border-gray-200"
+              }`}>
             <Download size={16} /> Export
           </button>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-            <Plus size={18} /> Add Transaction
+          <button
+            onClick={() => navigate("/add-expense")}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+          >
+            <Plus size={18} /> Add Expense
           </button>
         </div>
       </div>
@@ -58,7 +136,7 @@ export default function Expenses() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard
           title="Total Expenses"
-          value={`$${metrics.totalExpenses.toLocaleString()}`}
+          value={`₹${metrics.totalExpenses.toLocaleString()}`}
           icon={<DollarSign size={24} className="text-red-500" />}
           trend="-2.5%"
           trendUp={false}
@@ -66,13 +144,13 @@ export default function Expenses() {
         />
         <StatCard
           title="Monthly Budget"
-          value={`$${metrics.monthlyBudget.toLocaleString()}`}
+          value={`₹${metrics.monthlyBudget.toLocaleString()}`}
           icon={<CreditCard size={24} className="text-blue-500" />}
           darkMode={darkMode}
         />
         <StatCard
           title="Remaining Budget"
-          value={`$${metrics.remainingBudget.toLocaleString()}`}
+          value={`₹${metrics.remainingBudget.toLocaleString()}`}
           icon={<TrendingUp size={24} className="text-green-500" />}
           darkMode={darkMode}
         />
@@ -88,13 +166,13 @@ export default function Expenses() {
       <div className={`rounded-xl shadow-sm mb-6 ${darkMode ? "bg-gray-800" : "bg-white"}`}>
         <div className="p-4 border-b dark:border-gray-700 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
-            {['expenses', 'salaries', 'suppliers'].map((tab) => (
+            {['expenses'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${activeTab === tab
-                    ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-                    : darkMode ? "text-gray-400 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"
+                  ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+                  : darkMode ? "text-gray-400 hover:bg-gray-700" : "text-gray-600 hover:bg-gray-100"
                   }`}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -108,9 +186,11 @@ export default function Expenses() {
               <input
                 type="text"
                 placeholder={`Search ${activeTab}...`}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className={`w-full pl-9 pr-4 py-2 rounded-lg text-sm border focus:ring-2 focus:ring-blue-500 outline-none transition-colors ${darkMode
-                    ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-500"
-                    : "bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400"
+                  ? "bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-500"
+                  : "bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400"
                   }`}
               />
             </div>
@@ -123,6 +203,11 @@ export default function Expenses() {
 
         {/* Content */}
         <div className="overflow-x-auto">
+          {error && (
+            <div className="p-3 text-sm text-orange-800 bg-orange-50 border border-orange-200 mb-3 rounded">
+              {error}
+            </div>
+          )}
           {activeTab === 'expenses' && (
             <table className="w-full text-left text-sm">
               <thead className={`border-b ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-100 bg-gray-50"}`}>
@@ -136,7 +221,7 @@ export default function Expenses() {
                 </tr>
               </thead>
               <tbody className="divide-y dark:divide-gray-700">
-                {expenseRecords.map((record) => (
+                {filteredExpenses.map((record) => (
                   <tr key={record.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <td className="p-4 font-medium">{record.category}</td>
                     <td className="p-4">
@@ -146,19 +231,29 @@ export default function Expenses() {
                       </div>
                     </td>
                     <td className="p-4 text-gray-500 dark:text-gray-400">{record.date}</td>
-                    <td className="p-4 font-semibold">${record.amount.toLocaleString()}</td>
+                    <td className="p-4 font-semibold">₹{record.amount.toLocaleString()}</td>
                     <td className="p-4">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${record.status === 'Paid' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' :
-                          record.status === 'Pending' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300' :
-                            'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300'
+                        record.status === 'Pending' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300' :
+                          'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300'
                         }`}>
                         {record.status}
                       </span>
                     </td>
                     <td className="p-4 text-right">
                       <div className="flex justify-end gap-2">
-                        <button className="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors"><Edit size={16} /></button>
-                        <button className="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors"><Trash2 size={16} /></button>
+                        <button
+                          onClick={() => handleEdit(record.expenseId)}
+                          className="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded transition-colors"
+                        >
+                          <Edit size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(record.expenseId)}
+                          className="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded transition-colors"
+                        >
+                          <Trash2 size={16} />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -180,17 +275,15 @@ export default function Expenses() {
                 </tr>
               </thead>
               <tbody className="divide-y dark:divide-gray-700">
-                {employeeSalaries.map((emp) => (
+                {salaries.map((emp) => (
                   <tr key={emp.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <td className="p-4 font-medium">{emp.name}</td>
                     <td className="p-4 text-gray-500 dark:text-gray-400">{emp.role}</td>
-                    <td className="p-4 text-gray-500 dark:text-gray-400">{emp.paymentDate}</td>
-                    <td className="p-4 font-semibold">${emp.salary.toLocaleString()}</td>
+                    <td className="p-4 text-gray-500 dark:text-gray-400">{"N/A"}</td>
+                    <td className="p-4 font-semibold">₹{emp.salary.toLocaleString()}</td>
                     <td className="p-4">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${emp.status === 'Paid' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' :
-                          'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300'
-                        }`}>
-                        {emp.status}
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300`}>
+                        Active
                       </span>
                     </td>
                     <td className="p-4 text-right">
@@ -217,15 +310,15 @@ export default function Expenses() {
                 </tr>
               </thead>
               <tbody className="divide-y dark:divide-gray-700">
-                {supplierOrders.map((order) => (
+                {[].map((order) => (
                   <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <td className="p-4 font-medium">{order.supplier}</td>
                     <td className="p-4 text-gray-500 dark:text-gray-400">{order.id}</td>
-                    <td className="p-4 font-semibold">${order.totalAmount.toLocaleString()}</td>
-                    <td className="p-4 text-red-500">${order.dueAmount.toLocaleString()}</td>
+                    <td className="p-4 font-semibold">₹{order.totalAmount.toLocaleString()}</td>
+                    <td className="p-4 text-red-500">₹{order.dueAmount.toLocaleString()}</td>
                     <td className="p-4">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${order.status === 'Received' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' :
-                          'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                        'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
                         }`}>
                         {order.status}
                       </span>
@@ -309,8 +402,8 @@ function StatCard({ title, value, icon, trend, trendUp, darkMode }) {
         </div>
         {trend && (
           <span className={`text-xs font-medium px-2 py-1 rounded-full ${trendUp
-              ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-              : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+            ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+            : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
             }`}>
             {trend}
           </span>

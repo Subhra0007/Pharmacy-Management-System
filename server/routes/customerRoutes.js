@@ -1,12 +1,12 @@
 //routes/customerRoutes.js
-import express from "express";
-import {
+const express = require("express");
+const {
   getCustomers,
   getCustomerById,
   createCustomer,
   updateCustomer,
   deleteCustomer,
-} from "../controllers/customerController.js";
+} = require("../controllers/customerController.js");
 
 const router = express.Router();
 
@@ -16,4 +16,4 @@ router.post("/", createCustomer);
 router.put("/:id", updateCustomer);
 router.delete("/:id", deleteCustomer);
 
-export default router;
+module.exports = router;

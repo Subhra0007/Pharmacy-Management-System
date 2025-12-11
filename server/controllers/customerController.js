@@ -1,8 +1,8 @@
 //controllers/customerController.js
-import Customer from "../models/Customer.js";
+const Customer = require("../models/Customer.js");
 
 // Get all customers
-export const getCustomers = async (req, res) => {
+exports.getCustomers = async (req, res) => {
   try {
     const customers = await Customer.find();
     res.json(customers);
@@ -12,7 +12,7 @@ export const getCustomers = async (req, res) => {
 };
 
 // Get single customer
-export const getCustomerById = async (req, res) => {
+exports.getCustomerById = async (req, res) => {
   try {
     const customer = await Customer.findById(req.params.id);
     if (!customer) return res.status(404).json({ error: "Customer not found" });
@@ -23,7 +23,7 @@ export const getCustomerById = async (req, res) => {
 };
 
 // Add new customer
-export const createCustomer = async (req, res) => {
+exports.createCustomer = async (req, res) => {
   try {
     const customer = new Customer(req.body);
     await customer.save();
@@ -34,7 +34,7 @@ export const createCustomer = async (req, res) => {
 };
 
 // Update customer
-export const updateCustomer = async (req, res) => {
+exports.updateCustomer = async (req, res) => {
   try {
     const updated = await Customer.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updated) return res.status(404).json({ error: "Customer not found" });
@@ -45,7 +45,7 @@ export const updateCustomer = async (req, res) => {
 };
 
 // Delete customer
-export const deleteCustomer = async (req, res) => {
+exports.deleteCustomer = async (req, res) => {
   try {
     const deleted = await Customer.findByIdAndDelete(req.params.id);
     if (!deleted) return res.status(404).json({ error: "Customer not found" });

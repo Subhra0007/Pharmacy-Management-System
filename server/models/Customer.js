@@ -1,5 +1,5 @@
 //models/Customer.js
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const doctorSchema = new mongoose.Schema({
   name: String,
@@ -35,4 +35,4 @@ const customerSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Customer", customerSchema);
+module.exports = mongoose.model("Customer", customerSchema);

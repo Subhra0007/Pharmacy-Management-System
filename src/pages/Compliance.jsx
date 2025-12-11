@@ -1,10 +1,88 @@
-import { useOutletContext } from "react-router-dom";
+import { useEffect, useState, useMemo } from "react";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { ShieldCheck, CheckCircle, AlertTriangle, XCircle, Calendar, Plus, FileText, AlertOctagon, Clock } from "lucide-react";
-import { complianceData } from "../data/complianceData";
+import { fetchCompliances, updateCompliance, deleteCompliance } from "../api/complianceService";
 
 export default function Compliance() {
       const { darkMode } = useOutletContext();
-      const { metrics, requirements } = complianceData;
+      const navigate = useNavigate();
+      const [requirements, setRequirements] = useState([]);
+      const [error, setError] = useState(null);
+      const [editModal, setEditModal] = useState(null);
+      const [saving, setSaving] = useState(false);
+      const [selectedCategory, setSelectedCategory] = useState("All Categories");
+      const [selectedStatus, setSelectedStatus] = useState("All Status");
+
+
+      useEffect(() => {
+            fetchCompliances()
+                  .then(setRequirements)
+                  .catch((err) => setError(err.message));
+      }, []);
+
+      const metrics = useMemo(() => {
+            return {
+                  totalRequirements: requirements.length,
+                  compliant: requirements.filter(r => r.status === 'Compliant').length,
+                  pending: requirements.filter(r => r.status === 'Pending').length,
+                  nonCompliant: requirements.filter(r => r.status === 'Non-Compliant').length,
+                  nextAudit: "Oct 15, 2024" // Static for now, or could be dynamic if added to backend
+            };
+      }, [requirements]);
+
+      const filteredRequirements = useMemo(() => {
+            return requirements.filter(req => {
+                  const categoryMatch = selectedCategory === "All Categories" || req.category === selectedCategory;
+                  const statusMatch = selectedStatus === "All Status" || req.status === selectedStatus;
+                  return categoryMatch && statusMatch;
+            });
+      }, [requirements, selectedCategory, selectedStatus]);
+
+
+      const startEdit = (req) => {
+            setEditModal({ ...req });
+      };
+
+      const handleEditChange = (e) => {
+            const { name, value } = e.target;
+            setEditModal((prev) => ({ ...prev, [name]: name === "complianceRate" ? Number(value) : value }));
+      };
+
+      const submitEdit = async (e) => {
+            e.preventDefault();
+            if (!editModal) return;
+            setSaving(true);
+            try {
+                  const updated = await updateCompliance(editModal.requirementId, {
+                        title: editModal.title,
+                        description: editModal.description,
+                        category: editModal.category,
+                        frequency: editModal.frequency,
+                        lastAuditDate: editModal.lastAuditDate,
+                        nextDueDate: editModal.nextDueDate,
+                        status: editModal.status,
+                        complianceRate: editModal.complianceRate,
+                        assignee: editModal.assignee,
+                        priority: editModal.priority,
+                  });
+                  setRequirements((prev) => prev.map((r) => (r.requirementId === updated.requirementId ? updated : r)));
+                  setEditModal(null);
+            } catch (err) {
+                  alert(err.message || "Failed to update requirement");
+            } finally {
+                  setSaving(false);
+            }
+      };
+
+      const handleDelete = async (id) => {
+            if (!window.confirm("Delete this requirement?")) return;
+            try {
+                  await deleteCompliance(id);
+                  setRequirements((prev) => prev.filter((r) => r.requirementId !== id));
+            } catch (err) {
+                  alert(err.message || "Failed to delete requirement");
+            }
+      };
 
       return (
             <div
@@ -15,7 +93,9 @@ export default function Compliance() {
                         <h1 className="text-2xl font-bold flex items-center gap-2">
                               <ShieldCheck /> Compliance Management
                         </h1>
-                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                        <button
+                              onClick={() => navigate("/add-compliance")}
+                              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
                               <Plus size={18} /> Add Requirement
                         </button>
                   </div>
@@ -68,13 +148,21 @@ export default function Compliance() {
                         <div className="p-4 border-b dark:border-gray-700 flex justify-between items-center">
                               <h2 className="font-bold text-lg">Requirements & Standards</h2>
                               <div className="flex gap-2">
-                                    <select className={`text-sm rounded-md px-2 py-1 border ${darkMode ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
+                                    <select
+                                          value={selectedCategory}
+                                          onChange={(e) => setSelectedCategory(e.target.value)}
+                                          className={`text-sm rounded-md px-2 py-1 border ${darkMode ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"}`}
+                                    >
                                           <option>All Categories</option>
                                           <option>Regulatory</option>
                                           <option>Safety</option>
                                           <option>Operations</option>
                                     </select>
-                                    <select className={`text-sm rounded-md px-2 py-1 border ${darkMode ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"}`}>
+                                    <select
+                                          value={selectedStatus}
+                                          onChange={(e) => setSelectedStatus(e.target.value)}
+                                          className={`text-sm rounded-md px-2 py-1 border ${darkMode ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"}`}
+                                    >
                                           <option>All Status</option>
                                           <option>Compliant</option>
                                           <option>Pending</option>
@@ -84,7 +172,7 @@ export default function Compliance() {
                         </div>
 
                         <div className="divide-y dark:divide-gray-700">
-                              {requirements.map((req) => (
+                              {filteredRequirements.map((req) => (
                                     <div
                                           key={req.id}
                                           className={`p-4 transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700" : "bg-white hover:bg-gray-100"}`}
@@ -128,6 +216,14 @@ export default function Compliance() {
                                                             <div className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
                                                                   Goal: 100%
                                                             </div>
+                                                            <div className="flex gap-2 pt-1">
+                                                                  <button onClick={() => startEdit(req)} className="text-blue-600 text-xs hover:underline">
+                                                                        Edit
+                                                                  </button>
+                                                                  <button onClick={() => handleDelete(req.requirementId)} className="text-red-600 text-xs hover:underline">
+                                                                        Delete
+                                                                  </button>
+                                                            </div>
                                                       </div>
                                                 </div>
 
@@ -169,6 +265,124 @@ export default function Compliance() {
                               ))}
                         </div>
                   </div>
+
+
+                  {editModal && (
+                        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+                              <div
+                                    className={`w-full max-w-lg rounded-lg shadow-lg ${darkMode ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"
+                                          }`}
+                              >
+                                    <div className="p-4 border-b dark:border-gray-700 flex justify-between items-center">
+                                          <h3 className="text-lg font-semibold">Edit Requirement</h3>
+                                          <button onClick={() => setEditModal(null)} className="text-sm text-gray-500 hover:text-gray-700">
+                                                Close
+                                          </button>
+                                    </div>
+                                    <form onSubmit={submitEdit} className="p-4 space-y-3">
+                                          <input
+                                                name="title"
+                                                value={editModal.title}
+                                                onChange={handleEditChange}
+                                                required
+                                                placeholder="Title"
+                                                className="w-full rounded border px-3 py-2 text-sm dark:bg-gray-700 dark:border-gray-600"
+                                          />
+                                          <textarea
+                                                name="description"
+                                                value={editModal.description}
+                                                onChange={handleEditChange}
+                                                placeholder="Description"
+                                                className="w-full rounded border px-3 py-2 text-sm dark:bg-gray-700 dark:border-gray-600"
+                                          />
+                                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                <input
+                                                      name="category"
+                                                      value={editModal.category}
+                                                      onChange={handleEditChange}
+                                                      placeholder="Category"
+                                                      className="w-full rounded border px-3 py-2 text-sm dark:bg-gray-700 dark:border-gray-600"
+                                                />
+                                                <input
+                                                      name="frequency"
+                                                      value={editModal.frequency}
+                                                      onChange={handleEditChange}
+                                                      placeholder="Frequency"
+                                                      className="w-full rounded border px-3 py-2 text-sm dark:bg-gray-700 dark:border-gray-600"
+                                                />
+                                                <input
+                                                      type="date"
+                                                      name="lastAuditDate"
+                                                      value={editModal.lastAuditDate}
+                                                      onChange={handleEditChange}
+                                                      className="w-full rounded border px-3 py-2 text-sm dark:bg-gray-700 dark:border-gray-600"
+                                                />
+                                                <input
+                                                      type="date"
+                                                      name="nextDueDate"
+                                                      value={editModal.nextDueDate}
+                                                      onChange={handleEditChange}
+                                                      className="w-full rounded border px-3 py-2 text-sm dark:bg-gray-700 dark:border-gray-600"
+                                                />
+                                                <select
+                                                      name="status"
+                                                      value={editModal.status}
+                                                      onChange={handleEditChange}
+                                                      className="w-full rounded border px-3 py-2 text-sm dark:bg-gray-700 dark:border-gray-600"
+                                                >
+                                                      <option>Compliant</option>
+                                                      <option>Pending</option>
+                                                      <option>Non-Compliant</option>
+                                                </select>
+                                                <select
+                                                      name="priority"
+                                                      value={editModal.priority}
+                                                      onChange={handleEditChange}
+                                                      className="w-full rounded border px-3 py-2 text-sm dark:bg-gray-700 dark:border-gray-600"
+                                                >
+                                                      <option>Low</option>
+                                                      <option>Medium</option>
+                                                      <option>High</option>
+                                                      <option>Critical</option>
+                                                </select>
+                                                <input
+                                                      type="number"
+                                                      name="complianceRate"
+                                                      value={editModal.complianceRate}
+                                                      onChange={handleEditChange}
+                                                      min="0"
+                                                      max="100"
+                                                      placeholder="Compliance %"
+                                                      className="w-full rounded border px-3 py-2 text-sm dark:bg-gray-700 dark:border-gray-600"
+                                                />
+                                                <input
+                                                      name="assignee"
+                                                      value={editModal.assignee}
+                                                      onChange={handleEditChange}
+                                                      placeholder="Assignee"
+                                                      className="w-full rounded border px-3 py-2 text-sm dark:bg-gray-700 dark:border-gray-600"
+                                                />
+                                          </div>
+                                          <div className="flex justify-end gap-2 pt-2">
+                                                <button
+                                                      type="button"
+                                                      onClick={() => setEditModal(null)}
+                                                      className="rounded border px-4 py-2 text-sm dark:border-gray-600"
+                                                >
+                                                      Cancel
+                                                </button>
+                                                <button
+                                                      type="submit"
+                                                      disabled={saving}
+                                                      className="rounded bg-blue-600 px-4 py-2 text-sm text-white disabled:opacity-60"
+                                                >
+                                                      {saving ? "Saving..." : "Save"}
+                                                </button>
+                                          </div>
+                                    </form>
+                              </div>
+                        </div>
+                  )}
             </div>
       );
 }

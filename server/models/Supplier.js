@@ -1,5 +1,5 @@
 //models/Supplier.js
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const supplierSchema = new mongoose.Schema(
   {
@@ -26,4 +26,4 @@ supplierSchema.pre("save", async function (next) {
 });
 
 const Supplier = mongoose.model("Supplier", supplierSchema);
-export default Supplier;
+module.exports = Supplier;

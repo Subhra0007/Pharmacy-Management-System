@@ -59,6 +59,8 @@ import AddEmployee from "./addform/AddEmployee";
 import AddNewEmployee from "./addform/AddNewEmployee";
 import AddReturnProduct from "./addform/AddReturnProduct";
 import AddBranch from "./addform/AddBranch";
+import AddCompliance from "./addform/AddCompliance";
+import AddJobPosting from "./addform/AddJobPosting";
 
 function App() {
   return (
@@ -119,10 +121,13 @@ function App() {
           <Route path="/add-customer-order" element={<AddCustomerOrder />} />
           <Route path="/add-note" element={<AddNote />} />
           <Route path="/add-expense" element={<AddExpense />} />
+          <Route path="/edit-expense/:id" element={<AddExpense />} />
           <Route path="/add-employee" element={<AddEmployee />} />
           <Route path="/add-new-employee" element={<AddNewEmployee />} />
           <Route path="/add-return-product" element={<AddReturnProduct />} />
           <Route path="/add-branch" element={<AddBranch />} />
+          <Route path="/add-compliance" element={<AddCompliance />} />
+          <Route path="/add-job-posting" element={<AddJobPosting />} />
         </Route>
       </Routes>
     </BrowserRouter>

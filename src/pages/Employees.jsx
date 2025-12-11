@@ -1,300 +1,300 @@
-import { useState, useEffect, useRef } from "react";
-import { Plus, Edit, Eye, Trash2, ChevronDown } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Plus, Edit, Eye, Trash2, Search, Filter, Download, X } from "lucide-react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import Chart from "chart.js/auto";
+import Card from "../components/common/Card";
+import PageHeader from "../components/common/PageHeader";
+import StatBadge from "../components/common/StatBadge";
+import { EmployeeProvider, useEmployees } from "../context/EmployeeContext";
 
-export default function Employee() {
+export default function EmployeePage() {
+  return (
+    <EmployeeProvider>
+      <EmployeeContent />
+    </EmployeeProvider>
+  );
+}
+
+function EmployeeContent() {
   const { darkMode } = useOutletContext();
   const navigate = useNavigate();
-  // Dummy employee data
-  const initialEmployees = [
-    {
-      id: "#EMP001",
-      name: "Ravi Sharma",
-      mobile: "9876543210",
-      email: "ravi.sharma@example.com",
-      aadhaar: "123456789012",
-      address: "Mumbai, 400001",
-      role: "Employee",
-      salary: 5000,
-      hoursWorked: [
-        { month: "Jan", hours: 160 },
-        { month: "Feb", hours: 150 },
-        { month: "Mar", hours: 170 },
-        { month: "Apr", hours: 165 },
-        { month: "May", hours: 155 },
-        { month: "Jun", hours: 180 },
-        { month: "Jul", hours: 175 },
-        { month: "Aug", hours: 160 },
-      ],
-    },
-    {
-      id: "#EMP002",
-      name: "Priya Patel",
-      mobile: "8765432109",
-      email: "priya.patel@example.com",
-      aadhaar: "234567890123",
-      address: "Delhi, 110001",
-      role: "Employee",
-      salary: 5000,
-      hoursWorked: [
-        { month: "Jan", hours: 140 },
-        { month: "Feb", hours: 145 },
-        { month: "Mar", hours: 150 },
-        { month: "Apr", hours: 135 },
-        { month: "May", hours: 160 },
-        { month: "Jun", hours: 155 },
-        { month: "Jul", hours: 165 },
-        { month: "Aug", hours: 150 },
-      ],
-    },
-    {
-      id: "#EMP003",
-      name: "Amit Kumar",
-      mobile: "7654321098",
-      email: "amit.kumar@example.com",
-      aadhaar: "345678901234",
-      address: "Bangalore, 560001",
-      role: "Technician",
-      salary: 6000,
-      hoursWorked: [
-        { month: "Jan", hours: 170 },
-        { month: "Feb", hours: 160 },
-        { month: "Mar", hours: 175 },
-        { month: "Apr", hours: 165 },
-        { month: "May", hours: 180 },
-        { month: "Jun", hours: 170 },
-        { month: "Jul", hours: 160 },
-        { month: "Aug", hours: 155 },
-      ],
-    },
-    {
-      id: "#EMP004",
-      name: "Sneha Gupta",
-      mobile: "6543210987",
-      email: "sneha.gupta@example.com",
-      aadhaar: "456789012345",
-      address: "Chennai, 600001",
-      role: "Staff",
-      salary: 9000,
-      hoursWorked: [
-        { month: "Jan", hours: 150 },
-        { month: "Feb", hours: 155 },
-        { month: "Mar", hours: 160 },
-        { month: "Apr", hours: 170 },
-        { month: "May", hours: 165 },
-        { month: "Jun", hours: 175 },
-        { month: "Jul", hours: 160 },
-        { month: "Aug", hours: 180 },
-      ],
-    },
-  ];
+  const { employees, loading, error, deleteEmployee, updateEmployee } = useEmployees();
 
-  // State for employee list and filter mode
-  const [employees, setEmployees] = useState(initialEmployees);
-  const [filterMode, setFilterMode] = useState("week"); // Default to "week"
+  const [filterMode, setFilterMode] = useState("week");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [locationFilter, setLocationFilter] = useState("all");
+  const [sortKey, setSortKey] = useState("name");
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [panelMode, setPanelMode] = useState("view");
+  const [selected, setSelected] = useState(null);
+  const [editable, setEditable] = useState(null);
 
-  // Handle filter mode change via dropdown
-  const handleFilterChange = (e) => {
-    setFilterMode(e.target.value);
-  };
-
-  // Handle Add New Employee
-  const handleAddEmployee = () => {
-    navigate("/add-new-employee");
-  };
-
-  // Handle View action
-  const handleView = (employee) => {
-    console.log("View Employee:", employee);
-    alert(`Viewing ${employee.name}'s details:\n` +
-      `ID: ${employee.id}\n` +
-      `Mobile: ${employee.mobile}\n` +
-      `Email: ${employee.email}\n` +
-      `Aadhaar: ${employee.aadhaar}\n` +
-      `Address: ${employee.address}\n` +
-      `Role: ${employee.role}\n` +
-      `Salary: ${employee.salary}`
-    );
-  };
-
-  // Handle Edit action
-  const handleEdit = (employee) => {
-    console.log("Edit Employee:", employee);
-    alert(`Editing ${employee.name}'s details`);
-  };
-
-  // Handle Delete action
-  const handleDelete = (index) => {
-    if (window.confirm("Are you sure you want to delete this employee?")) {
-      setEmployees(employees.filter((_, i) => i !== index));
-      console.log("Deleted employee at index:", index);
-    }
-  };
-
-  // Chart setup
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
 
+  const uniqueRoles = useMemo(
+    () => ["all", ...new Set(employees.map((e) => e.role))],
+    [employees]
+  );
+
+  const uniqueLocations = useMemo(
+    () =>
+      ["all", ...new Set(employees.map((e) => (e.address || "").split(",")[0].trim()).filter(Boolean))],
+    [employees]
+  );
+
+  const filteredEmployees = useMemo(() => {
+    const term = searchTerm.toLowerCase();
+    return employees
+      .filter((e) => (roleFilter === "all" ? true : e.role === roleFilter))
+      .filter((e) => (locationFilter === "all" ? true : e.address.startsWith(locationFilter)))
+      .filter(
+        (e) =>
+          e.name.toLowerCase().includes(term) ||
+          e.email.toLowerCase().includes(term) ||
+          e.id.toLowerCase().includes(term)
+      )
+      .sort((a, b) => {
+        if (sortKey === "salary") return b.salary - a.salary;
+        if (sortKey === "role") return a.role.localeCompare(b.role);
+        return a.name.localeCompare(b.name);
+      });
+  }, [employees, roleFilter, locationFilter, searchTerm, sortKey]);
+
+  const stats = useMemo(() => {
+    const total = employees.length;
+    const byRole = employees.reduce((acc, emp) => {
+      acc[emp.role] = (acc[emp.role] || 0) + 1;
+      return acc;
+    }, {});
+    const avgSalary = total === 0 ? 0 : Math.round(employees.reduce((s, e) => s + e.salary, 0) / total);
+    return { total, byRole, avgSalary };
+  }, [employees]);
+
   useEffect(() => {
+    if (!chartRef.current || loading) return;
+
     const ctx = chartRef.current.getContext("2d");
+    if (chartInstance.current) chartInstance.current.destroy();
 
-    if (chartInstance.current) {
-      chartInstance.current.destroy();
-    }
-
-    const labels = employees.map((emp) => emp.name);
+    const labels = filteredEmployees.map((emp) => emp.name);
     let data;
     let maxValue;
 
     if (filterMode === "month") {
-      data = employees.map((emp) =>
-        emp.name === "Ravi Sharma" ? 5 : emp.hoursWorked[emp.hoursWorked.length - 1].hours
-      );
+      data = filteredEmployees.map((emp) => emp.hoursWorked[emp.hoursWorked.length - 1].hours);
       maxValue = 200;
     } else if (filterMode === "week") {
-      data = employees.map((emp) =>
-        emp.name === "Ravi Sharma" ? 3 : Math.round(emp.hoursWorked[emp.hoursWorked.length - 1].hours / 4)
-      );
+      data = filteredEmployees.map((emp) => Math.round(emp.hoursWorked[emp.hoursWorked.length - 1].hours / 4));
       maxValue = 50;
     } else {
-      data = employees.map((emp) => emp.hoursWorked.reduce((sum, entry) => sum + entry.hours, 0));
+      data = filteredEmployees.map((emp) => emp.hoursWorked.reduce((sum, entry) => sum + entry.hours, 0));
       maxValue = 2000;
     }
 
-    const textColor = darkMode ? "#94a3b8" : "#1a202c"; // Deep text color
+    const textColor = darkMode ? "#cbd5e1" : "#1f2937";
 
     chartInstance.current = new Chart(ctx, {
       type: "bar",
       data: {
-        labels: labels,
-        datasets: [{
-          label: `Hours Worked (${filterMode === "month" ? "This Month" : filterMode === "week" ? "This Week" : "This Year"})`,
-          data: data,
-          backgroundColor: [
-            "rgba(0, 128, 128, 0.8)",
-            "rgba(0, 191, 255, 0.8)",
-            "rgba(0, 0, 255, 0.8)",
-            "rgba(128, 0, 128, 0.8)",
-          ],
-          borderColor: [
-            "rgba(0, 128, 128, 1)",
-            "rgba(0, 191, 255, 1)",
-            "rgba(0, 0, 255, 1)",
-            "rgba(128, 0, 128, 1)",
-          ],
-          borderWidth: 1,
-        }],
+        labels,
+        datasets: [
+          {
+            label:
+              filterMode === "month"
+                ? "Hours Worked (This Month)"
+                : filterMode === "week"
+                ? "Hours Worked (This Week)"
+                : "Hours Worked (Year)",
+            data,
+            backgroundColor: ["rgba(14, 165, 233, 0.6)"],
+            borderColor: ["rgba(14, 165, 233, 1)"],
+            borderWidth: 1,
+          },
+        ],
       },
       options: {
-        indexAxis: "y", // Horizontal bars
+        indexAxis: "y",
+        maintainAspectRatio: false,
         scales: {
           x: {
             beginAtZero: true,
             max: maxValue,
-            title: {
-              display: true,
-              text: "Hours",
-              color: textColor,
-              font: {
-                size: 14,
-                weight: "bold",
-              },
-            },
-            ticks: {
-              color: textColor,
-            },
+            ticks: { color: textColor },
+            title: { display: true, text: "Hours", color: textColor },
           },
           y: {
-            title: {
-              display: true,
-              text: "Employees",
-              color: textColor,
-              font: {
-                size: 14,
-                weight: "bold",
-              },
-            },
-            ticks: {
-              color: textColor,
-            },
+            ticks: { color: textColor },
+            title: { display: true, text: "Employees", color: textColor },
           },
         },
         plugins: {
           legend: {
-            display: true,
-            position: "top",
-            labels: {
-              color: textColor,
-              font: {
-                size: 12,
-                weight: "bold",
-              },
-            },
-          },
-          title: {
-            display: true,
-            text: "Employee Hours Worked",
-            color: textColor,
-            font: {
-              size: 18,
-              weight: "bold",
-            },
+            labels: { color: textColor },
           },
         },
-        maintainAspectRatio: false,
       },
     });
 
-    return () => {
-      if (chartInstance.current) {
-        chartInstance.current.destroy();
-      }
-    };
-  }, [employees, darkMode, filterMode]);
+    return () => chartInstance.current?.destroy();
+  }, [filteredEmployees, filterMode, darkMode, loading]);
+
+  const handleAddEmployee = () => {
+    navigate("/add-new-employee");
+  };
+
+  const openPanel = (mode, employee) => {
+    setPanelMode(mode);
+    setSelected(employee);
+    setEditable(employee ? { ...employee } : null);
+    setPanelOpen(true);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this employee?")) {
+      deleteEmployee(id);
+    }
+  };
+
+  const handleSaveEdit = (e) => {
+    e.preventDefault();
+    if (selected && editable) {
+      updateEmployee(selected.id, editable);
+      setPanelOpen(false);
+    }
+  };
+
+  const exportCsv = () => {
+    const rows = filteredEmployees.map((emp) => ({
+      id: emp.id,
+      name: emp.name,
+      mobile: emp.mobile,
+      email: emp.email,
+      aadhaar: emp.aadhaar,
+      address: emp.address,
+      role: emp.role,
+      salary: emp.salary,
+    }));
+    const header = Object.keys(rows[0] || {}).join(",");
+    const body = rows.map((r) => Object.values(r).join(",")).join("\n");
+    const blob = new Blob([`${header}\n${body}`], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "employees.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div
-      className={`p-6 space-y-6 transition-colors duration-300 mt-16 pl-64 ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
+      className={`space-y-6 transition-colors duration-300 ml-64 pt-20 ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
         }`}
     >
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Employee Management</h2>
-          <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
-            Manage employee details.
-          </p>
-        </div>
+      <PageHeader
+        title="Employee Management"
+        description="Manage employee records, filters, and hours worked."
+        action={
+          <button
+            onClick={handleAddEmployee}
+            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
+          >
+            <Plus size={18} />
+            Add New Employee
+          </button>
+        }
+      >
         <button
-          onClick={handleAddEmployee}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${darkMode
-              ? "bg-blue-600 text-white hover:bg-blue-700"
-              : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
+          onClick={exportCsv}
+          className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
+          aria-label="Export employees as CSV"
         >
-          <Plus size={18} />
-          Add New Employee
+          <Download size={16} />
+          Export CSV
         </button>
+      </PageHeader>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <StatBadge label="Total Employees" value={stats.total} />
+        {Object.entries(stats.byRole).map(([role, count]) => (
+          <StatBadge key={role} label={`Role: ${role}`} value={count} />
+        ))}
+        <StatBadge label="Avg Salary" value={`₹${stats.avgSalary}`} />
       </div>
 
-      {/* Employee List */}
-      <div
-        className={`p-4 shadow rounded-md transition-colors duration-300 ${darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
-          }`}
-      >
-        <h3 className="text-lg font-semibold mb-4">Employee List</h3>
+      <Card className="p-4">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+          <div className="flex flex-1 items-center gap-2">
+            <Search size={16} className="text-gray-400" />
+            <input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search by name, email, or ID"
+              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+              aria-label="Search employees"
+            />
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Filter size={16} className="text-gray-400" aria-hidden />
+            <select
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+              className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800"
+              aria-label="Filter by role"
+            >
+              {uniqueRoles.map((role) => (
+                <option key={role} value={role}>
+                  {role === "all" ? "All Roles" : role}
+                </option>
+              ))}
+            </select>
+            <select
+              value={locationFilter}
+              onChange={(e) => setLocationFilter(e.target.value)}
+              className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800"
+              aria-label="Filter by location"
+            >
+              {uniqueLocations.map((city) => (
+                <option key={city} value={city}>
+                  {city === "all" ? "All Locations" : city}
+                </option>
+              ))}
+            </select>
+            <select
+              value={sortKey}
+              onChange={(e) => setSortKey(e.target.value)}
+              className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800"
+              aria-label="Sort employees"
+            >
+              <option value="name">Sort: Name</option>
+              <option value="salary">Sort: Salary</option>
+              <option value="role">Sort: Role</option>
+            </select>
+          </div>
+        </div>
+      </Card>
+
+      <Card className="p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-semibold">Employee List</h3>
+          <span className="text-sm text-gray-500 dark:text-gray-400">{filteredEmployees.length} shown</span>
+        </div>
+        {error && (
+          <div className="mb-3 rounded-md border border-orange-300 bg-orange-50 px-3 py-2 text-sm text-orange-800 dark:border-orange-700 dark:bg-orange-900/30 dark:text-orange-100">
+            {error}
+          </div>
+        )}
         <div className="overflow-x-auto">
           <table
-            className={`min-w-[1200px] border rounded-lg text-center  ${darkMode ? "border-gray-600" : "border-gray-200"
-              }`}
+            className={`min-w-[1100px] border rounded-lg text-left ${darkMode ? "border-gray-600" : "border-gray-200"}`}
           >
-            <thead
-              className={darkMode ? "bg-gray-600 text-gray-100" : "bg-gray-100 text-gray-900"}
-            >
+            <thead className={`${darkMode ? "bg-gray-700 text-gray-100" : "bg-gray-100 text-gray-900"} sticky top-0 z-10`}>
               <tr>
                 <th className="p-3">Employee ID</th>
                 <th className="p-3">Name</th>
+                <th className="p-3">Username</th>
+                <th className="p-3">Password</th>
                 <th className="p-3">Mobile</th>
                 <th className="p-3">Email</th>
                 <th className="p-3">Aadhaar</th>
@@ -305,57 +305,54 @@ export default function Employee() {
               </tr>
             </thead>
             <tbody>
-              {employees.length === 0 ? (
+              {loading ? (
                 <tr>
-                  <td colSpan="8" className="p-3 text-center">
-                    No employees added yet.
+                  <td colSpan="9" className="p-4 text-center text-sm text-gray-500">
+                    Loading employees...
+                  </td>
+                </tr>
+              ) : filteredEmployees.length === 0 ? (
+                <tr>
+                  <td colSpan="9" className="p-4 text-center text-sm text-gray-500">
+                    No employees match these filters.
                   </td>
                 </tr>
               ) : (
-                employees.map((emp, index) => (
+                filteredEmployees.map((emp) => (
                   <tr
-                    key={index}
-                    className={`border-t transition-colors duration-300 ${darkMode
-                        ? "border-gray-600 hover:bg-gray-600"
-                        : "border-gray-200 hover:bg-gray-50"
+                    key={emp.id}
+                    className={`border-t transition-colors duration-300 ${darkMode ? "border-gray-600 hover:bg-gray-700" : "border-gray-200 hover:bg-gray-50"
                       }`}
                   >
                     <td className="p-3">{emp.id}</td>
-                    <td className="p-3">{emp.name}</td>
+                    <td className="p-3 font-medium">{emp.name}</td>
+                    <td className="p-3">{emp.username}</td>
+                    <td className="p-3 font-mono">{emp.password}</td>
                     <td className="p-3">{emp.mobile}</td>
                     <td className="p-3">{emp.email}</td>
                     <td className="p-3">{emp.aadhaar}</td>
                     <td className="p-3">{emp.address}</td>
                     <td className="p-3">{emp.role}</td>
-                    <td className="p-3">${emp.salary}</td>
-                    <td className="p-3 flex gap-2 justify-center">
+                    <td className="p-3">₹{emp.salary}</td>
+                    <td className="p-3 flex gap-2">
                       <button
-                        onClick={() => handleView(emp)}
-                        className={`p-2 rounded transition ${darkMode
-                            ? "bg-green-600 text-white hover:bg-green-700"
-                            : "bg-green-500 text-white hover:bg-green-600"
-                          }`}
-                        title="View"
+                        onClick={() => openPanel("view", emp)}
+                        className="rounded bg-green-600 px-3 py-2 text-white transition hover:bg-green-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400"
+                        aria-label={`View ${emp.name}`}
                       >
                         <Eye size={16} />
                       </button>
                       <button
-                        onClick={() => handleEdit(emp)}
-                        className={`p-2 rounded transition ${darkMode
-                            ? "bg-blue-600 text-white hover:bg-blue-700"
-                            : "bg-blue-500 text-white hover:bg-blue-600"
-                          }`}
-                        title="Edit"
+                        onClick={() => openPanel("edit", emp)}
+                        className="rounded bg-blue-600 px-3 py-2 text-white transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
+                        aria-label={`Edit ${emp.name}`}
                       >
                         <Edit size={16} />
                       </button>
                       <button
-                        onClick={() => handleDelete(index)}
-                        className={`p-2 rounded transition ${darkMode
-                            ? "bg-orange-600 text-white hover:bg-orange-700"
-                            : "bg-orange-500 text-white hover:bg-orange-600"
-                          }`}
-                        title="Delete"
+                        onClick={() => handleDelete(emp.id)}
+                        className="rounded bg-orange-600 px-3 py-2 text-white transition hover:bg-orange-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400"
+                        aria-label={`Delete ${emp.name}`}
                       >
                         <Trash2 size={16} />
                       </button>
@@ -366,32 +363,152 @@ export default function Employee() {
             </tbody>
           </table>
         </div>
-      </div>
+      </Card>
 
-      {/* Graph Section */}
-      <div
-        className={`p-4 shadow rounded-md transition-colors duration-300 ${darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
-          }`}
-      >
-        <div className="flex items-center justify-between mb-4">
+      {/* <Card className="p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
           <h3 className="text-lg font-semibold">Employee Hours Worked</h3>
-          <select
-            value={filterMode}
-            onChange={handleFilterChange}
-            className={`border text-xs px-2 py-1 rounded-md transition appearance-none ${darkMode
-                ? "border-gray-500 bg-gray-600 text-gray-100 hover:bg-gray-500 focus:bg-gray-500"
-                : "border-gray-300 bg-gray-100 text-gray-900 hover:bg-gray-200 focus:bg-gray-200"
-              }`}
-          >
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
-            <option value="year">This Year</option>
-          </select>
+          <div className="flex gap-2">
+            {["week", "month", "year"].map((mode) => (
+              <button
+                key={mode}
+                onClick={() => setFilterMode(mode)}
+                className={`rounded-md px-3 py-1 text-sm border transition ${filterMode === mode
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-800"
+                  }`}
+                aria-pressed={filterMode === mode}
+              >
+                {mode === "week" ? "This Week" : mode === "month" ? "This Month" : "This Year"}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="h-64">
-          <canvas ref={chartRef}></canvas>
+          <canvas ref={chartRef} aria-label="Employee hours chart" />
         </div>
-      </div>
+      </Card> */}
+
+      {panelOpen && selected && (
+        <div
+          className="fixed inset-0 z-40 flex justify-end bg-black/40"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${panelMode === "view" ? "View" : "Edit"} ${selected.name}`}
+        >
+          <div className="w-full max-w-md h-full bg-white dark:bg-gray-800 shadow-xl p-6 overflow-y-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-xl font-semibold">
+                {panelMode === "view" ? "Employee Details" : "Edit Employee"}
+              </h4>
+              <button
+                onClick={() => setPanelOpen(false)}
+                className="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                aria-label="Close panel"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {panelMode === "view" && (
+              <div className="space-y-3 text-sm">
+                <InfoRow label="Employee ID" value={selected.id} />
+                <InfoRow label="Name" value={selected.name} />
+                <InfoRow label="Mobile" value={selected.mobile} />
+                <InfoRow label="Email" value={selected.email} />
+                <InfoRow label="Aadhaar" value={selected.aadhaar} />
+                <InfoRow label="Address" value={selected.address} />
+                <InfoRow label="Role" value={selected.role} />
+                <InfoRow label="Salary" value={`$${selected.salary}`} />
+              </div>
+            )}
+
+            {panelMode === "edit" && editable && (
+              <form onSubmit={handleSaveEdit} className="space-y-3">
+                <LabeledInput
+                  label="Name"
+                  value={editable.name}
+                  onChange={(e) => setEditable({ ...editable, name: e.target.value })}
+                  required
+                />
+                <LabeledInput
+                  label="Mobile"
+                  value={editable.mobile}
+                  onChange={(e) => setEditable({ ...editable, mobile: e.target.value })}
+                  required
+                />
+                <LabeledInput
+                  label="Email"
+                  type="email"
+                  value={editable.email}
+                  onChange={(e) => setEditable({ ...editable, email: e.target.value })}
+                  required
+                />
+                <LabeledInput
+                  label="Aadhaar"
+                  value={editable.aadhaar}
+                  onChange={(e) => setEditable({ ...editable, aadhaar: e.target.value })}
+                  required
+                />
+                <LabeledInput
+                  label="Address"
+                  value={editable.address}
+                  onChange={(e) => setEditable({ ...editable, address: e.target.value })}
+                />
+                <LabeledInput
+                  label="Role"
+                  value={editable.role}
+                  onChange={(e) => setEditable({ ...editable, role: e.target.value })}
+                  required
+                />
+                <LabeledInput
+                  label="Salary"
+                  type="number"
+                  value={editable.salary}
+                  onChange={(e) => setEditable({ ...editable, salary: Number(e.target.value) || 0 })}
+                  required
+                />
+                <div className="flex justify-end gap-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setPanelOpen(false)}
+                    className="rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-700"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
+                  >
+                    Save changes
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+function InfoRow({ label, value }) {
+  return (
+    <div className="flex justify-between border-b border-gray-200 pb-2 dark:border-gray-700">
+      <span className="text-gray-500 dark:text-gray-400">{label}</span>
+      <span className="font-medium">{value}</span>
+    </div>
+  );
+}
+
+function LabeledInput({ label, ...props }) {
+  return (
+    <label className="flex flex-col gap-1 text-sm">
+      <span className="text-gray-600 dark:text-gray-300">{label}</span>
+      <input
+        className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+        {...props}
+      />
+    </label>
   );
 }

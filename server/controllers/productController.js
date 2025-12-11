@@ -1,9 +1,9 @@
 //controllers/productController.js
-import Product from "../models/Product.js";
+const Product = require("../models/Product.js");
 
 // @desc Get all products
 // @route GET /api/products
-export const getProducts = async (req, res) => {
+exports.getProducts = async (req, res) => {
   try {
     const products = await Product.find();
     res.json(products);
@@ -14,7 +14,7 @@ export const getProducts = async (req, res) => {
 
 // @desc Add a new product
 // @route POST /api/products
-export const addProduct = async (req, res) => {
+exports.addProduct = async (req, res) => {
   try {
     const product = new Product(req.body);
     const savedProduct = await product.save();
@@ -26,7 +26,7 @@ export const addProduct = async (req, res) => {
 
 // @desc Update a product
 // @route PUT /api/products/:id
-export const updateProduct = async (req, res) => {
+exports.updateProduct = async (req, res) => {
   try {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
@@ -43,7 +43,7 @@ export const updateProduct = async (req, res) => {
 
 // @desc Delete a product
 // @route DELETE /api/products/:id
-export const deleteProduct = async (req, res) => {
+exports.deleteProduct = async (req, res) => {
   try {
     const deletedProduct = await Product.findByIdAndDelete(req.params.id);
     if (!deletedProduct)

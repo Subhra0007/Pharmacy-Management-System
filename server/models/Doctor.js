@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const doctorSchema = new mongoose.Schema(
   {
@@ -25,7 +25,7 @@ const doctorSchema = new mongoose.Schema(
       required: true,
     },
     day: {
-      type: String, 
+      type: String,
       required: true,
     },
     time: {
@@ -38,4 +38,4 @@ const doctorSchema = new mongoose.Schema(
 
 const Doctor = mongoose.model("Doctor", doctorSchema);
 
-export default Doctor;
+module.exports = Doctor;

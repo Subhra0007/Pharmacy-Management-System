@@ -1,0 +1,75 @@
+﻿[dotenv@17.2.2] injecting env (3) from .env -- tip: ΓÜÖ∩╕Å  specify custom .env file path with { path: '/custom/path/.env' }
+[dotenv@17.2.2] injecting env (0) from .env -- tip: ΓÜÖ∩╕Å  enable debug logging with { debug: true }
+node : C:\Users\Subhra
+\OneDrive\Desktop\HR-M
+anagement\server\node_
+modules\router\index.j
+s:392
+At line:1 char:1
++ node index.js 2>&1 
+| Out-File -Encoding 
+utf8 run_error.txt
++ ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (C:\Users\S   
+ ubhra...er\index.    
+js:392:String) []    
+, RemoteException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+      throw new 
+TypeError('argument 
+handler must be a 
+function')
+      ^
+
+TypeError: argument 
+handler must be a 
+function
+    at Function.use (C
+:\Users\Subhra\OneDriv
+e\Desktop\HR-Managemen
+t\server\node_modules\
+router\index.js:392:13
+)
+    at 
+Function.<anonymous> (
+C:\Users\Subhra\OneDri
+ve\Desktop\HR-Manageme
+nt\server\node_modules
+\express\lib\applicati
+on.js:222:21)
+    at Array.forEach 
+(<anonymous>)
+    at Function.use (C
+:\Users\Subhra\OneDriv
+e\Desktop\HR-Managemen
+t\server\node_modules\
+express\lib\applicatio
+n.js:219:7)
+    at 
+Object.<anonymous> (C:
+\Users\Subhra\OneDrive
+\Desktop\HR-Management
+\server\index.js:25:5)
+    at 
+Module._compile (node:
+internal/modules/cjs/l
+oader:1554:14)
+    at Object..js (nod
+e:internal/modules/cjs
+/loader:1706:10)
+    at Module.load (no
+de:internal/modules/cj
+s/loader:1289:32)
+    at Function._load 
+(node:internal/modules
+/cjs/loader:1108:12)
+    at TracingChannel.
+traceSync (node:diagno
+stics_channel:322:14)
+
+Node.js v22.14.0
