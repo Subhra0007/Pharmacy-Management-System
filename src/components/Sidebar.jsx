@@ -64,7 +64,7 @@ const Sidebar = ({ darkMode }) => {
             {/* Brand Header with Gradient Text */}
             <div className="px-6 py-6">
                 <h1 className="font-extrabold text-2xl tracking-tight bg-gradient-to-r from-fuchsia-700 to-cyan-400 bg-clip-text text-transparent">
-                    HR Management 
+                   Minervasutra
                 </h1>
             </div>
 

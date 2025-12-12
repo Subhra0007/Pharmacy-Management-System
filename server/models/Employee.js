@@ -52,6 +52,12 @@ const EmployeeSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  gender: {
+    type: String,
+    required: true,
+    enum: ["Male", "Female", "Other"],
+    trim: true
+  },
   branch: {
     type: String,
     default: ""
@@ -84,7 +90,7 @@ const EmployeeSchema = new mongoose.Schema({
 });
 
 // Update timestamp on save
-EmployeeSchema.pre('save', function(next) {
+EmployeeSchema.pre('save', function (next) {
   this.updatedAt = Date.now();
   next();
 });

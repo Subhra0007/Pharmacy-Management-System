@@ -8,6 +8,7 @@ const mapEmployeeFromApi = (emp) => ({
   email: emp.email,
   aadhaar: emp.aadhaar,
   address: emp.address || "N/A",
+  gender: emp.gender || "N/A",
   role: emp.role,
   branch: emp.branch || "",
   username: emp.username,
@@ -17,15 +18,15 @@ const mapEmployeeFromApi = (emp) => ({
     emp.hoursWorked && emp.hoursWorked.length
       ? emp.hoursWorked
       : [
-          { month: "Jan", hours: 0 },
-          { month: "Feb", hours: 0 },
-          { month: "Mar", hours: 0 },
-          { month: "Apr", hours: 0 },
-          { month: "May", hours: 0 },
-          { month: "Jun", hours: 0 },
-          { month: "Jul", hours: 0 },
-          { month: "Aug", hours: 0 },
-        ],
+        { month: "Jan", hours: 0 },
+        { month: "Feb", hours: 0 },
+        { month: "Mar", hours: 0 },
+        { month: "Apr", hours: 0 },
+        { month: "May", hours: 0 },
+        { month: "Jun", hours: 0 },
+        { month: "Jul", hours: 0 },
+        { month: "Aug", hours: 0 },
+      ],
 });
 
 export async function fetchEmployees() {

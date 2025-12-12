@@ -9,14 +9,14 @@ const data = [
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-export default function EventPieChart({ darkMode }) {
+export default function EventPieChart({ darkMode, data = [], title = "Distribution" }) {
       return (
             <div
-                  className={`p-4 shadow rounded-xl transition-colors duration-300 flex flex-col items-center justify-center ${darkMode ?  "bg-gray-700 text-gray-100" : "bg-white text-gray-900 "
+                  className={`p-4 shadow rounded-xl transition-colors duration-300 flex flex-col items-center justify-center ${darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900 "
                         }`}
                   style={{ height: "100%" }}
             >
-                  <h3 className="font-semibold mb-4 self-start">Event Distribution</h3>
+                  <h3 className="font-semibold mb-4 self-start">{title}</h3>
                   <div className="w-full flex-1 min-h-[250px]">
                         <ResponsiveContainer width="100%" height="100%">
                               <PieChart>
@@ -31,7 +31,7 @@ export default function EventPieChart({ darkMode }) {
                                           dataKey="value"
                                     >
                                           {data.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                                <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
                                           ))}
                                     </Pie>
                                     <Tooltip

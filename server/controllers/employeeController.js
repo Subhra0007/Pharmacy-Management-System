@@ -1,8 +1,22 @@
 const Employee = require('../models/Employee');
 
 const generateEmployeeId = async () => {
-  const count = await Employee.countDocuments();
-  return `EMP${String(count + 1).padStart(4, '0')}`;
+  const lastEmployee = await Employee.findOne({}, { employeeId: 1 }).sort({ createdAt: -1 });
+  let nextId = 1;
+  if (lastEmployee && lastEmployee.employeeId) {
+    const lastIdNum = parseInt(lastEmployee.employeeId.replace('EMP', ''), 10);
+    if (!isNaN(lastIdNum)) {
+      nextId = lastIdNum + 1;
+    }
+  }
+  let candidate = `EMP${String(nextId).padStart(4, '0')}`;
+
+  // Double check uniqueness
+  while (await Employee.exists({ employeeId: candidate })) {
+    nextId++;
+    candidate = `EMP${String(nextId).padStart(4, '0')}`;
+  }
+  return candidate;
 };
 
 const generateUsername = async (name) => {
@@ -48,10 +62,10 @@ exports.getEmployeeById = async (req, res) => {
 
 exports.createEmployee = async (req, res) => {
   try {
-    const { name, mobile, email, aadhaar, address, role, salary, hoursWorked, branch } = req.body;
+    const { name, mobile, email, aadhaar, address, role, gender, salary, hoursWorked, branch } = req.body;
 
     // Validate required fields
-    if (!name || !mobile || !email || !aadhaar || !address || !role || !salary) {
+    if (!name || !mobile || !email || !aadhaar || !address || !role || !gender || !salary) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
@@ -76,12 +90,13 @@ exports.createEmployee = async (req, res) => {
       employeeId,
       username,
       password,
-      name,
+      name: typeof name === 'string' ? name.trim() : name,
       mobile,
-      email,
+      email: typeof email === 'string' ? email.trim().toLowerCase() : email,
       aadhaar,
-      address,
-      role,
+      address: typeof address === 'string' ? address.trim() : address,
+      role: typeof role === 'string' ? role.trim() : role,
+      gender: typeof gender === 'string' ? gender.trim() : gender,
       branch: branch || '',
       salary,
       hoursWorked: hoursWorked || []
@@ -96,15 +111,16 @@ exports.createEmployee = async (req, res) => {
 
 exports.updateEmployee = async (req, res) => {
   try {
-    const { name, mobile, email, aadhaar, address, role, salary, hoursWorked, branch, username, password } = req.body;
+    const { name, mobile, email, aadhaar, address, role, gender, salary, hoursWorked, branch, username, password } = req.body;
 
     const updateData = {};
-    if (name) updateData.name = name;
+    if (name) updateData.name = typeof name === 'string' ? name.trim() : name;
     if (mobile) updateData.mobile = mobile;
-    if (email) updateData.email = email;
+    if (email) updateData.email = typeof email === 'string' ? email.trim().toLowerCase() : email;
     if (aadhaar) updateData.aadhaar = aadhaar;
-    if (address) updateData.address = address;
-    if (role) updateData.role = role;
+    if (address) updateData.address = typeof address === 'string' ? address.trim() : address;
+    if (role) updateData.role = typeof role === 'string' ? role.trim() : role;
+    if (gender) updateData.gender = typeof gender === 'string' ? gender.trim() : gender;
     if (branch !== undefined) updateData.branch = branch;
     if (username) updateData.username = username;
     if (password) updateData.password = password;

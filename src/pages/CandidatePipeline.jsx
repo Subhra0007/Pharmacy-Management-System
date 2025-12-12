@@ -1,10 +1,45 @@
 import { useOutletContext } from "react-router-dom";
-import { Filter, Users, Phone, Briefcase, CheckCircle, XCircle, Calendar, Plus, Mail, Star } from "lucide-react";
-import { candidatePipelineData } from "../data/candidatePipelineData";
+import { Filter, Users, Phone, Briefcase, CheckCircle, XCircle, Calendar, Plus, Mail, Star, User, Edit, Trash2 } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { Link } from "react-router-dom";
+import { fetchCandidates, deleteCandidate } from "../api/candidateService";
 
 export default function CandidatePipeline() {
       const { darkMode } = useOutletContext();
-      const { metrics, stages, candidates } = candidatePipelineData;
+      const [candidates, setCandidates] = useState([]);
+      const [loading, setLoading] = useState(true);
+
+      useEffect(() => {
+            fetchCandidates()
+                  .then(setCandidates)
+                  .catch(err => console.error("Failed to fetch candidates", err))
+                  .finally(() => setLoading(false));
+      }, []);
+
+      const metrics = useMemo(() => {
+            return {
+                  totalCandidates: candidates.length,
+                  screening: candidates.filter(c => c.stage === 'Screening').length,
+                  interviewing: candidates.filter(c => ['Phone Interview', 'Technical Interview', 'Final Interview'].includes(c.stage)).length,
+                  offered: candidates.filter(c => c.stage === 'Offer').length
+            }
+      }, [candidates]);
+
+      const stages = useMemo(() => {
+            const counts = candidates.reduce((acc, curr) => {
+                  acc[curr.stage] = (acc[curr.stage] || 0) + 1;
+                  return acc;
+            }, {});
+
+            return [
+                  { id: 1, name: "Screening", count: counts['Screening'] || 0, color: "blue" },
+                  { id: 2, name: "Phone Interview", count: counts['Phone Interview'] || 0, color: "purple" },
+                  { id: 3, name: "Technical Interview", count: counts['Technical Interview'] || 0, color: "indigo" },
+                  { id: 4, name: "Final Interview", count: counts['Final Interview'] || 0, color: "orange" },
+                  { id: 5, name: "Offer", count: counts['Offer'] || 0, color: "green" },
+                  { id: 6, name: "Rejected", count: counts['Rejected'] || 0, color: "red" },
+            ];
+      }, [candidates]);
 
       return (
             <div
@@ -15,9 +50,9 @@ export default function CandidatePipeline() {
                         <h1 className="text-2xl font-bold flex items-center gap-2">
                               <Filter /> Candidate Pipeline
                         </h1>
-                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                        <Link to="/add-candidate" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
                               <Plus size={18} /> Add Candidate
-                        </button>
+                        </Link>
                   </div>
 
                   {/* Metrics Row */}
@@ -100,7 +135,17 @@ export default function CandidatePipeline() {
                                     >
                                           <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                                                 <div className="flex gap-4 items-start flex-1">
-                                                      <img src={candidate.avatar} alt={candidate.name} className="w-12 h-12 rounded-full object-cover" />
+                                                      {candidate.avatar && candidate.avatar !== 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150' ? (
+                                                            <img
+                                                                  src={candidate.avatar}
+                                                                  alt={candidate.name}
+                                                                  className="w-12 h-12 rounded-full object-cover"
+                                                            />
+                                                      ) : (
+                                                            <div className={`w-12 h-12 rounded-full flex items-center justify-center ${darkMode ? "bg-gray-700" : "bg-gray-200"}`}>
+                                                                  <User size={24} className={darkMode ? "text-gray-400" : "text-gray-500"} />
+                                                            </div>
+                                                      )}
                                                       <div className="flex-1">
                                                             <div className="flex items-start justify-between gap-2">
                                                                   <div>
@@ -173,10 +218,18 @@ export default function CandidatePipeline() {
                                                             {candidate.status}
                                                       </div>
 
-                                                      <button className={`text-xs px-3 py-1 rounded ${darkMode ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-600 hover:bg-blue-700"
-                                                            } text-white transition-colors`}>
-                                                            View Profile
-                                                      </button>
+                                                      <div className="flex gap-2">
+                                                            <Link to={`/edit-candidate/${candidate.id}`} className={`p-1.5 rounded transition-colors ${darkMode ? "bg-blue-900/30 text-blue-400 hover:bg-blue-900/50" : "bg-blue-100 text-blue-600 hover:bg-blue-200"}`} title="Edit">
+                                                                  <Edit size={16} />
+                                                            </Link>
+                                                            <button
+                                                                  onClick={() => handleDelete(candidate.id)}
+                                                                  className={`p-1.5 rounded transition-colors ${darkMode ? "bg-red-900/30 text-red-400 hover:bg-red-900/50" : "bg-red-100 text-red-600 hover:bg-red-200"}`}
+                                                                  title="Delete"
+                                                            >
+                                                                  <Trash2 size={16} />
+                                                            </button>
+                                                      </div>
                                                 </div>
                                           </div>
                                     </div>
@@ -185,6 +238,17 @@ export default function CandidatePipeline() {
                   </div>
             </div>
       );
+
+      async function handleDelete(id) {
+            if (window.confirm("Are you sure you want to delete this candidate?")) {
+                  try {
+                        await deleteCandidate(id);
+                        setCandidates(candidates.filter(c => c.id !== id));
+                  } catch (err) {
+                        alert("Failed to delete candidate");
+                  }
+            }
+      }
 }
 
 function StatCard({ title, value, icon, darkMode }) {

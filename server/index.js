@@ -15,12 +15,14 @@ const employeeRoutes = require("./routes/employeeRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const complianceRoutes = require("./routes/complianceRoutes");
 const jobPostingRoutes = require("./routes/jobPostingRoutes");
+const candidateRoutes = require("./routes/candidateRoutes");
 
 dotenv.config();
 const app = express();
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // MongoDB Connection
 database.connect();
@@ -37,6 +39,10 @@ app.use("/api/employees", employeeRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/compliance", complianceRoutes);
 app.use("/api/job-postings", jobPostingRoutes);
+app.use("/api/candidates", candidateRoutes);
+app.use("/api/interviews", require("./routes/interviewRoutes"));
+app.use("/api/offers", require("./routes/offerRoutes"));
+app.use("/api/negotiations", require("./routes/negotiationRoutes"));
 
 // Error handling for invalid routes
 app.use((req, res) => {

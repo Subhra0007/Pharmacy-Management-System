@@ -14,6 +14,7 @@ export default function AddNewEmployee() {
     email: "",
     aadhaar: "",
     address: "",
+    gender: "",
     role: "",
     salary: "",
   });
@@ -72,6 +73,9 @@ export default function AddNewEmployee() {
     if (!formData.address.trim()) {
       newErrors.address = "Address is required";
     }
+    if (!formData.gender) {
+      newErrors.gender = "Gender is required";
+    }
     if (!formData.role.trim()) {
       newErrors.role = "Role is required";
     }
@@ -97,6 +101,7 @@ export default function AddNewEmployee() {
         email: formData.email,
         aadhaar: formData.aadhaar,
         address: formData.address,
+        gender: formData.gender,
         role: formData.role,
         salary: Number(formData.salary),
       });
@@ -111,6 +116,7 @@ export default function AddNewEmployee() {
         email: "",
         aadhaar: "",
         address: "",
+        gender: "",
         role: "",
         salary: "",
       });
@@ -123,9 +129,8 @@ export default function AddNewEmployee() {
 
   return (
     <div
-      className={`p-6 space-y-6 transition-colors duration-300 mt-16 ml-64 ${
-        darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
-      }`}
+      className={`p-6 space-y-6 transition-colors duration-300 mt-16 ml-64 ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
+        }`}
     >
       <div className="flex items-center justify-between">
         <div>
@@ -137,9 +142,8 @@ export default function AddNewEmployee() {
       </div>
 
       <div
-        className={`p-4 shadow rounded-md transition-colors duration-300 ${
-          darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
-        }`}
+        className={`p-4 shadow rounded-md transition-colors duration-300 ${darkMode ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900"
+          }`}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -154,11 +158,10 @@ export default function AddNewEmployee() {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Enter name"
-                className={`w-full p-2 border rounded-md transition ${
-                  darkMode
+                className={`w-full p-2 border rounded-md transition ${darkMode
                     ? "bg-gray-600 border-gray-500 text-gray-100"
                     : "bg-white border-gray-300 text-gray-900"
-                } ${errors.name ? "border-red-500" : ""}`}
+                  } ${errors.name ? "border-red-500" : ""}`}
               />
               {errors.name && (
                 <p className="text-red-500 text-xs mt-1">{errors.name}</p>
@@ -175,11 +178,10 @@ export default function AddNewEmployee() {
                 value={formData.mobile}
                 onChange={handleChange}
                 placeholder="Enter 10-digit mobile"
-                className={`w-full p-2 border rounded-md transition ${
-                  darkMode
+                className={`w-full p-2 border rounded-md transition ${darkMode
                     ? "bg-gray-600 border-gray-500 text-gray-100"
                     : "bg-white border-gray-300 text-gray-900"
-                } ${errors.mobile ? "border-red-500" : ""}`}
+                  } ${errors.mobile ? "border-red-500" : ""}`}
               />
               {errors.mobile && (
                 <p className="text-red-500 text-xs mt-1">{errors.mobile}</p>
@@ -196,11 +198,10 @@ export default function AddNewEmployee() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter email"
-                className={`w-full p-2 border rounded-md transition ${
-                  darkMode
+                className={`w-full p-2 border rounded-md transition ${darkMode
                     ? "bg-gray-600 border-gray-500 text-gray-100"
                     : "bg-white border-gray-300 text-gray-900"
-                } ${errors.email ? "border-red-500" : ""}`}
+                  } ${errors.email ? "border-red-500" : ""}`}
               />
               {errors.email && (
                 <p className="text-red-500 text-xs mt-1">{errors.email}</p>
@@ -217,11 +218,10 @@ export default function AddNewEmployee() {
                 value={formData.aadhaar}
                 onChange={handleChange}
                 placeholder="Enter 12-digit Aadhaar"
-                className={`w-full p-2 border rounded-md transition ${
-                  darkMode
+                className={`w-full p-2 border rounded-md transition ${darkMode
                     ? "bg-gray-600 border-gray-500 text-gray-100"
                     : "bg-white border-gray-300 text-gray-900"
-                } ${errors.aadhaar ? "border-red-500" : ""}`}
+                  } ${errors.aadhaar ? "border-red-500" : ""}`}
               />
               {errors.aadhaar && (
                 <p className="text-red-500 text-xs mt-1">{errors.aadhaar}</p>
@@ -238,14 +238,36 @@ export default function AddNewEmployee() {
                 value={formData.address}
                 onChange={handleChange}
                 placeholder="Enter address"
-                className={`w-full p-2 border rounded-md transition ${
-                  darkMode
+                className={`w-full p-2 border rounded-md transition ${darkMode
                     ? "bg-gray-600 border-gray-500 text-gray-100"
                     : "bg-white border-gray-300 text-gray-900"
-                } ${errors.address ? "border-red-500" : ""}`}
+                  } ${errors.address ? "border-red-500" : ""}`}
               />
               {errors.address && (
                 <p className="text-red-500 text-xs mt-1">{errors.address}</p>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1" htmlFor="gender">
+                Gender
+              </label>
+              <select
+                name="gender"
+                id="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className={`w-full p-2 border rounded-md transition appearance-none ${darkMode
+                    ? "bg-gray-600 border-gray-500 text-gray-100"
+                    : "bg-white border-gray-300 text-gray-900"
+                  } ${errors.gender ? "border-red-500" : ""}`}
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              {errors.gender && (
+                <p className="text-red-500 text-xs mt-1">{errors.gender}</p>
               )}
             </div>
             <div>
@@ -259,11 +281,10 @@ export default function AddNewEmployee() {
                 value={formData.salary}
                 onChange={handleChange}
                 placeholder="Enter salary"
-                className={`w-full p-2 border rounded-md transition ${
-                  darkMode
+                className={`w-full p-2 border rounded-md transition ${darkMode
                     ? "bg-gray-600 border-gray-500 text-gray-100"
                     : "bg-white border-gray-300 text-gray-900"
-                } ${errors.salary ? "border-red-500" : ""}`}
+                  } ${errors.salary ? "border-red-500" : ""}`}
               />
               {errors.salary && (
                 <p className="text-red-500 text-xs mt-1">{errors.salary}</p>
@@ -278,11 +299,10 @@ export default function AddNewEmployee() {
                 id="role"
                 value={formData.role}
                 onChange={handleChange}
-                className={`w-full p-2 border rounded-md transition appearance-none ${
-                  darkMode
+                className={`w-full p-2 border rounded-md transition appearance-none ${darkMode
                     ? "bg-gray-600 border-gray-500 text-gray-100"
                     : "bg-white border-gray-300 text-gray-900"
-                } ${errors.role ? "border-red-500" : ""}`}
+                  } ${errors.role ? "border-red-500" : ""}`}
               >
                 <option value="">Select Role</option>
                 {roles.map((role, index) => (
@@ -307,20 +327,18 @@ export default function AddNewEmployee() {
                   value={newRole}
                   onChange={handleNewRoleChange}
                   placeholder="Enter new role"
-                  className={`w-full p-2 border rounded-md transition ${
-                    darkMode
+                  className={`w-full p-2 border rounded-md transition ${darkMode
                       ? "bg-gray-600 border-gray-500 text-gray-100"
                       : "bg-white border-gray-300 text-gray-900"
-                  } ${roleError ? "border-red-500" : ""}`}
+                    } ${roleError ? "border-red-500" : ""}`}
                 />
                 <button
                   type="button"
                   onClick={handleAddRole}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
-                    darkMode
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${darkMode
                       ? "bg-green-600 text-white hover:bg-green-700"
                       : "bg-green-600 text-white hover:bg-green-700"
-                  }`}
+                    }`}
                 >
                   <Plus size={18} />
                   Add Role
@@ -334,11 +352,10 @@ export default function AddNewEmployee() {
           <div className="flex justify-end">
             <button
               type="submit"
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
-                darkMode
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${darkMode
                   ? "bg-blue-600 text-white hover:bg-blue-700"
                   : "bg-blue-600 text-white hover:bg-blue-700"
-              }`}
+                }`}
             >
               <Plus size={18} />
               Add Employee

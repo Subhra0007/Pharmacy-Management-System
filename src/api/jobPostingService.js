@@ -50,3 +50,4 @@ export async function deleteJobPosting(id) {
   return id;
 }
 
+

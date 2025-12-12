@@ -138,7 +138,7 @@ export default function Expenses() {
           title="Total Expenses"
           value={`₹${metrics.totalExpenses.toLocaleString()}`}
           icon={<DollarSign size={24} className="text-red-500" />}
-          trend="-2.5%"
+          // trend="-2.5%"
           trendUp={false}
           darkMode={darkMode}
         />

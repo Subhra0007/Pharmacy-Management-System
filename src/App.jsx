@@ -61,6 +61,13 @@ import AddReturnProduct from "./addform/AddReturnProduct";
 import AddBranch from "./addform/AddBranch";
 import AddCompliance from "./addform/AddCompliance";
 import AddJobPosting from "./addform/AddJobPosting";
+import AddCandidate from "./addform/AddCandidate";
+import EditCandidate from "./addform/EditCandidate";
+import AddInterview from "./addform/AddInterview";
+import EditInterview from "./addform/EditInterview";
+import AddOffer from "./addform/AddOffer";
+import EditOffer from "./addform/EditOffer";
+import AddNegotiation from "./addform/AddNegotiation";
 
 function App() {
   return (
@@ -128,6 +135,13 @@ function App() {
           <Route path="/add-branch" element={<AddBranch />} />
           <Route path="/add-compliance" element={<AddCompliance />} />
           <Route path="/add-job-posting" element={<AddJobPosting />} />
+          <Route path="/add-candidate" element={<AddCandidate />} />
+          <Route path="/edit-candidate/:id" element={<EditCandidate />} />
+          <Route path="/add-interview" element={<AddInterview />} />
+          <Route path="/edit-interview/:id" element={<EditInterview />} />
+          <Route path="/add-offer" element={<AddOffer />} />
+          <Route path="/edit-offer/:id" element={<EditOffer />} />
+          <Route path="/add-negotiation" element={<AddNegotiation />} />
         </Route>
       </Routes>
     </BrowserRouter>

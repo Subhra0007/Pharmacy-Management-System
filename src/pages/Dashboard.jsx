@@ -22,14 +22,46 @@ const revenueData = [
   { month: "Dec", revenue: 19000, expense: 14000 },
 ];
 
+import { useMemo } from "react";
+import { EmployeeProvider, useEmployees } from "../context/EmployeeContext";
+
 export default function Dashboard() {
+  return (
+    <EmployeeProvider>
+      <DashboardContent />
+    </EmployeeProvider>
+  );
+}
+
+function DashboardContent() {
   const { darkMode } = useOutletContext();
+  const { employees, loading } = useEmployees();
+
+  const genderData = useMemo(() => {
+    const stats = employees.reduce((acc, curr) => {
+      const gender = curr.gender || "Unknown";
+      acc[gender] = (acc[gender] || 0) + 1;
+      return acc;
+    }, {});
+
+    const colors = {
+      Male: "#3b82f6", // Blue
+      Female: "#ec4899", // Pink
+      Other: "#10b981", // Emerald
+      Unknown: "#9ca3af" // Gray
+    };
+
+    return Object.entries(stats).map(([name, value], index) => ({
+      name,
+      value,
+      color: colors[name] || "#fac" // Default color
+    }));
+  }, [employees]);
 
   return (
     <div
-      className={`space-y-6 p-6 ml-64 mt-16 transition-colors duration-300 ${
-        darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
-      }`}
+      className={`space-y-6 p-6 ml-64 mt-16 transition-colors duration-300 ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"
+        }`}
     >
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* Stat Cards */}
@@ -38,8 +70,8 @@ export default function Dashboard() {
           <StatCard
             icon={<Users className="text-cyan-400" />}
             title="Total Employees"
-            value="120"
-            change="+32%"
+            value={employees.length}
+            change={employees.length > 0 ? "+Updated" : "0"}
             darkMode={darkMode}
           />
 
@@ -64,9 +96,9 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Event Chart */}
+        {/* Event (Gender) Chart */}
         <div className="col-span-1 md:col-span-4">
-          <EventPieChart darkMode={darkMode} />
+          <EventPieChart darkMode={darkMode} data={genderData} title="Gender Distribution" />
         </div>
 
         {/* Add New */}

@@ -105,8 +105,8 @@ function EmployeeContent() {
               filterMode === "month"
                 ? "Hours Worked (This Month)"
                 : filterMode === "week"
-                ? "Hours Worked (This Week)"
-                : "Hours Worked (Year)",
+                  ? "Hours Worked (This Week)"
+                  : "Hours Worked (Year)",
             data,
             backgroundColor: ["rgba(14, 165, 233, 0.6)"],
             borderColor: ["rgba(14, 165, 233, 1)"],
@@ -173,6 +173,7 @@ function EmployeeContent() {
       email: emp.email,
       aadhaar: emp.aadhaar,
       address: emp.address,
+      gender: emp.gender,
       role: emp.role,
       salary: emp.salary,
     }));
@@ -299,6 +300,7 @@ function EmployeeContent() {
                 <th className="p-3">Email</th>
                 <th className="p-3">Aadhaar</th>
                 <th className="p-3">Address</th>
+                <th className="p-3">Gender</th>
                 <th className="p-3">Role</th>
                 <th className="p-3">Salary</th>
                 <th className="p-3">Action</th>
@@ -332,6 +334,7 @@ function EmployeeContent() {
                     <td className="p-3">{emp.email}</td>
                     <td className="p-3">{emp.aadhaar}</td>
                     <td className="p-3">{emp.address}</td>
+                    <td className="p-3">{emp.gender}</td>
                     <td className="p-3">{emp.role}</td>
                     <td className="p-3">₹{emp.salary}</td>
                     <td className="p-3 flex gap-2">
@@ -418,6 +421,7 @@ function EmployeeContent() {
                 <InfoRow label="Email" value={selected.email} />
                 <InfoRow label="Aadhaar" value={selected.aadhaar} />
                 <InfoRow label="Address" value={selected.address} />
+                <InfoRow label="Gender" value={selected.gender} />
                 <InfoRow label="Role" value={selected.role} />
                 <InfoRow label="Salary" value={`$${selected.salary}`} />
               </div>
@@ -455,6 +459,19 @@ function EmployeeContent() {
                   value={editable.address}
                   onChange={(e) => setEditable({ ...editable, address: e.target.value })}
                 />
+                <label className="flex flex-col gap-1 text-sm">
+                  <span className="text-gray-600 dark:text-gray-300">Gender</span>
+                  <select
+                    className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-400 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+                    value={editable.gender || ""}
+                    onChange={(e) => setEditable({ ...editable, gender: e.target.value })}
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </label>
                 <LabeledInput
                   label="Role"
                   value={editable.role}
