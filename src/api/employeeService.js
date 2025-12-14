@@ -1,4 +1,6 @@
-const API_BASE = "http://localhost:5000";
+import { API_BASE_URL } from "../config";
+
+const API_BASE = API_BASE_URL;
 
 const mapEmployeeFromApi = (emp) => ({
   id: emp.employeeId || emp.id,
@@ -30,7 +32,12 @@ const mapEmployeeFromApi = (emp) => ({
 });
 
 export async function fetchEmployees() {
-  const response = await fetch(`${API_BASE}/api/employees`);
+  const response = await fetch(`${API_BASE}/api/employees`, {
+    headers: {
+      "Cache-Control": "no-cache",
+      "Pragma": "no-cache"
+    }
+  });
   if (!response.ok) {
     const message = await response.text();
     throw new Error(message || `HTTP error! status: ${response.status}`);

@@ -50,3 +50,9 @@ html.dark .scrollbar-thin::-webkit-scrollbar-thumb {
 html.dark .scrollbar-thin {
   scrollbar-color: rgba(71,85,105,0.9) transparent;
 }
+
+/* FIX: Override legacy page margins because Layout.jsx now handles the offset */
+main > div[class*="ml-"] {
+  margin-left: 0 !important;
+  width: 100%;
+}

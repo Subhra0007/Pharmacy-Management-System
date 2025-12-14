@@ -107,7 +107,7 @@ export default function AddNewEmployee() {
       });
 
       alert(
-        `Employee added!\nID: ${newEmployee.employeeId}\nUsername: ${newEmployee.username}\nPassword: ${newEmployee.password}`
+        `Employee added!\nID: ${newEmployee.employeeId}\nName: ${newEmployee.name}\nGender: ${newEmployee.gender || "N/A"}\nUsername: ${newEmployee.username}\nPassword: ${newEmployee.password}`
       );
 
       setFormData({
@@ -159,8 +159,8 @@ export default function AddNewEmployee() {
                 onChange={handleChange}
                 placeholder="Enter name"
                 className={`w-full p-2 border rounded-md transition ${darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100"
-                    : "bg-white border-gray-300 text-gray-900"
+                  ? "bg-gray-600 border-gray-500 text-gray-100"
+                  : "bg-white border-gray-300 text-gray-900"
                   } ${errors.name ? "border-red-500" : ""}`}
               />
               {errors.name && (
@@ -179,8 +179,8 @@ export default function AddNewEmployee() {
                 onChange={handleChange}
                 placeholder="Enter 10-digit mobile"
                 className={`w-full p-2 border rounded-md transition ${darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100"
-                    : "bg-white border-gray-300 text-gray-900"
+                  ? "bg-gray-600 border-gray-500 text-gray-100"
+                  : "bg-white border-gray-300 text-gray-900"
                   } ${errors.mobile ? "border-red-500" : ""}`}
               />
               {errors.mobile && (
@@ -199,8 +199,8 @@ export default function AddNewEmployee() {
                 onChange={handleChange}
                 placeholder="Enter email"
                 className={`w-full p-2 border rounded-md transition ${darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100"
-                    : "bg-white border-gray-300 text-gray-900"
+                  ? "bg-gray-600 border-gray-500 text-gray-100"
+                  : "bg-white border-gray-300 text-gray-900"
                   } ${errors.email ? "border-red-500" : ""}`}
               />
               {errors.email && (
@@ -219,8 +219,8 @@ export default function AddNewEmployee() {
                 onChange={handleChange}
                 placeholder="Enter 12-digit Aadhaar"
                 className={`w-full p-2 border rounded-md transition ${darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100"
-                    : "bg-white border-gray-300 text-gray-900"
+                  ? "bg-gray-600 border-gray-500 text-gray-100"
+                  : "bg-white border-gray-300 text-gray-900"
                   } ${errors.aadhaar ? "border-red-500" : ""}`}
               />
               {errors.aadhaar && (
@@ -239,8 +239,8 @@ export default function AddNewEmployee() {
                 onChange={handleChange}
                 placeholder="Enter address"
                 className={`w-full p-2 border rounded-md transition ${darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100"
-                    : "bg-white border-gray-300 text-gray-900"
+                  ? "bg-gray-600 border-gray-500 text-gray-100"
+                  : "bg-white border-gray-300 text-gray-900"
                   } ${errors.address ? "border-red-500" : ""}`}
               />
               {errors.address && (
@@ -257,8 +257,8 @@ export default function AddNewEmployee() {
                 value={formData.gender}
                 onChange={handleChange}
                 className={`w-full p-2 border rounded-md transition appearance-none ${darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100"
-                    : "bg-white border-gray-300 text-gray-900"
+                  ? "bg-gray-600 border-gray-500 text-gray-100"
+                  : "bg-white border-gray-300 text-gray-900"
                   } ${errors.gender ? "border-red-500" : ""}`}
               >
                 <option value="">Select Gender</option>
@@ -282,8 +282,8 @@ export default function AddNewEmployee() {
                 onChange={handleChange}
                 placeholder="Enter salary"
                 className={`w-full p-2 border rounded-md transition ${darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100"
-                    : "bg-white border-gray-300 text-gray-900"
+                  ? "bg-gray-600 border-gray-500 text-gray-100"
+                  : "bg-white border-gray-300 text-gray-900"
                   } ${errors.salary ? "border-red-500" : ""}`}
               />
               {errors.salary && (
@@ -300,8 +300,8 @@ export default function AddNewEmployee() {
                 value={formData.role}
                 onChange={handleChange}
                 className={`w-full p-2 border rounded-md transition appearance-none ${darkMode
-                    ? "bg-gray-600 border-gray-500 text-gray-100"
-                    : "bg-white border-gray-300 text-gray-900"
+                  ? "bg-gray-600 border-gray-500 text-gray-100"
+                  : "bg-white border-gray-300 text-gray-900"
                   } ${errors.role ? "border-red-500" : ""}`}
               >
                 <option value="">Select Role</option>
@@ -328,16 +328,16 @@ export default function AddNewEmployee() {
                   onChange={handleNewRoleChange}
                   placeholder="Enter new role"
                   className={`w-full p-2 border rounded-md transition ${darkMode
-                      ? "bg-gray-600 border-gray-500 text-gray-100"
-                      : "bg-white border-gray-300 text-gray-900"
+                    ? "bg-gray-600 border-gray-500 text-gray-100"
+                    : "bg-white border-gray-300 text-gray-900"
                     } ${roleError ? "border-red-500" : ""}`}
                 />
                 <button
                   type="button"
                   onClick={handleAddRole}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${darkMode
-                      ? "bg-green-600 text-white hover:bg-green-700"
-                      : "bg-green-600 text-white hover:bg-green-700"
+                    ? "bg-green-600 text-white hover:bg-green-700"
+                    : "bg-green-600 text-white hover:bg-green-700"
                     }`}
                 >
                   <Plus size={18} />
@@ -353,8 +353,8 @@ export default function AddNewEmployee() {
             <button
               type="submit"
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${darkMode
-                  ? "bg-blue-600 text-white hover:bg-blue-700"
-                  : "bg-blue-600 text-white hover:bg-blue-700"
+                ? "bg-blue-600 text-white hover:bg-blue-700"
+                : "bg-blue-600 text-white hover:bg-blue-700"
                 }`}
             >
               <Plus size={18} />

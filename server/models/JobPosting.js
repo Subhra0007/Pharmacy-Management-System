@@ -22,3 +22,5 @@ const JobPostingSchema = new mongoose.Schema(
 module.exports = mongoose.model("JobPosting", JobPostingSchema);
 
 
+
+

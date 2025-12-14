@@ -1,4 +1,6 @@
-const API_BASE = "http://localhost:5000";
+import { API_BASE_URL } from "../config";
+
+const API_BASE = API_BASE_URL;
 
 const mapJob = (job) => ({
   id: job.jobId || job.id,
@@ -49,5 +51,7 @@ export async function deleteJobPosting(id) {
   if (!res.ok) throw new Error((await res.text()) || "Failed to delete job posting");
   return id;
 }
+
+
 
 
