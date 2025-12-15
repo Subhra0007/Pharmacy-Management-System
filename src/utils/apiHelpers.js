@@ -69,3 +69,4 @@ export async function safeFetch(url, options = {}) {
     throw error;
   }
 }
+

@@ -51,3 +51,4 @@ If you still see errors, verify:
 - The backend URL is correct and accessible
 - CORS is properly configured on your backend
 - The backend endpoints match what the frontend expects
+

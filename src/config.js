@@ -4,21 +4,19 @@ const getApiBaseUrl = () => {
   
   // If environment variable is set, use it
   if (envUrl) {
-    return envUrl;
+    // Remove trailing slash if present
+    return envUrl.replace(/\/$/, "");
   }
   
-  // In production (Vercel), throw error if not set
+  // In production (Vercel), use relative URLs (same domain)
+  // This works if backend is deployed to the same Vercel project
   if (import.meta.env.PROD) {
-    console.error(
-      "❌ VITE_API_URL is not set! Please set it in Vercel environment variables.\n" +
-      "Go to your Vercel project → Settings → Environment Variables → Add VITE_API_URL"
-    );
-    // Return empty string to fail gracefully, but log the error
+    // Use relative URL - API will be on the same domain
     return "";
   }
   
   // Development fallback
-  return "http://localhost:5000";
+  return envUrl || "http://localhost:5000";
 };
 
 export const API_BASE_URL = getApiBaseUrl();
