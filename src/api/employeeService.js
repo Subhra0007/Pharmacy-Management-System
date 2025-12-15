@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../config";
+import { safeJsonParse, safeFetch } from "../utils/apiHelpers";
 
 const API_BASE = API_BASE_URL;
 
@@ -32,7 +33,7 @@ const mapEmployeeFromApi = (emp) => ({
 });
 
 export async function fetchEmployees() {
-  const response = await fetch(`${API_BASE}/api/employees`, {
+  const response = await safeFetch(`${API_BASE}/api/employees`, {
     headers: {
       "Cache-Control": "no-cache",
       "Pragma": "no-cache"
@@ -42,12 +43,12 @@ export async function fetchEmployees() {
     const message = await response.text();
     throw new Error(message || `HTTP error! status: ${response.status}`);
   }
-  const data = await response.json();
+  const data = await safeJsonParse(response);
   return data.map(mapEmployeeFromApi);
 }
 
 export async function createEmployee(employee) {
-  const response = await fetch(`${API_BASE}/api/employees`, {
+  const response = await safeFetch(`${API_BASE}/api/employees`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(employee),
@@ -58,12 +59,12 @@ export async function createEmployee(employee) {
     throw new Error(message || "Failed to create employee");
   }
 
-  const data = await response.json();
+  const data = await safeJsonParse(response);
   return mapEmployeeFromApi(data);
 }
 
 export async function updateEmployee(id, updates) {
-  const response = await fetch(`${API_BASE}/api/employees/${id}`, {
+  const response = await safeFetch(`${API_BASE}/api/employees/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updates),
@@ -74,12 +75,12 @@ export async function updateEmployee(id, updates) {
     throw new Error(message || "Failed to update employee");
   }
 
-  const data = await response.json();
+  const data = await safeJsonParse(response);
   return mapEmployeeFromApi(data);
 }
 
 export async function removeEmployee(id) {
-  const response = await fetch(`${API_BASE}/api/employees/${id}`, { method: "DELETE" });
+  const response = await safeFetch(`${API_BASE}/api/employees/${id}`, { method: "DELETE" });
   if (!response.ok) {
     const message = await response.text();
     throw new Error(message || "Failed to delete employee");
