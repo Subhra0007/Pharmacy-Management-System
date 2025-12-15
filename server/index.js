@@ -33,7 +33,7 @@ const connectDB = async () => {
       dbConnected = true;
     } catch (error) {
       console.error("Database connection error:", error);
-      // Don't throw - let routes handle the error
+      throw error;
     }
   }
 };
@@ -41,7 +41,14 @@ const connectDB = async () => {
 // Connect on first request in serverless
 app.use(async (req, res, next) => {
   if (!dbConnected) {
-    await connectDB();
+    try {
+      await connectDB();
+    } catch (error) {
+      return res.status(500).json({
+        error: "Database connection failed",
+        message: error.message
+      });
+    }
   }
   next();
 });
