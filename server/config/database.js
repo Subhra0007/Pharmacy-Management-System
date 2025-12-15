@@ -8,6 +8,16 @@ dotenv.config();
 const database = {
   connect: async () => {
     try {
+      // Check if already connected
+      if (mongoose.connection.readyState === 1) {
+        console.log("✅ DB Already Connected");
+        return;
+      }
+
+      if (!process.env.MONGO_URI) {
+        throw new Error("MONGO_URI environment variable is not set");
+      }
+
       await mongoose.connect(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -15,7 +25,11 @@ const database = {
       console.log("✅ DB Connected Successfully");
     } catch (error) {
       console.error("❌ DB Connection Failed:", error);
-      process.exit(1);
+      // Don't exit in serverless - let the function handle the error
+      if (process.env.VERCEL !== "1") {
+        process.exit(1);
+      }
+      throw error;
     }
   },
 };

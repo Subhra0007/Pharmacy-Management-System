@@ -24,8 +24,27 @@ app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
-// MongoDB Connection
-database.connect();
+// MongoDB Connection - handle gracefully for serverless
+let dbConnected = false;
+const connectDB = async () => {
+  if (!dbConnected) {
+    try {
+      await database.connect();
+      dbConnected = true;
+    } catch (error) {
+      console.error("Database connection error:", error);
+      // Don't throw - let routes handle the error
+    }
+  }
+};
+
+// Connect on first request in serverless
+app.use(async (req, res, next) => {
+  if (!dbConnected) {
+    await connectDB();
+  }
+  next();
+});
 
 // Routes
 app.use("/api/customers", customerRoutes);
