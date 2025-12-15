@@ -21,6 +21,10 @@ const database = {
       await mongoose.connect(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 5000, // 5 second timeout
+        socketTimeoutMS: 45000,
+        connectTimeoutMS: 5000,
+        maxPoolSize: 1, // Important for serverless - reuse connection
       });
       console.log("✅ DB Connected Successfully");
     } catch (error) {

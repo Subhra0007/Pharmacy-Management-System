@@ -3,6 +3,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const mongoose = require("mongoose");
 const { database } = require("./config/database");
 const customerRoutes = require("./routes/customerRoutes");
 const doctorRoutes = require("./routes/doctorRoutes");
@@ -25,31 +26,81 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // MongoDB Connection - handle gracefully for serverless
+let dbConnectionPromise = null;
 let dbConnected = false;
+
 const connectDB = async () => {
-  if (!dbConnected) {
+  // If already connected, return immediately
+  if (mongoose.connection.readyState === 1) {
+    dbConnected = true;
+    return;
+  }
+
+  // If connection is in progress, wait for it (with timeout)
+  if (dbConnectionPromise) {
     try {
-      await database.connect();
+      await Promise.race([
+        dbConnectionPromise,
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error("Connection timeout")), 5000)
+        )
+      ]);
       dbConnected = true;
+      return;
     } catch (error) {
-      console.error("Database connection error:", error);
+      dbConnectionPromise = null; // Reset on error
       throw error;
     }
   }
+
+  // Start new connection
+  dbConnectionPromise = database.connect()
+    .then(() => {
+      dbConnected = true;
+      dbConnectionPromise = null;
+    })
+    .catch((error) => {
+      console.error("Database connection error:", error.message);
+      dbConnectionPromise = null;
+      throw error;
+    });
+
+  // Wait for connection with timeout
+  try {
+    await Promise.race([
+      dbConnectionPromise,
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Connection timeout")), 5000)
+      )
+    ]);
+  } catch (error) {
+    dbConnectionPromise = null;
+    throw error;
+  }
 };
 
-// Connect on first request in serverless
+// Connect on first request in serverless (non-blocking after first attempt)
 app.use(async (req, res, next) => {
-  if (!dbConnected) {
-    try {
-      await connectDB();
-    } catch (error) {
-      return res.status(500).json({
-        error: "Database connection failed",
-        message: error.message
+  // Check if already connected
+  if (mongoose.connection.readyState === 1) {
+    return next();
+  }
+
+  // Try to connect (with timeout protection)
+  try {
+    await connectDB();
+  } catch (error) {
+    console.error("Database connection failed:", error.message);
+    // Don't block - let the route handlers deal with it
+    // But mark that connection failed
+    if (error.message.includes("timeout") || error.message.includes("MONGO_URI")) {
+      return res.status(503).json({
+        error: "Database unavailable",
+        message: "Unable to connect to database. Please check MONGO_URI environment variable."
       });
     }
   }
+  
   next();
 });
 

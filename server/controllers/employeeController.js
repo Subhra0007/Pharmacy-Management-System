@@ -1,4 +1,12 @@
 const Employee = require('../models/Employee');
+const mongoose = require('mongoose');
+
+// Helper to check database connection
+const checkDBConnection = () => {
+  if (mongoose.connection.readyState !== 1) {
+    throw new Error("Database not connected. Please check MONGO_URI environment variable.");
+  }
+};
 
 const generateEmployeeId = async () => {
   const lastEmployee = await Employee.findOne({}, { employeeId: 1 }).sort({ createdAt: -1 });
@@ -41,9 +49,11 @@ const generatePassword = () => {
 
 exports.getAllEmployees = async (req, res) => {
   try {
-    const employees = await Employee.find().sort({ createdAt: -1 });
+    checkDBConnection();
+    const employees = await Employee.find().sort({ createdAt: -1 }).lean();
     res.status(200).json(employees);
   } catch (error) {
+    console.error("Error fetching employees:", error);
     res.status(500).json({ message: 'Error fetching employees', error: error.message });
   }
 };
@@ -62,6 +72,7 @@ exports.getEmployeeById = async (req, res) => {
 
 exports.createEmployee = async (req, res) => {
   try {
+    checkDBConnection();
     const { name, mobile, email, aadhaar, address, role, gender, salary, hoursWorked, branch } = req.body;
 
     // Validate required fields
